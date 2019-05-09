@@ -127,6 +127,6 @@ Code principal
 if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
     fenetre = Fenetre() # Crée un objet de type Fenetre
-    fenetre.setWindowTitle("Graphique 3D") # Définit le nom de la fenêtre
+    fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
     fenetre.show() # Affiche la fenêtre
     sys.exit(application.exec_()) # application.exec_() attend que tout ce qui est en cours soit exécuté
