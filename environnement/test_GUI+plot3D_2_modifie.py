@@ -1,0 +1,113 @@
+# Ce code est basé sur un code déjà écrit
+# Source : https://stackoverflow.com/questions/52379426/pyqta-matplotlib-how-to-redraw-update-a-3d-surface-plot-in-a-window
+
+import sys # Librairie pour faire des appels systèmes
+from PyQt4.QtCore import * # Librairie Python Qt4 pour créer la GUI
+from PyQt4.QtGui import * # Librairie Python Qt4 pour créer la GUI
+
+from math import * # Librairie mathématique, pour utiliser la fonction log()
+import numpy # Autre librairie mathématique
+
+from matplotlib.figure import Figure # Classe Figure de la librairie Matplotlib
+import matplotlib.pyplot as plt # Librairie pour faire des graphiques
+from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg # Classe pour mettre du Matplotlib dans Qt
+from mpl_toolkits.mplot3d import Axes3D # Classe pour gérer les axes 3D
+
+from random import choice # Fonction pour chosir aléatoirement un élement dans une liste
+couleursMatplotlib = ["b", "g", "r", "c", "m", "y", "k"]
+
+
+# Note : Une variable commencant par "self." est un attribut de l'objet
+"""
+Classe Graphique3D, hérite de FigureCanvasQTAgg
+Cette classe permet de gérer un graphique 3D Matplotlib
+"""
+class Graphique3D(FigureCanvasQTAgg) :
+    def __init__(self) : # Constructeur, initialise le graphique
+        self.figure = plt.figure(figsize=(7,7)) # Crée un objet de type Figure
+        FigureCanvasQTAgg.__init__(self, self.figure) # Objet de type FigureCanvas
+        self.axes = self.figure.gca(projection='3d') # On lui dit qu'on veut des axes 3D, et on les stockes dans un attribut
+    
+    """
+    Le paramètre "liste" est une liste de listes.
+    Chaque sous-liste représente une courbe.
+    Ces sous-listes doivent comprendre 3 sous-sous-listes étant les coordonnées X, Y et Z à tracer
+    """
+    def dessinerGraphique3D(self, liste) : # Procédure qui dessine le graphique
+        self.axes.clear() # Nettoie les axes
+        self.axes.set_xlabel('Axe X') # Label sur l'axe X
+        self.axes.set_ylabel('Axe Y') # Label sur l'axe Y
+        self.axes.set_zlabel('Axe Z') # Label sur l'axe Z
+        self.axes.set_aspect('equal') # Permet d'avoir un repère orthonormal
+        for courbe in liste :
+            couleur = choice(couleursMatplotlib)
+            self.axes.plot(courbe[0], courbe[1], courbe[2], couleur + 'o-') # Dessine le graphique 3D à partir de 3 listes dans les axes
+        self.draw() # Dessine le graphique 3D avec les axes
+
+"""
+Classe Fenetre, hérite de la classe QWidget
+Cette classe permet de gérer la fenêtre Qt
+"""
+class Fenetre(QWidget) :# The QWidget in which the 3D window is been embedded
+    def __init__(self, parent=None) : # Constructeur
+        super(Fenetre, self).__init__(parent)
+        
+        self.menuSelection = QComboBox() # Crée un objet de type QComboBox, c'est un menu déroulant
+        self.menuSelection.addItems(['Graph1', 'Graph2']) # Ajoute les indexes de ce menu
+        self.menuSelection.currentIndexChanged.connect(self.changementGraphique3D) # La procédure à appeler lors du changement
+        
+        self.graphique3D = Graphique3D() # Crée un objet de type Graphique3D
+        grille = QGridLayout() # Crée un objet de type QGridLayout, c'est l'intérieur de la fenêtre, une grille ("layout")
+        grille.addWidget(self.menuSelection, 1, 1) # Ajoute le menu déroulant en position ligne 2 colonne 1
+        grille.addWidget(self.graphique3D, 2, 1) # Ajoute le graphique 3D en position ligne 2 colonne 1
+        self.setLayout(grille) # Definit notre grille comme grille à utiliser
+        
+        # Fonction à afficher
+        self.graph1()
+    
+    def changementGraphique3D(self) :
+        graphiqueDemande = str(self.menuSelection.currentText())
+        if graphiqueDemande == "Graph1" :
+            self.graph1()
+        if graphiqueDemande == "Graph2" :
+            self.graph2()
+    
+    def graph1(self) :
+        theta = numpy.linspace(-4 * numpy.pi, 4 * numpy.pi, 100)
+        z = numpy.linspace(-2, 2, 100)
+        r = z**2 + 1
+        x = r * numpy.sin(theta)
+        y = r * numpy.cos(theta)
+        
+        courbe1 = [x, y, z]
+        courbe2 = [y, z, x]
+        courbe3 = [z, x, y]
+        
+        self.graphique3D.dessinerGraphique3D([courbe1, courbe2, courbe3]) # Dessine le graphique
+    
+    def graph2(self) :
+        theta = numpy.linspace(-10 * numpy.pi, 5 * numpy.pi, 100)
+        z = numpy.linspace(-2, 2, 100)
+        r = z**2 + 1
+        x = r * numpy.sin(theta)
+        y = r * numpy.cos(theta)
+        
+        courbe1 = [x, y, z]
+        courbe2 = [y, z, x]
+        courbe3 = [z, x, y]
+        
+        self.graphique3D.dessinerGraphique3D([courbe1, courbe2, courbe3]) # Dessine le graphique
+
+
+"""
+Code principal
+"""
+# Si on est le script principal
+# Cela permet de ne pas exécuter ce bloc de codes lorsque ce script est importé par un autre
+# Source : https://stackoverflow.com/questions/419163/what-does-if-name-main-do
+if __name__ == '__main__' :
+    application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
+    fenetre = Fenetre() # Crée un objet de type Fenetre
+    fenetre.setWindowTitle("Graphique 3D") # Définit le nom de la fenêtre
+    fenetre.show() # Affiche la fenêtre
+    sys.exit(application.exec_()) # application.exec_() attend que tout ce qui est en cours soit exécuté
