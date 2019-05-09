@@ -65,16 +65,30 @@ class Fenetre(QWidget) :
     Constructeur
     """
     def __init__(self, parent=None) :
-        super(Fenetre, self).__init__(parent)
+        super(Fenetre, self).__init__(parent) # Appel du constructeur de QWidget
         
         self.menuSelection = QComboBox() # Crée un objet de type QComboBox, c'est un menu déroulant
         self.menuSelection.addItems(['Graph1', 'Graph2']) # Ajoute les indexes de ce menu
         self.menuSelection.currentIndexChanged.connect(self.changementGraphique3D) # La procédure à appeler lors du changement
         
         self.graphique3D = Graphique3D() # Crée un objet de type Graphique3D
+        
         grille = QGridLayout() # Crée un objet de type QGridLayout, c'est l'intérieur de la fenêtre, une grille ("layout")
-        grille.addWidget(self.menuSelection, 1, 1) # Ajoute le menu déroulant en position ligne 2 colonne 1
-        grille.addWidget(self.graphique3D, 2, 1) # Ajoute le graphique 3D en position ligne 2 colonne 1
+        
+        self.groupe1 = QGroupBox("Sélectionner le graphique") # Crée un objet de type QGroupBox, c'est un groupe d'élements
+        self.groupe2 = QGroupBox("Graphique") # Crée un objet de type QGroupBox, c'est un groupe d'élements
+        
+        grilleGroupe1 = QVBoxLayout() # Créer un objet de type QVBoxLayout, la grille du groupe 1
+        self.groupe1.setLayout(grilleGroupe1) # Assigne cette grille au groupe 1
+        grilleGroupe2 = QVBoxLayout() # Créer un objet de type QVBoxLayout, la grille du groupe 2
+        self.groupe2.setLayout(grilleGroupe2) # Assigne cette grille au groupe 2
+        
+        grilleGroupe1.addWidget(self.menuSelection) # Ajoute le menu déroulant en position ligne 2 colonne 1
+        grilleGroupe2.addWidget(self.graphique3D) # Ajoute le graphique 3D en position ligne 1 colonne 1
+        
+        grille.addWidget(self.groupe1, 1, 1) # Ajoute le groupe du menu déroulant en position ligne 2 colonne 1
+        grille.addWidget(self.groupe2, 2, 1) # Ajoute le groupe du graphique 3D en position ligne 2 colonne 1
+        
         self.setLayout(grille) # Definit notre grille comme grille à utiliser
         
         # Fonction à afficher
