@@ -1,5 +1,14 @@
-# Ce code est basé sur un code déjà écrit
-# Source : https://stackoverflow.com/questions/52379426/pyqta-matplotlib-how-to-redraw-update-a-3d-surface-plot-in-a-window
+"""
+Environnement graphique d'affichage de graphiques en 3D
+Utilise la librairie PyQt pour l'UI, et MatPlotLib pour les graphiques
+
+Ce code est basé sur un code trouvé sur StackOverflow.com qui correspondait à ce que nous voulions faire
+Source : https://stackoverflow.com/questions/52379426/pyqta-matplotlib-how-to-redraw-update-a-3d-surface-plot-in-a-window
+Auteurs originaux :
+- "Sreeletha" : https://stackoverflow.com/users/10374297/sreeletha
+- "Joe" : https://stackoverflow.com/users/7919597/joe
+"""
+
 
 import sys # Librairie pour faire des appels systèmes
 from PyQt4.QtCore import * # Librairie Python Qt4 pour créer la GUI
@@ -14,7 +23,6 @@ from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg # Classe pour m
 from mpl_toolkits.mplot3d import Axes3D # Classe pour gérer les axes 3D
 
 from random import choice # Fonction pour chosir aléatoirement un élement dans une liste
-couleursMatplotlib = ["b", "g", "r", "c", "m", "y", "k"]
 
 
 # Note : Une variable commencant par "self." est un attribut de l'objet
@@ -23,7 +31,10 @@ Classe Graphique3D, hérite de FigureCanvasQTAgg
 Cette classe permet de gérer un graphique 3D Matplotlib
 """
 class Graphique3D(FigureCanvasQTAgg) :
-    def __init__(self) : # Constructeur, initialise le graphique
+    """
+    Constructeur, initialise le graphique
+    """
+    def __init__(self) :
         self.figure = plt.figure(figsize=(7,7)) # Crée un objet de type Figure
         FigureCanvasQTAgg.__init__(self, self.figure) # Objet de type FigureCanvas
         self.axes = self.figure.gca(projection='3d') # On lui dit qu'on veut des axes 3D, et on les stockes dans un attribut
@@ -40,16 +51,20 @@ class Graphique3D(FigureCanvasQTAgg) :
         self.axes.set_zlabel('Axe Z') # Label sur l'axe Z
         self.axes.set_aspect('equal') # Permet d'avoir un repère orthonormal
         for courbe in liste :
-            couleur = choice(couleursMatplotlib)
+            couleur = choice(["b", "g", "r", "c", "m", "y", "k"]) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
             self.axes.plot(courbe[0], courbe[1], courbe[2], couleur + 'o-') # Dessine le graphique 3D à partir de 3 listes dans les axes
         self.draw() # Dessine le graphique 3D avec les axes
 
 """
 Classe Fenetre, hérite de la classe QWidget
 Cette classe permet de gérer la fenêtre Qt
+Le graphique 3D est inséré dedans
 """
-class Fenetre(QWidget) :# The QWidget in which the 3D window is been embedded
-    def __init__(self, parent=None) : # Constructeur
+class Fenetre(QWidget) :
+    """
+    Constructeur
+    """
+    def __init__(self, parent=None) :
         super(Fenetre, self).__init__(parent)
         
         self.menuSelection = QComboBox() # Crée un objet de type QComboBox, c'est un menu déroulant
@@ -65,6 +80,9 @@ class Fenetre(QWidget) :# The QWidget in which the 3D window is been embedded
         # Fonction à afficher
         self.graph1()
     
+    """
+    Gère les changements par l'utilisateur dans le menu déroulant de sélection
+    """
     def changementGraphique3D(self) :
         graphiqueDemande = str(self.menuSelection.currentText())
         if graphiqueDemande == "Graph1" :
