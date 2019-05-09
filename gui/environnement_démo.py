@@ -51,7 +51,7 @@ class Graphique3D(FigureCanvasQTAgg) :
         self.axes.set_zlabel('Axe Z') # Label sur l'axe Z
         self.axes.set_aspect('equal') # Permet d'avoir un repère orthonormal
         for courbe in liste :
-            couleur = choice(["b", "g", "r", "c", "m", "y", "k"]) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
+            couleur = choice(["b", "g", "r", "c", "m", "y"]) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
             self.axes.plot(courbe[0], courbe[1], courbe[2], couleur + 'o-') # Dessine le graphique 3D à partir de 3 listes dans les axes
         self.draw() # Dessine le graphique 3D avec les axes
 
@@ -65,20 +65,21 @@ class Fenetre(QWidget) :
     Constructeur
     """
     def __init__(self, parent=None) :
-        super(Fenetre, self).__init__(parent)
+        super(Fenetre, self).__init__(parent) # Appel du constructeur de QWidget
         
         self.menuSelection = QComboBox() # Crée un objet de type QComboBox, c'est un menu déroulant
         self.menuSelection.addItems(['Graph1', 'Graph2']) # Ajoute les indexes de ce menu
         self.menuSelection.currentIndexChanged.connect(self.changementGraphique3D) # La procédure à appeler lors du changement
         
         self.graphique3D = Graphique3D() # Crée un objet de type Graphique3D
+        
         grille = QGridLayout() # Crée un objet de type QGridLayout, c'est l'intérieur de la fenêtre, une grille ("layout")
         grille.addWidget(self.menuSelection, 1, 1) # Ajoute le menu déroulant en position ligne 2 colonne 1
         grille.addWidget(self.graphique3D, 2, 1) # Ajoute le graphique 3D en position ligne 2 colonne 1
+        
         self.setLayout(grille) # Definit notre grille comme grille à utiliser
         
-        # Fonction à afficher
-        self.graph1()
+        self.graph1() # Procédure du graphique par défaut
     
     """
     Gère les changements par l'utilisateur dans le menu déroulant de sélection
