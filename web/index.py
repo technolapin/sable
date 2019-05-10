@@ -2,6 +2,8 @@
 
 # NB : Il faut que ce script soit executable !  
 
+# J'aime le Web
+
 
 """ CGI """
 import cgitb
