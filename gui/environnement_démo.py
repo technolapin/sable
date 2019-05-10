@@ -28,7 +28,7 @@ from random import choice # Fonction pour chosir aléatoirement un élement dans
 # Note : Une variable commencant par "self." est un attribut de l'objet
 """
 Classe Graphique3D, hérite de FigureCanvasQTAgg
-Cette classe permet de gérer un graphique 3D Matplotlib
+Cette classe permet de gérer un graphique 3D Matplotlib pouvant être tourné et inséré dans un environnement Qt
 """
 class Graphique3D(FigureCanvasQTAgg) :
     """
@@ -40,8 +40,9 @@ class Graphique3D(FigureCanvasQTAgg) :
         self.axes = self.figure.gca(projection='3d') # On lui dit qu'on veut des axes 3D, et on les stockes dans un attribut
     
     """
-    Le paramètre "liste" est une liste de listes.
-    Chaque sous-liste représente une courbe.
+    Dessine ou actualise avec un nouveau graphique
+    Le paramètre "liste" est une liste de listes
+    Chaque sous-liste représente une courbe
     Ces sous-listes doivent comprendre 3 sous-sous-listes étant les coordonnées X, Y et Z à tracer
     """
     def dessinerGraphique3D(self, liste) : # Procédure qui dessine le graphique
@@ -74,6 +75,7 @@ class Fenetre(QWidget) :
         self.graphique3D = Graphique3D() # Crée un objet de type Graphique3D
         self.graphique3D.setMinimumSize(QSize(400, 400)) # Définit la taille minimum en pixels de ce Widget
         # Cela permet de bloquer le trop retrécissement de la fenêtre
+        # On peut remplacer "QSize(400, 400)" par "self.graphique3D.sizeHint()" pour que la taille par défaut soit la taille minimum
         
         grille = QGridLayout() # Crée un objet de type QGridLayout, c'est l'intérieur de la fenêtre, une grille ("layout")
         
@@ -94,6 +96,9 @@ class Fenetre(QWidget) :
         if graphiqueDemande == "Graph2" :
             self.graph2()
     
+    """
+    Graphiques de démonstration
+    """
     def graph1(self) :
         theta = numpy.linspace(-4 * numpy.pi, 4 * numpy.pi, 100)
         z = numpy.linspace(-2, 2, 100)
