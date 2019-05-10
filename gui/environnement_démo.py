@@ -72,8 +72,11 @@ class Fenetre(QWidget) :
         self.menuSelection.currentIndexChanged.connect(self.changementGraphique3D) # La procédure à appeler lors du changement
         
         self.graphique3D = Graphique3D() # Crée un objet de type Graphique3D
+        self.graphique3D.setMinimumSize(QSize(400, 400)) # Définit la taille minimum en pixels de ce Widget
+        # Cela permet de bloquer le trop retrécissement de la fenêtre
         
         grille = QGridLayout() # Crée un objet de type QGridLayout, c'est l'intérieur de la fenêtre, une grille ("layout")
+        
         grille.addWidget(self.menuSelection, 1, 1) # Ajoute le menu déroulant en position ligne 2 colonne 1
         grille.addWidget(self.graphique3D, 2, 1) # Ajoute le graphique 3D en position ligne 2 colonne 1
         
