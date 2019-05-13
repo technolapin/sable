@@ -1,0 +1,12 @@
+import os
+os.system("ls")
+root = ".."
+libs = root + "/pink/linux/bin/"
+
+os.system("rm *.pgm")
+
+def command(cmd):
+    os.system(libs+cmd)
+
+os.system("cp ../extraction/rangee/00/tranche-0000t00.pgm  seuil.pgm")
+command("dist seuil.pgm 0 dist.pgm")
