@@ -22,7 +22,7 @@ Nous avons deux outils :
 * La carte de distances,
 * Et la ligne de partage des eaux.
 
-Ces méthodes ne fonctionnent que dans un certain cas...
+Ces méthodes ne fonctionnent que dans un certain cas :
 ![Image 1](./10_mai_2019_image1.jpg)
 
 Pour compter le nombre de grains à séparer, nous pouvons utiliser la méthode de la carte de distances.
@@ -32,6 +32,7 @@ Pour séparer deux grains, nous pouvons utiliser la méthode de la ligne de part
 En étude du mouvement de l'eau, la ligne de partage des eaux est le limite d'attraction des mers et océans sur la terre.
 ![Image 3](./10_mai_2019_image3.jpg)
 
+Ainsi, sur l'exemple précédent, on obtient :
 ![Image 4](./10_mai_2019_image4.jpg)
 
 Sur notre environnement graphique, ça serait bien de pouvoir faire défiler les coupes et le temps avec deux curseurs... C'est mieux qu'un menu pour sélectionner les grains.
