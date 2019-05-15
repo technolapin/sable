@@ -149,7 +149,7 @@ class Fenetre(QTabWidget) :
     """
     Gère les changements par l'utilisateur dans le menu déroulant de sélection
     """
-    def changementGraphique3D(self) :
+    def changementGraphique3D(self, value) :
 #        graphiqueDemande = str(self.menuSelection.currentText())
 #        if graphiqueDemande == "Graph1" :
 #            self.graph1()
@@ -158,7 +158,7 @@ class Fenetre(QTabWidget) :
 #       Devenu inutlie puisqu'on a supprimé les menus déroulants
          self.graphique3D.dessinerGraphique3D( graphe, self.barreDeScrollCourbes.value(), self.barreDeScrollTemps.value() )
          
-         print( "[Debug] Temps : " + str( self.barreDeScrollCourbes.value() ) + ", Courbe : " + str( self.barreDeScrollTemps.value() ) )
+         print( "[Debug] Temps : " + str( self.barreDeScrollCourbes.value() ) + ", Courbe : " + str( self.barreDeScrollTemps.value() ) + ", Valeur donnée : " + str( value ) )
 
 
 """
