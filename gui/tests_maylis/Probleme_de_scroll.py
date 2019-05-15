@@ -59,12 +59,14 @@ class Fenetre(QTabWidget):
         #scrollbar=QScrollBar()
         
         #zone_de_texte.setSizeConstraint(3)
-        fichier=io.open("C:/Users/Maylis/Documents/1.COURS/4.ESIEE/PROJET/sable/gui/tests_maylis/Aide_generale.html", 'r',encoding='utf8')
+        fichier=io.open("Aide_generale.html", 'r',encoding='utf8')
         texte=QLabel(fichier.read())
+        texte.setScaledContents(True)
+ #       texte.adjustSize()
         #texte.setFixedWidth(500)
         texte.setWordWrap(True)
         texte.setAlignment(Qt.AlignJustify)
-        texte.adjustSize()
+#        texte.adjustSize()
         scroll_area.setWidget(texte)
         zone_de_texte.addWidget(scroll_area)
        # zone_de_texte.addWidget(scrollbar)
@@ -94,10 +96,11 @@ def main():
 if __name__ == '__main__':
      main()
      
-     
+     """
      
 fichier = open("urlfichier")
 list=fichier.readlines()
 concatenation=""
 for i in range (len(list)):
     concatenation+=list[i]
+    """
