@@ -137,4 +137,4 @@ if __name__ == '__main__' :
     fenetre = Fenetre() # Crée un objet de type Fenetre
     fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
     fenetre.show() # Affiche la fenêtre
-sys.exit(application.exec_()) # application.exec_() attend que tout ce qui est en cours soit exécuté
+    sys.exit(application.exec_()) # application.exec_() attend que tout ce qui est en cours soit exécuté
