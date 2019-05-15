@@ -51,7 +51,7 @@ class Graphique3D(FigureCanvasQTAgg) :
         self.axes.set_xlabel( 'Axe X' ) # Label sur l'axe X
         self.axes.set_ylabel( 'Axe Y' ) # Label sur l'axe Y
         self.axes.set_zlabel( 'Axe Z' ) # Label sur l'axe Z
-        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
+#        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
         if courbeAfficher != 0 :
             couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
             self.axes.plot( liste[courbeAfficher - 1][0], liste[courbeAfficher - 1][1], liste[courbeAfficher - 1][2], couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
@@ -109,13 +109,13 @@ class Fenetre(QTabWidget) :
         self.barreDeScrollCourbes = QScrollBar() # C'est une barre de défilement
         self.barreDeScrollCourbes.setMaximum( len(graphe[0]) + 1 ) # Défini le nombre de valeurs qu'on peut y parcourir
         # len(graphe[0][0]) est le nombre de courbes
-        self.barreDeScrollCourbes.sliderMoved.connect( self.changementGraphique3D ) # La procédure à appeler lorsque l'utilisateur y touche
+        self.barreDeScrollCourbes.valueChanged.connect( self.changementGraphique3D ) # La procédure à appeler lorsque l'utilisateur y touche
         
         # Défilement coupes
         self.barreDeScrollTemps = QScrollBar()
         self.barreDeScrollTemps.setMaximum( len(graphe[0][0]) + 1 )
         # len(graphe[0][0]) est le nombre d'échantillons temporels dont on dispose
-        self.barreDeScrollTemps.sliderMoved.connect( self.changementGraphique3D )
+        self.barreDeScrollTemps.valueChanged.connect( self.changementGraphique3D )
         
         grille = QGridLayout() # C'est l'intérieur de la fenêtre, une grille ("layout")
         
@@ -126,7 +126,7 @@ class Fenetre(QTabWidget) :
         
         self.setLayout(grille) # Definit notre grille comme grille à utiliser
         
-        self.graphique3D.dessinerGraphique3D( graphe, -1, -1 ) # Afficher graphique de base
+        self.graphique3D.dessinerGraphique3D( graphe, 0, 0 ) # Afficher graphique de base
         
         self.onglet1.setLayout( grille ) # Ajout du contenu dans l'onglet
     
