@@ -1,3 +1,7 @@
+# Note
+
+**NE PLUS TOUCHER A CE QU'IL Y A DANS `tests/` ET `old/` !** Merci ! ^^
+
 # Dépendances
 
 ## Installer PyQt4 sur Windows avec Anaconda
