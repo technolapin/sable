@@ -88,11 +88,13 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
         for I in range( len( listeImages ) ) :
             # Source : https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
             # Create a 100 x 100 vertex mesh
-            X, Y = numpy.meshgrid(numpy.linspace(0,1,100), numpy.linspace(0,1,100))
-            # TODO : Pré-traiter l'image
+            X, Y = numpy.meshgrid(numpy.linspace(0,1,400), numpy.linspace(0,1,400))
+            # TODO : Pré-traiter l'image pour prendre en charge le format à la con
             self.axes.plot_surface( X, Y, I, rstride=1, cstride=1, facecolors=plt.imread( listeImages[I] )/255., shade=False )
         
         self.draw()
+        
+        # GROSSE MERDE QUI LAG LA MORT PUNAISE !
 
 """
 Classe Fenetre, hérite de la classe QTabWidget (Et plus QWidget vu qu'on veut faire des onglets)
