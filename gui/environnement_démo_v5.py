@@ -81,21 +81,16 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
     Dessine ou actualise avec un nouveau graphique
     @param "listeImages" : Liste d'images à afficher
     """
-    def dessinerMilleFeuille3D(self, listeImages) : # Procédure qui dessine le graphique
-        # https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
-        
+    def dessinerMilleFeuille3D(self, listeImages) : # Procédure qui dessine le graphique      
         self.axes.clear() # Nettoie les axes et leur contenu
 #        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
+
+        for I in range( len( listeImage ) ) :
+            # Source : https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
+            # Create a 100 x 100 vertex mesh
+            X, Y = numpy.meshgrid(numpy.linspace(0,1,100), numpy.linspace(0,1,100))
+            self.axes.plot_surface( X, Y, I, rstride=1, cstride=1, facecolors=plt.imread( listeImage[I] )/255., shade=False )
         
-        # create a 513 x 513 vertex mesh
-        xx, yy = numpy.meshgrid(numpy.linspace(0,1,500), numpy.linspace(0,1,477))
-        
-        # create vertices for a rotated mesh (3D rotation matrix)
-        X = xx
-        Y = yy
-        Z = 3
-        
-        self.axes.plot_surface( X, Y, Z, rstride=1, cstride=1, facecolors=plt.imread('JPEG_example_flower.jpg')/255., shade=False )
         self.draw()
 
 """
@@ -179,7 +174,7 @@ class Fenetre(QTabWidget) :
         
         self.setLayout(grille)
         
-        self.milleFeuille3D.dessinerMilleFeuille3D( [] )
+        self.milleFeuille3D.dessinerMilleFeuille3D( ['JPEG_example_flower.jpg'] )
         
         self.onglet2.setLayout( grille )
     
