@@ -26,7 +26,9 @@ for t in range(0, n_tempo):
     os.system("mkdir formes/" + numerote(t, 2)) #créé les dossiers contenant les image
     os.system("mkdir centres/" + numerote(t, 2)) #créé les dossiers contenant les images
     os.system("mkdir labels/" + numerote(t, 2))
-os.system("rm images/*")    #supprimer
+os.system("rm images -R")    #supprimer
+os.system("mkdir images")
+
 os.system("mkdir tmp")
 os.system("convert gros_sable.tif tmp/test.bmp") #extraction des images du tif en images bmp dans tmp
 
@@ -38,15 +40,17 @@ def parse_list(file_name):
     line = f.readline()
     mode = line[0]
     n_els = int(line[2:][:-1])
-    print("liste de type "+mode+" a "+str(n_els)+" elements")
     liste = []
     for i in range(n_els):
         liste.append([])
         line = f.readline()[:-1];
         for s in line.split(" "):
             liste[i].append(int(s))
-    print(liste)
     f.close()
+    return liste
+
+
+    
 donnees = []
 for i in range (0, n_tempo):
     donnees.append([])
@@ -89,11 +93,19 @@ for i in range(0, n_tempo*n_coupe):
     #cette convertion a juste pour but de faciliter le visionnage
     #on pert potentiellement de l'information ce faisant
     command("long2byte tmp/lab.pgm 0 "+output_file_label)
+
     command("attribute tmp/superpose_inverse.pgm 8 0 0 0 tmp/attributes.pgm")
+    command("long2byte tmp/attributes.pgm 0 tmp/attributes_scaled.pgm")
+    centres = parse_list(output_file_center)
 
+    img_aires = mpimg.imread("tmp/attributes_scaled.pgm")
 
-    parse_list(output_file_center)
-    
+    for coords in centres:
+        x = coords[0]
+        y = coords[1]
+        coords.append(img_aires[y][x])
+
+    donnees[i//n_coupe].append(centres)
     """
     img_centres = mpimg.imread("tmp/centres.pgm")
     centres = []
@@ -147,12 +159,13 @@ for i in range(0, n_tempo*n_coupe):
     """
 file = open("donnees","w")
 for t in range(0, n_tempo):
+    print(t)
     for z in range(0, n_coupe):
         for forme in donnees[t][z]:
             file.write(str(forme[0])+" "+str(forme[1])+" "+str(forme[2])+"\n")
-        file.write(" ")
-    file.write("####")
+        file.write("\n")
+    file.write("####\n")
 file.close()
-#os.system("rm -R tmp")
+os.system("rm -R tmp")
 
 
