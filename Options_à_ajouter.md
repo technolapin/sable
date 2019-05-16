@@ -30,7 +30,7 @@
 
 -Faire des stats sur les objets (nombre de grain dans une coupe/image 3D, taille moyenne des grains, mouvement global, si ça bouge beaucoup)
 
-
+-Plusieurs "modes" pour l'affichage des images (noir et blanc, niveaux de gris, contours, couleur,...)
 
 
 
