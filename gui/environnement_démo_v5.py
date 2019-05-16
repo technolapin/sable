@@ -82,11 +82,13 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
     @param "listeImages" : Liste d'images à afficher
     """
     def dessinerMilleFeuille3D(self, listeImages) : # Procédure qui dessine le graphique
+        # https://stackoverflow.com/questions/30464117/plotting-a-imshow-image-in-3d-in-matplotlib
+        
         self.axes.clear() # Nettoie les axes et leur contenu
 #        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
         
         # create a 21 x 21 vertex mesh
-        xx, yy = numpy.meshgrid(np.linspace(0,1,21), numpy.linspace(0,1,21))
+        xx, yy = numpy.meshgrid(numpy.linspace(0,1,21), numpy.linspace(0,1,21))
         
         # create vertices for a rotated mesh (3D rotation matrix)
         X =  xx 
@@ -96,8 +98,8 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
         # create some dummy data (20 x 20) for the image
         data = numpy.cos(xx) * numpy.cos(xx) + numpy.sin(yy) * numpy.sin(yy)
         
-        self.axes.plot( X, Y, Z, rstride=1, cstride=1, facecolors=plt.cm.BrBG(data), shade=False ) # Dessine le graphique 3D à partir de 3 listes dans les axes
-        self.draw() # Dessine le graphique 3D avec les axes
+        self.axes.plot( X, Y, Z, data, 100, zdir='z', offset=0.5, cmap=cm.BrBG)
+        self.draw()
 
 """
 Classe Fenetre, hérite de la classe QTabWidget (Et plus QWidget vu qu'on veut faire des onglets)

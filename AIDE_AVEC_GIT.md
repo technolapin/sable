@@ -15,7 +15,7 @@ Pour mettre à jour depuis le dépôt distant : `git pull`.
 
 A faire de temps en temps. Cela permet de récupérer toutes les modifications des collaborateurs.
 
-## Enoyer ses modifications
+## Envoyer ses modifications
 
 Ajouter le fichier : `git add leFichier.ext`.
 On peut ajouter plusieurs fichiers, ou des répertoires.
