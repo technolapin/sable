@@ -1,17 +1,10 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed May 15 14:44:17 2019
-
-@author: Maylis
-"""
-
-# -*- coding: utf-8 -*-
 
 import sys # Librairie pour faire des appels systèmes
 
 from PyQt4.QtCore import * # Librairie Python Qt4 pour créer la GUI
 from PyQt4.QtGui import *
-
+import codecs
 import io
 
 class Fenetre(QTabWidget):
@@ -23,7 +16,7 @@ class Fenetre(QTabWidget):
         self.tab2 = QWidget()
         self.setTabShape(1)
         self.addTab(self.tab1,"Tab 1")
-        self.addTab(self.tab2,"Tab 1")
+        self.addTab(self.tab2,"Tab 2")
         self.tab1UI()
         self.tab2UI()
         self.setWindowTitle("Analyse de mouvements de grains de sable dans une sequence d'images 3D")
@@ -54,22 +47,17 @@ class Fenetre(QTabWidget):
         zone_de_texte = QHBoxLayout()
         scroll_area=QScrollArea()
         scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll_area.setWidgetResizable(True)
         
-        #scroll_area.setWidgetResizable(True)
-        #scrollbar=QScrollBar()
-        
-        #zone_de_texte.setSizeConstraint(3)
-        fichier=io.open("Aide_generale.html", 'r',encoding='utf8')
+        fichier=codecs.open("C:/Users/Maylis/Documents/1.COURS/4.ESIEE/PROJET/sable/gui/tests_maylis/Aide_generale.html", 'r',encoding='utf-8')
         texte=QLabel(fichier.read())
-        texte.setScaledContents(True)
- #       texte.adjustSize()
-        #texte.setFixedWidth(500)
+        texte.adjustSize()
+        texte.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Expanding)
+        
         texte.setWordWrap(True)
         texte.setAlignment(Qt.AlignJustify)
-#        texte.adjustSize()
         scroll_area.setWidget(texte)
         zone_de_texte.addWidget(scroll_area)
-       # zone_de_texte.addWidget(scrollbar)
         onglet1.setLayout(zone_de_texte)
         
 
@@ -96,11 +84,10 @@ def main():
 if __name__ == '__main__':
      main()
      
-     """
+     
      
 fichier = open("urlfichier")
 list=fichier.readlines()
 concatenation=""
 for i in range (len(list)):
     concatenation+=list[i]
-    """
