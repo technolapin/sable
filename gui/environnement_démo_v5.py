@@ -63,6 +63,43 @@ class Graphique3D(FigureCanvasQTAgg) :
         self.draw() # Dessine le graphique 3D avec les axes
 
 """
+Classe MilleFeuille3D, hérite de FigureCanvasQTAgg
+Cette classe permet de gérer un graphique 3D d'images pouvant être tourné et inséré dans un environnement Qt
+Ces images sont affichées sous la forme d'un mille-feuilles
+"""
+class MilleFeuille3D(FigureCanvasQTAgg) :
+    """
+    Constructeur, initialise le graphique
+    """
+    def __init__(self) :
+        self.figure = plt.figure()
+        self.figure.subplots_adjust(bottom=0, top=1, left=0, right=1) # Supprime les marges
+        FigureCanvasQTAgg.__init__( self, self.figure ) # Objet de type FigureCanvas
+        self.axes = self.figure.gca( projection = '3d' ) # On lui dit qu'on veut des axes 3D, et on les stockes dans un attribut
+    
+    """
+    Dessine ou actualise avec un nouveau graphique
+    @param "listeImages" : Liste d'images à afficher
+    """
+    def dessinerMilleFeuille3D(self, listeImages) : # Procédure qui dessine le graphique
+        self.axes.clear() # Nettoie les axes et leur contenu
+#        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
+        
+        # create a 21 x 21 vertex mesh
+        xx, yy = numpy.meshgrid(np.linspace(0,1,21), numpy.linspace(0,1,21))
+        
+        # create vertices for a rotated mesh (3D rotation matrix)
+        X =  xx 
+        Y =  yy
+        Z =  10*numpy.ones(X.shape)
+        
+        # create some dummy data (20 x 20) for the image
+        data = numpy.cos(xx) * numpy.cos(xx) + numpy.sin(yy) * numpy.sin(yy)
+        
+        self.axes.plot( X, Y, Z, rstride=1, cstride=1, facecolors=plt.cm.BrBG(data), shade=False ) # Dessine le graphique 3D à partir de 3 listes dans les axes
+        self.draw() # Dessine le graphique 3D avec les axes
+
+"""
 Classe Fenetre, hérite de la classe QTabWidget (Et plus QWidget vu qu'on veut faire des onglets)
 Cette classe permet de gérer la fenêtre Qt avec onglets (Appel de la procédure "addTab()")
 Le graphique 3D est inséré dedans
@@ -84,12 +121,12 @@ class Fenetre(QTabWidget) :
         
         # Ajout des onglets à la fenêtre  	    
         self.addTab( self.onglet1, "Visualisation du Graphique" ) 
-        self.addTab( self.onglet2, "Onglet 2" )
+        self.addTab( self.onglet2, "Mille-feuilles" )
         self.addTab( self.onglet3, "Onglet 3" )
         
         # Appel des procédures qui remplissent les onglets
         self.tabGraphique3D()
-        self.tabOnglet2()
+        self.tabMilleFeuille3D()
         self.tabOnglet3()
     
     """
@@ -132,10 +169,18 @@ class Fenetre(QTabWidget) :
         self.onglet1.setLayout( grille ) # Ajout du contenu dans l'onglet
     
     """
-    Onglet 2
+    Onglet du mille-feuilles 3D
     """
-    def tabOnglet2(self) :
+    def tabMilleFeuille3D(self) :
+        self.milleFeuille3D = MilleFeuille3D()
+        
         grille = QGridLayout()
+        
+        grille.addWidget( self.milleFeuille3D, 2, 1 )
+        
+        self.setLayout(grille)
+        
+        self.milleFeuille3D.dessinerMilleFeuille3D( [] )
         
         self.onglet2.setLayout( grille )
     
