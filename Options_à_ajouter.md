@@ -1,15 +1,50 @@
 # Options à ajouter au projet
 
-Tracking d'un point (Grain de sable) pour visualiser sa position au cours du temps.
-* Pouvoir cliquer sur un point (Sur une image 2D ou 3D si on est balèzes) et suivre sa position.
+-Tracking d'un point (Grain de sable) pour visualiser sa position au cours du temps.
+  * Pouvoir cliquer sur un point (Sur une image 2D ou 3D si on est balèzes) et suivre sa position.
 
-Pouvoir obtenir la vitesse de chaque grain de sable.
-* En cliquant sur un grain sa vitesse instantanée est affichée.
+-Pouvoir obtenir la vitesse de chaque grain de sable.
+  * En cliquant sur un grain sa vitesse instantanée est affichée.
 
-Suivre l'évolution de l'angle entre un repère et un grain de sable.
-* Pouvoir placer un repère et cliquer sur le grain puis l'angle entre le repère et la droite pssant par le grain de sable est calculé et affiché pour chaque position temporelle (Cela permettrait de visualiser ce qu'il se passe lorsque 2 grains de sable entre en collision).
+-Suivre l'évolution de l'angle entre un repère et un grain de sable.
+  * Pouvoir placer un repère et cliquer sur le grain puis l'angle entre le repère et la droite pssant par le grain de sable est calculé et affiché pour chaque position temporelle (Cela permettrait de visualiser ce qu'il se passe lorsque 2 grains de sable entre en collision).
 
-Pouvoir isoler un/un groupe de grain(s) de sable (Faire disparaitre les autres ou juste le spotlight).
-* Cela permettrait de repérer des schémas que décrivent certains grains de sable (Un groupe de grains qui auraient un mouvement similaire).
+-Pouvoir isoler un/un groupe de grain(s) de sable (Faire disparaitre les autres ou juste le spotlight).
+  * Cela permettrait de repérer des schémas que décrivent certains grains de sable (Un groupe de grains qui auraient un  mouvement similaire).
 
-Pouvoir repérer une rotation d'un grain de sable (Hard).
+-Pouvoir repérer une rotation d'un grain de sable (Hard).
+
+-Afficher les vecteurs de direction lorsque l'on clique sur un grain de sable
+
+-Afficher les "fantomes" des autres positions du grain de sable cliqué (position à t0, t1, t2...)
+
+-Pouvoir faire défiler les images 2D et 3D 
+
+-Pouvoir enregistrer la suite d'images 2D ou 3D sous forme de vidéo (format AVI, mp4, gif,...)
+
+-Pouvoir enregistrer les caractéristiques du grain cliqué 
+
+-Détecter les grains alentours du grain qu'on clique
+
+-Interpoler pour avoir des belles courbes
+
+-Faire des stats sur les objets (nombre de grain dans une coupe/image 3D, taille moyenne des grains, mouvement global, si ça bouge beaucoup)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
