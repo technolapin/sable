@@ -82,23 +82,20 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
     @param "listeImages" : Liste d'images à afficher
     """
     def dessinerMilleFeuille3D(self, listeImages) : # Procédure qui dessine le graphique
-        # https://stackoverflow.com/questions/30464117/plotting-a-imshow-image-in-3d-in-matplotlib
+        # https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
         
         self.axes.clear() # Nettoie les axes et leur contenu
 #        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
         
-        # create a 21 x 21 vertex mesh
-        xx, yy = numpy.meshgrid(numpy.linspace(0,1,21), numpy.linspace(0,1,21))
+        # create a 513 x 513 vertex mesh
+        xx, yy = numpy.meshgrid(numpy.linspace(0,1,500), numpy.linspace(0,1,477))
         
         # create vertices for a rotated mesh (3D rotation matrix)
-        X =  xx 
-        Y =  yy
-        Z =  10*numpy.ones(X.shape)
+        X = xx
+        Y = yy
+        Z = 3
         
-        # create some dummy data (20 x 20) for the image
-        data = numpy.cos(xx) * numpy.cos(xx) + numpy.sin(yy) * numpy.sin(yy)
-        
-        self.axes.plot( X, Y, Z, data, 100, zdir='z', offset=0.5, cmap=cm.BrBG)
+        self.axes.plot_surface( X, Y, Z, rstride=1, cstride=1, facecolors=plt.imread('JPEG_example_flower.jpg')/255., shade=False )
         self.draw()
 
 """
