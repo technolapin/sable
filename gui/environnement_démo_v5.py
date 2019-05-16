@@ -85,11 +85,12 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
         self.axes.clear() # Nettoie les axes et leur contenu
 #        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
 
-        for I in range( len( listeImage ) ) :
+        for I in range( len( listeImages ) ) :
             # Source : https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
             # Create a 100 x 100 vertex mesh
             X, Y = numpy.meshgrid(numpy.linspace(0,1,100), numpy.linspace(0,1,100))
-            self.axes.plot_surface( X, Y, I, rstride=1, cstride=1, facecolors=plt.imread( listeImage[I] )/255., shade=False )
+            # TODO : Pré-traiter l'image
+            self.axes.plot_surface( X, Y, I, rstride=1, cstride=1, facecolors=plt.imread( listeImages[I] )/255., shade=False )
         
         self.draw()
 
