@@ -79,7 +79,8 @@ class Fenetre(QTabWidget) :
     Constructeur
     """
     def __init__(self, parent=None) :
-        super(Fenetre, self).__init__(parent) # Appel du constructeur de QWidget
+        # Appel du constructeur de QWidget
+        super(Fenetre, self).__init__(parent) 
         
         # Impose la taille minimale de la fenêtre, en pixels
         self.setMinimumSize( QSize(500, 500) );
@@ -90,12 +91,14 @@ class Fenetre(QTabWidget) :
         self.aide = QWidget()
         self.onglet3 = QWidget()  
 
-        # Dictionnaire des onglets de la fenêtre
-        self.ongl_fen = { 'visu_graph' : [self.visu_graph, "Visualisation du Graphique", self.tabGraphique3D()] , 'aide' : [self.aide , "Aide", self.tabAide() ] , 'onglet 3' : [self.onglet3 , "Onglet 3", self.tabOnglet3()] }
+        # Dictionnaire des onglets de la fenêtre 
+        self.ongl_fen = { 'visu_graph' : [self.visu_graph, "Visualisation du Graphique", self.tabGraphique3D()] , 
+                          'aide' :       [self.aide ,      "Aide",                       self.tabAide()       ] , 
+                          'onglet 3' :   [self.onglet3 ,   "Onglet 3",                   self.tabOnglet3()    ] }
         
-        # Ajout dynamique des onglets à la fenêtre
+        # Ajout dynamique des onglets dans la fenêtre
         for ongl in self.ongl_fen :
-            self.addTab(self.ongl_fen[ongl][0], self.ongl_fen[ongl][1])
+            self.addTab(self.ongl_fen[ongl][0], self.ongl_fen[ongl][1]) # Ajout des onglets à la fenêtre
             self.ongl_fen[ongl][2] # Appel procédures remplissant les onglets
         
     
@@ -144,32 +147,45 @@ class Fenetre(QTabWidget) :
     Onglet 2
     """
     def tabAide(self) :
+        # Création d'un layout
         layout=QGridLayout()
 
         # Création d'onglets dans la page d'aide
         onglets = QTabWidget()
-        
-        intro_onglet = QWidget()
-        aide_onglet1 = QWidget()
-        aide_onglet2 = QWidget()
-        onglets.addTab( intro_onglet, "Introduction" ) 
-        onglets.addTab( aide_onglet1, "Onglet 2" )
-        onglets.addTab( aide_onglet2, "Onglet 3" )
         onglets.setTabPosition(2)
         onglets.setTabShape(1)
+
+        aide_ongl = QWidget()
+        aide_onglet1 = QWidget()
+        aide_onglet2 = QWidget()
+    
+        # Dictionnaire des onglets de la page d'aide
+        self.ongl_aide = { 'aide_ongl' :   [aide_ongl,     "Introduction", 'Aide_generale.html'] , 
+                          'aide_onglet1' : [aide_onglet1 , "Aide Onglet1", 'coucou.html'       ] , 
+                          'aide_onglet2' : [aide_onglet2 , "Aide_Onglet2", 'salut.html'        ] }
         
-        # Ajout des onglets dans la grille et l'onglet Aide
+        # Ajout dynamique des onglets à la page d'aide
+        for ongl in self.ongl_aide :
+            onglets.addTab(self.ongl_aide[ongl][0], self.ongl_aide[ongl][1])
+            self.contenu_onglet_aide(ongl)
+        
+        # Ajout du conteneur d'onglets dans la grille et du layout dans l'onglet Aide de la fenêtre
         layout.addWidget(onglets)
         self.aide.setLayout(layout)
         
-        
+    
+    """
+    Affiche dans l'onglet indiqué le contenu du fichier .html associé
+    """    
+    def contenu_onglet_aide(self, nom_onglet)       :  
         # Contenu de l'onglet  d'introduction
         zone_de_texte = QHBoxLayout()
         scroll_area=QScrollArea()
         scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         scroll_area.setWidgetResizable(True)
         
-        fichier=codecs.open("C:/Users/Maylis/Documents/1.COURS/4.ESIEE/PROJET/sable/gui/tests_maylis/contenu_aide/Aide_generale.html", 'r',encoding='utf-8')
+        lien_fichier='C:/Users/Maylis/Documents/1.COURS/4.ESIEE/PROJET/sable/gui/tests_maylis/contenu_aide/'+self.ongl_aide[nom_onglet][2]
+        fichier=codecs.open(lien_fichier, 'r',encoding='utf-8')
         texte=QLabel(fichier.read())
         texte.adjustSize()
         texte.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Expanding)
@@ -178,9 +194,9 @@ class Fenetre(QTabWidget) :
         texte.setAlignment(Qt.AlignJustify)
         scroll_area.setWidget(texte)
         zone_de_texte.addWidget(scroll_area)
-        intro_onglet.setLayout(zone_de_texte)
+        self.ongl_aide[nom_onglet][0].setLayout(zone_de_texte)
 
-
+        
 
         
     """
@@ -191,6 +207,8 @@ class Fenetre(QTabWidget) :
         
         self.onglet3.setLayout( grille )
     
+ 
+
 
 
 """
