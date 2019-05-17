@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Environnement graphique d'affichage de graphiques en 3D
 Utilise la librairie PyQt pour l'UI, et MatPlotLib pour les graphiques
@@ -84,20 +86,18 @@ class Fenetre(QTabWidget) :
         
         # Création des onglets de la fenêtre
         self.setTabShape(1)
-        self.onglet1 = QWidget()
-        self.onglet2 = QWidget()
+        self.visu_graph = QWidget()
+        self.aide = QWidget()
         self.onglet3 = QWidget()  
+
+        # Dictionnaire des onglets de la fenêtre
+        self.ongl_fen = { 'visu_graph' : [self.visu_graph, "Visualisation du Graphique", self.tabGraphique3D()] , 'aide' : [self.aide , "Aide", self.tabAide() ] , 'onglet 3' : [self.onglet3 , "Onglet 3", self.tabOnglet3()] }
         
-        # Ajout des onglets à la fenêtre  	    
-        self.addTab( self.onglet1, "Visualisation du Graphique" ) 
-        self.addTab( self.onglet2, "Aide" )
-        self.addTab( self.onglet3, "Onglet 3" )
+        # Ajout dynamique des onglets à la fenêtre
+        for ongl in self.ongl_fen :
+            self.addTab(self.ongl_fen[ongl][0], self.ongl_fen[ongl][1])
+            self.ongl_fen[ongl][2] # Appel procédures remplissant les onglets
         
-        # Appel des procédures qui remplissent les onglets
-        self.tabGraphique3D()
-        self.tabAide()
-        self.tabOnglet3()
-    
     
 
     """
@@ -126,7 +126,7 @@ class Fenetre(QTabWidget) :
         
         self.graphique3D.dessinerGraphique3D( graphe, 0, 0 ) # Afficher graphique de base
         
-        self.onglet1.setLayout( grille ) # Ajout du contenu dans l'onglet
+        self.visu_graph.setLayout(grille) # Ajout du contenu dans l'onglet
 
 
     """
@@ -148,6 +148,7 @@ class Fenetre(QTabWidget) :
 
         # Création d'onglets dans la page d'aide
         onglets = QTabWidget()
+        
         intro_onglet = QWidget()
         aide_onglet1 = QWidget()
         aide_onglet2 = QWidget()
@@ -159,7 +160,7 @@ class Fenetre(QTabWidget) :
         
         # Ajout des onglets dans la grille et l'onglet Aide
         layout.addWidget(onglets)
-        self.onglet2.setLayout(layout)
+        self.aide.setLayout(layout)
         
         
         # Contenu de l'onglet  d'introduction
@@ -168,8 +169,7 @@ class Fenetre(QTabWidget) :
         scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         scroll_area.setWidgetResizable(True)
         
-        lien_fichier='contenu_aide/'+'Aide_generale.html'
-        fichier=codecs.open(lien_fichier, 'r',encoding='utf-8')
+        fichier=codecs.open("C:/Users/Maylis/Documents/1.COURS/4.ESIEE/PROJET/sable/gui/tests_maylis/contenu_aide/Aide_generale.html", 'r',encoding='utf-8')
         texte=QLabel(fichier.read())
         texte.adjustSize()
         texte.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Expanding)
@@ -191,8 +191,6 @@ class Fenetre(QTabWidget) :
         
         self.onglet3.setLayout( grille )
     
- 
-
 
 
 """
