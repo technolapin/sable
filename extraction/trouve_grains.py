@@ -44,7 +44,12 @@ def parse_list(file_name):
     f.close()
     return liste
 
-
+def export_list(liste, file_name):
+    f = open(file_name, "w")
+    f.write("_ "+str(len(liste))+"\n")
+    for elements in liste:
+        f.write(" ".join(str(el) for el in elements)+"\n")
+    f.close()
 
 
 
@@ -133,6 +138,7 @@ for i in range(0, n_tempo*n_coupe):
             del(centres[j])
         j += 1
 
+    
 
     ## Algo qui suit:
     # on fusionnes les formes trop proches par rapport a leur taille
@@ -143,8 +149,9 @@ for i in range(0, n_tempo*n_coupe):
     # variable correspondant a la qualite des cercles
     # = 1: on suppose cercles parfaits
     # < 1: l'algorithmes sera plus laxe
-    circlisme = 0.9
-    
+    circlisme = 1.0
+
+    """
     flag =  True
     while flag:
         flag = False
@@ -170,7 +177,13 @@ for i in range(0, n_tempo*n_coupe):
                         break
             if flag:
                 break
+    """
+    export_list(centres, "tmp/centrestmp.list")
+    os.system("./trucs_en_c/fusionne_proches tmp/centrestmp.list tmp/centres_fusion.list "+str(circlisme))
 
+    centres = parse_list("tmp/centres_fusion.list")
+
+    
     f = open("tmp/centres.lst", "w")
     f.write("b "+str(len(centres))+"\n")
     for forme in centres:
@@ -180,6 +193,7 @@ for i in range(0, n_tempo*n_coupe):
     # on transpose la liste finale des centres en pgm puis en png
     # pour visualiser avec de la couleur
     # (cf la doc)
+    
     command("list2pgm tmp/centres.lst 80 80 1 tmp/filtered_centres.pgm")
     command("genlut 256 0 200 0 255 0 2550 lut.lut")
     command("pgm2ppm tmp/filtered_centres.pgm lut.lut tmp/colored_centers.ppm")
@@ -187,7 +201,7 @@ for i in range(0, n_tempo*n_coupe):
     os.system("convert tmp/colored_centers.ppm -transparent black tmp/transp_centers.png")
     # superpose l'image des formes et celles des centres colores
     os.system("composite -compose over tmp/transp_centers.png "+output_file_formes+" "+output_file_appercu)
-
+    
     # on sauvegarde les resulats dans la liste des resultats
     donnees[i//n_coupe].append(centres)
 
