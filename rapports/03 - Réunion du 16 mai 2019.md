@@ -15,7 +15,7 @@ Participants du projet :
 ## Compte-rendu de la réunion
 
 ### Ce que nous avons fait
-* Clément et Barbara ont appliqués le watershade et corrigé certains défauts de séparation des grains de sable. Ils ont aussi cherché de nouveaux outils pour régler les problèmes générés par le watershade pour obtenir une qualité obtimale. 
+* Clément et Barbara ont appliqués le watershade et corrigé certains défauts de séparation des grains de sable. Ils ont aussi cherché de nouveaux outils pour régler les problèmes générés par le watershade pour obtenir une qualité optimale. 
 * Amaury s'est chargé de la visualisation graphique de points dans un espace 3D. 
 * Maylis a créé une interface graphique permettant d'afficher plusieurs onglets et de générer une aide spécifique à chaque onglet. 
 * Alexandre a fait la liste des outils restant à implémenter pour les rendre accessibles depuis l'interface et a aidé Maylis à trouver les bons outils pour l'interface graphique. 
