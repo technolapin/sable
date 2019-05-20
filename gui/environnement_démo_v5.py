@@ -24,6 +24,31 @@ from mpl_toolkits.mplot3d import Axes3D # Classe pour gérer les axes 3D
 from random import choice # Fonction pour chosir aléatoirement un élement dans une liste
 
 
+
+def read_pgm(filename, byteorder='>'):
+    """Return image data from a raw PGM file as numpy array.
+
+    Format specification: http://netpbm.sourceforge.net/doc/pgm.html
+
+    """
+    with open(filename, 'rb') as f:
+        buffer = f.read()
+    try:
+        header, width, height, maxval = re.search(
+            b"(^P5\s(?:\s*#.*[\r\n])*"
+            b"(\d+)\s(?:\s*#.*[\r\n])*"
+            b"(\d+)\s(?:\s*#.*[\r\n])*"
+            b"(\d+)\s(?:\s*#.*[\r\n]\s)*)", buffer).groups()
+    except AttributeError:
+        raise ValueError("Not a raw PGM file: '%s'" % filename)
+    return numpy.frombuffer(buffer,
+                            dtype='u1' if int(maxval) < 256 else byteorder+'u2',
+                            count=int(width)*int(height),
+                            offset=len(header)
+                            ).reshape((int(height), int(width)))
+
+
+
 # Note : Une variable commencant par "self." est un attribut de l'objet
 """
 Classe Graphique3D, hérite de FigureCanvasQTAgg
@@ -90,7 +115,7 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
             # Create a 100 x 100 vertex mesh
             X, Y = numpy.meshgrid(numpy.linspace(0,1,80), numpy.linspace(0,1,80))
             # TODO : Pré-traiter l'image pour prendre en charge le format à la con
-            self.axes.plot_surface( X, Y, I, rstride=1, cstride=1, facecolors=plt.imread( listeImages[I] )/255., shade=False )
+            self.axes.plot_surface( X, Y, I, rstride=1, cstride=1, facecolors = read_pgm("test-0.pgm", byteorder='<'), shade=False )
         
         self.draw()
         
