@@ -1,4 +1,4 @@
-# Options à ajouter au projet
+﻿# Options à ajouter au projet
 
 -Tracking d'un point (Grain de sable) pour visualiser sa position au cours du temps.
   * Pouvoir cliquer sur un point (Sur une image 2D ou 3D si on est balèzes) et suivre sa position.
@@ -32,6 +32,7 @@
 
 -Plusieurs "modes" pour l'affichage des images (noir et blanc, niveaux de gris, contours, couleur,...)
 
+- Faire une liste des pixels appartenant à un grain OU à partir de l'aire et des centres déterminer quels pixels appartiennent au grain (quand on clique, savoir dans quel grain on se trouve)
 
 
 

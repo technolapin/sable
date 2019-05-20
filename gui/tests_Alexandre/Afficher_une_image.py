@@ -18,25 +18,17 @@ class Fenetre(QTabWidget) :
     def __init__(self, parent=None) :
         super(Fenetre, self).__init__(parent) # Appel du constructeur de QWidget
         
-        # Impose la taille minimale de la fenêtre, en pixels
         self.setMinimumSize(QSize(500, 500));
         
-        # Création des onglets de la fenêtre
         self.setTabShape(1)
-        self.onglet1 = QWidget()
         self.onglet2 = QWidget()
         self.onglet3 = QWidget()  
-        self.centralwidget = QWidget() 
         
-        # Ajout des onglets à la fenêtre  	    
-        self.addTab( self.onglet1, "Visualisation du Graphique" ) 
         self.addTab( self.onglet2, "Aide" )
         self.addTab( self.onglet3, "Affichage de l'image" )
         
-        # On choisit l'image à afficher dans l'onglet 3
         self.image_1 = "Result1.pgm"             
 
-        # Appel des procédures qui remplissent les onglets        
         self.tabOnglet3()
         
         
@@ -48,15 +40,8 @@ class Fenetre(QTabWidget) :
         grille = QGridLayout()
         
         self.onglet3.setLayout(grille)
-        #Affichage de l'image        
-        self.label = QLabel(self.centralwidget) 
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed) 
-        self.label.setSizePolicy(sizePolicy) 
+        self.label = QLabel() #self.centralwidget) 
         self.label.setPixmap(QPixmap(self.image_1))        
-        self.label.setScaledContents(False)
-        self.label.adjustSize()
-        self.label_cmb = QComboBox(self.centralwidget)
-        self.label_cmb.currentIndexChanged.connect(self.update_label) 
         grille.addWidget(self.label)
         
         
