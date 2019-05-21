@@ -204,13 +204,13 @@ class Fenetre(QTabWidget) :
         
         # Défilement temporel
         self.barreDeScrollCourbes = QScrollBar() # C'est une barre de défilement
-        self.barreDeScrollCourbes.setMaximum( len(graphe[0]) + 1 ) # Défini le nombre de valeurs qu'on peut y parcourir
+        self.barreDeScrollCourbes.setMaximum( len(graphe[0]) ) # Défini le nombre de valeurs qu'on peut y parcourir
         # len(graphe[0][0]) est le nombre de courbes
         self.barreDeScrollCourbes.valueChanged.connect( self.changementGraphique3D ) # La procédure à appeler lorsque l'utilisateur y touche
         
         # Défilement coupes
         self.barreDeScrollTemps = QScrollBar()
-        self.barreDeScrollTemps.setMaximum( len(graphe[0][0]) + 1 )
+        self.barreDeScrollTemps.setMaximum( len(graphe[0][0]) )
         # len(graphe[0][0]) est le nombre d'échantillons temporels dont on dispose
         self.barreDeScrollTemps.valueChanged.connect( self.changementGraphique3D )
         
@@ -256,7 +256,7 @@ class Fenetre(QTabWidget) :
         self.onglet3.setLayout( grille )
     
     """
-    Gère les changements par l'utilisateur dans le menu déroulant de sélection
+    Gère les changements par l'utilisateur dans les barres de défilement
     """
     def changementGraphique3D(self, value) :
 #        graphiqueDemande = str(self.menuSelection.currentText())
