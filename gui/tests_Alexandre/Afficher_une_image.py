@@ -27,7 +27,7 @@ class Fenetre(QTabWidget) :
         self.addTab( self.onglet2, "Aide" )
         self.addTab( self.onglet3, "Affichage de l'image" )
         
-        self.image_1 = "Result1.pgm"             
+        self.image = "Result.pgm"             
 
         self.tabOnglet3()
         
@@ -41,7 +41,7 @@ class Fenetre(QTabWidget) :
         
         self.onglet3.setLayout(grille)
         self.label = QLabel() #self.centralwidget) 
-        self.label.setPixmap(QPixmap(self.image_1))        
+        self.label.setPixmap(QPixmap(self.image))
         grille.addWidget(self.label)
         
         
