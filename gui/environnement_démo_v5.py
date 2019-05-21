@@ -28,7 +28,7 @@ graphe = [courbe1, courbe2, courbe3]
 # Chaque sous-liste représente une courbe, et toutes ces sous-listes doivent avoir la même longueur
 # Ces sous-listes doivent comprendre 3 sous-sous-listes étant les coordonnées X, Y et Z à tracer
 
-DISABLE_MILLEFEUILLE = True # Parce que ça nécéssite de grosses capacitées de calcul
+DESACTIVER_MILLEFEUILLE = True # Parce que ça nécéssite de grosses capacitées de calcul
 
 
 
@@ -175,17 +175,17 @@ class Fenetre(QTabWidget) :
         
         # Création des onglets de la fenêtre
         self.onglet1 = QWidget()
-        self.onglet2 = QWidget()
+        if not DESACTIVER_MILLEFEUILLE : self.onglet2 = QWidget()
         self.onglet3 = QWidget()  
         
         # Ajout des onglets à la fenêtre  	    
         self.addTab( self.onglet1, "Visualisation du Graphique" ) 
-        if not DISABLE_MILLEFEUILLE : self.addTab( self.onglet2, "Mille-feuilles" )
-        self.addTab( self.onglet3, "Onglet 3" )
+        if not DESACTIVER_MILLEFEUILLE : self.addTab( self.onglet2, "Mille-feuilles" )
+        self.addTab( self.onglet3, "Nouvel Onglet" )
         
         # Appel des procédures qui remplissent les onglets
         self.tabGraphique3D()
-        if not DISABLE_MILLEFEUILLE : self.tabMilleFeuille3D()
+        if not DESACTIVER_MILLEFEUILLE : self.tabMilleFeuille3D()
         self.tabOnglet3()
     
     """
