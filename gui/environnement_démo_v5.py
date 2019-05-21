@@ -9,9 +9,12 @@ Auteurs originaux :
 """
 
 
+import os
+
 import sys # Librairie pour faire des appels systèmes
-from PyQt4.QtCore import * # Librairie Python Qt4 pour créer la GUI
-from PyQt4.QtGui import * # Librairie Python Qt4 pour créer la GUI
+from PyQt5.QtCore import * # Librairie Python Qt4 pour créer la GUI
+from PyQt5.QtGui import * # Librairie Python Qt4 pour créer la GUI
+from PyQt5.QtWidgets import * # Librairie Python Qt4 pour créer la GUI
 
 from math import * # Librairie mathématique, pour utiliser la fonction log()
 import numpy # Autre librairie mathématique
@@ -21,16 +24,17 @@ import matplotlib.pyplot as plt # Librairie pour faire des graphiques
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg # Classe pour mettre du Matplotlib dans Qt
 from mpl_toolkits.mplot3d import Axes3D # Classe pour gérer les axes 3D
 
-from random import choice # Fonction pour chosir aléatoirement un élement dans une liste
+from random import choice # Fonction pour choisir aléatoirement un élement dans une liste
+import re # Librairie pour faire des recherches
 
-import re
 
-
+"""
+Lecture d'un fichier PGM
+"""
 def read_pgm(filename, byteorder='>'):
-    """Return image data from a raw PGM file as numpy array.
-
+    """
+    Return image data from a raw PGM file as numpy array.
     Format specification: http://netpbm.sourceforge.net/doc/pgm.html
-
     """
     with open(filename, 'rb') as f:
         buffer = f.read()
@@ -113,10 +117,14 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
 
         for I in range( len( listeImages ) ) :
             # Source : https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
-            # Create a 100 x 100 vertex mesh
+            # Create a 80 x 80 vertex mesh
             X, Y = numpy.meshgrid(numpy.linspace(0,1,80), numpy.linspace(0,1,80))
-            # TODO : Pré-traiter l'image pour prendre en charge le format à la con
-            self.axes.plot_surface( X, Y, I, rstride=1, cstride=1, facecolors = read_pgm("test-0.pgm", byteorder='<'), shade=False )
+            Z = numpy.zeros(X.shape) + I
+            # Traitement de l'image
+            image = read_pgm("test-0.pgm", byteorder='<')
+            imageConvertie = image.astype(float64) / 255
+            T = mpl.cm.hot(imageConvertie)
+            self.axes.plot_surface(X, Y, Z, facecolors=T)
         
         self.draw()
         

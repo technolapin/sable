@@ -1,20 +1,20 @@
 import os
 
 
-from pylab import *
+#from pylab import *
 from mpl_toolkits.mplot3d import Axes3D
-from matplotlib.cbook import get_sample_data
-from matplotlib._png import read_png
+#from matplotlib.cbook import get_sample_data
+#from matplotlib._png import read_png
 
 import re
 
 import numpy
 
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib.cbook import get_sample_data
-from matplotlib._png import read_png
-import numpy as np
+#from mpl_toolkits.mplot3d import Axes3D
+#from matplotlib.cbook import get_sample_data
+#from matplotlib._png import read_png
+#import numpy as np
 
 
 
@@ -57,25 +57,23 @@ show()
 """
 
 
-"""
 
 imgALaCon = read_pgm("test-0.pgm", byteorder='<')
 
-plt.matshow(imgALaCon)
-"""
+imgCOnvertie = imgALaCon.astype(float64)/255
+
+norm = mpl.colors.Normalize(vmin=-1, vmax=1)
+X, Y= numpy.meshgrid(numpy.linspace(0,1,80), numpy.linspace(0,1,80))
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
-# Make data.
-X = np.arange(-5, 5, 0.25)
-Y = np.arange(-5, 5, 0.25)
-X, Y = np.meshgrid(X, Y)
-R = np.sqrt(X**2 + Y**2)
-Z = np.sin(R)
+for i in numpy.linspace(-1,1,5):
+    Z = numpy.zeros(X.shape)+i
+    T1 = numpy.sin(X*Y*Z)
+    T = mpl.cm.hot(imgCOnvertie)
+    ax.plot_surface(X, Y, Z, facecolors=T)
 
-# Plot the surface.
-surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm,
-                       linewidth=0, antialiased=False)
+plt.show()
 
 '''
 fn = get_sample_data("C:\Users\Amaury\Desktop\Sable\gui\JPEG_example_flower.png", asfileobj=False)
