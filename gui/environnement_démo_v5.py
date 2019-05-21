@@ -8,8 +8,33 @@ Auteurs originaux :
 - "Joe" : https://stackoverflow.com/users/7919597/joe
 """
 
+"""
+PARAMETRES
+"""
+# Graphique que on veut afficher
+theta = numpy.linspace(-10 * numpy.pi, 5 * numpy.pi, 100)
+z = numpy.linspace(-2, 2, 100)
+r = z**2 + 1
+x = r * numpy.sin(theta)
+y = r * numpy.cos(theta)
+
+courbe1 = [x, y, z]
+courbe2 = [y, z, x]
+courbe3 = [z, x, y]
+
+# Note : Notre programme n'utilise que cette variable globale "graphe"
+graphe = [courbe1, courbe2, courbe3]
+# Elle doit être une liste de listes
+# Chaque sous-liste représente une courbe, et toutes ces sous-listes doivent avoir la même longueur
+# Ces sous-listes doivent comprendre 3 sous-sous-listes étant les coordonnées X, Y et Z à tracer
+
+DISABLE_MILLEFEUILLE = True # Parce que ça nécéssite de grosses capacitées de calcul
 
 
+
+"""
+IMPORTATIONS
+"""
 import sys # Librairie pour faire des appels systèmes
 from PyQt5.QtCore import * # Librairie Python Qt4 pour créer la GUI
 from PyQt5.QtGui import * # Librairie Python Qt4 pour créer la GUI
@@ -155,12 +180,12 @@ class Fenetre(QTabWidget) :
         
         # Ajout des onglets à la fenêtre  	    
         self.addTab( self.onglet1, "Visualisation du Graphique" ) 
-        self.addTab( self.onglet2, "Mille-feuilles" )
+        if not DISABLE_MILLEFEUILLE : self.addTab( self.onglet2, "Mille-feuilles" )
         self.addTab( self.onglet3, "Onglet 3" )
         
         # Appel des procédures qui remplissent les onglets
         self.tabGraphique3D()
-        self.tabMilleFeuille3D()
+        if not DISABLE_MILLEFEUILLE : self.tabMilleFeuille3D()
         self.tabOnglet3()
     
     """
@@ -249,23 +274,6 @@ class Fenetre(QTabWidget) :
 """
 Code principal
 """
-# Graphique que on veut afficher
-theta = numpy.linspace(-10 * numpy.pi, 5 * numpy.pi, 100)
-z = numpy.linspace(-2, 2, 100)
-r = z**2 + 1
-x = r * numpy.sin(theta)
-y = r * numpy.cos(theta)
-
-courbe1 = [x, y, z]
-courbe2 = [y, z, x]
-courbe3 = [z, x, y]
-
-# Note : Notre programme n'utilise que cette variable globale "graphe"
-graphe = [courbe1, courbe2, courbe3]
-# Elle doit être une liste de listes
-# Chaque sous-liste représente une courbe, et toutes ces sous-listes doivent avoir la même longueur
-# Ces sous-listes doivent comprendre 3 sous-sous-listes étant les coordonnées X, Y et Z à tracer
-
 # Si on est le script principal
 # Cela permet de ne pas exécuter ce bloc de codes lorsque ce script est importé par un autre
 # Source : https://stackoverflow.com/questions/419163/what-does-if-name-main-do
