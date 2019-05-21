@@ -8,28 +8,6 @@ Auteurs originaux :
 - "Joe" : https://stackoverflow.com/users/7919597/joe
 """
 
-"""
-PARAMETRES
-"""
-# Graphique que on veut afficher
-theta = numpy.linspace(-10 * numpy.pi, 5 * numpy.pi, 100)
-z = numpy.linspace(-2, 2, 100)
-r = z**2 + 1
-x = r * numpy.sin(theta)
-y = r * numpy.cos(theta)
-
-courbe1 = [x, y, z]
-courbe2 = [y, z, x]
-courbe3 = [z, x, y]
-
-# Note : Notre programme n'utilise que cette variable globale "graphe"
-graphe = [courbe1, courbe2, courbe3]
-# Elle doit être une liste de listes
-# Chaque sous-liste représente une courbe, et toutes ces sous-listes doivent avoir la même longueur
-# Ces sous-listes doivent comprendre 3 sous-sous-listes étant les coordonnées X, Y et Z à tracer
-
-DESACTIVER_MILLEFEUILLE = True # Parce que ça nécéssite de grosses capacitées de calcul
-
 
 
 """
@@ -51,6 +29,37 @@ import matplotlib.cm as cm # Pour cm.hot()
 
 from random import choice # Fonction pour choisir aléatoirement un élement dans une liste
 import re # Librairie pour faire des recherches
+
+
+
+"""
+PARAMETRES
+"""
+# Graphique que on veut afficher
+theta = numpy.linspace(-10 * numpy.pi, 5 * numpy.pi, 100)
+z = numpy.linspace(-2, 2, 100)
+r = z**2 + 1
+x = r * numpy.sin(theta)
+y = r * numpy.cos(theta)
+
+courbe1 = [x, y, z]
+courbe2 = [y, z, x]
+courbe3 = [z, x, y]
+
+# Note : Notre programme n'utilise que cette variable globale "graphe"
+graphe = [courbe1, courbe2, courbe3]
+# Elle doit être une liste de listes
+# Chaque sous-liste représente une courbe, et toutes ces sous-listes doivent avoir la même longueur
+# Ces sous-listes doivent comprendre 3 sous-sous-listes étant les coordonnées X, Y et Z à tracer
+
+DESACTIVER_MILLEFEUILLE = False # Parce que ça nécéssite de grosses capacitées de calcul
+
+NB_IMGS = 4000 # Nombre d'images au format PGM
+INTERVALLE = 250 # Intervalle temporel dans cette liste d'images
+
+if NB_IMGS % INTERVALLE != 0 :
+    print( "On a un problème !" )
+    sys.exit(1)
 
 
 
@@ -202,13 +211,13 @@ class Fenetre(QTabWidget) :
 #        # On peut remplacer "QSize(400, 400)" par "self.graphique3D.sizeHint()" pour que la taille par défaut soit la taille minimum
 #       Devenu inutile car on définit la taille minimale de la fenêtre
         
-        # Défilement temporel
+        # Défilement coupes
         self.barreDeScrollCourbes = QScrollBar() # C'est une barre de défilement
         self.barreDeScrollCourbes.setMaximum( len(graphe[0]) ) # Défini le nombre de valeurs qu'on peut y parcourir
         # len(graphe[0][0]) est le nombre de courbes
         self.barreDeScrollCourbes.valueChanged.connect( self.changementGraphique3D ) # La procédure à appeler lorsque l'utilisateur y touche
         
-        # Défilement coupes
+        # Défilement temporel
         self.barreDeScrollTemps = QScrollBar()
         self.barreDeScrollTemps.setMaximum( len(graphe[0][0]) )
         # len(graphe[0][0]) est le nombre d'échantillons temporels dont on dispose
@@ -220,9 +229,7 @@ class Fenetre(QTabWidget) :
         grille.addWidget( self.graphique3D, 2, 1 ) # Ajoute le graphique 3D en position ligne 2 colonne 1
         grille.addWidget( self.barreDeScrollCourbes, 2, 2 ) # Ajoute la barre de défilement 1 en position ligne 2 colonne 2
         grille.addWidget( self.barreDeScrollTemps, 2, 3 ) # Ajoute la barre de défilement 2 en position ligne 2 colonne 2
-        
-        self.setLayout(grille) # Definit notre grille comme grille à utiliser
-        
+            
         self.graphique3D.dessinerGraphique3D( graphe, 0, 0 ) # Afficher graphique de base
         
         self.onglet1.setLayout( grille ) # Ajout du contenu dans l'onglet
@@ -233,17 +240,29 @@ class Fenetre(QTabWidget) :
     def tabMilleFeuille3D(self) :
         self.milleFeuille3D = MilleFeuille3D()
         
+        # Défilement de couches inférieures
+        self.barreDeScrollMFCoucheMin = QScrollBar()
+        self.barreDeScrollMFCoucheMin.setMaximum( INTERVALLE )
+        self.barreDeScrollMFCoucheMin.valueChanged.connect( self.dessinerMilleFeuille3D )
+        
+        # Défilement de couches supérieures
+        self.barreDeScrollMFCoucheMax = QScrollBar()
+        self.barreDeScrollMFCoucheMax.setMaximum( INTERVALLE )
+        self.barreDeScrollMFCoucheMax.valueChanged.connect( self.dessinerMilleFeuille3D )
+        
+        # Défilement temporel
+        self.barreDeScrollMFTemps = QScrollBar(Qt.Horizontal)
+        self.barreDeScrollMFTemps.setMaximum( NB_IMGS / INTERVALLE )
+        self.barreDeScrollMFTemps.valueChanged.connect( self.dessinerMilleFeuille3D )
+        
         grille = QGridLayout()
         
         grille.addWidget( self.milleFeuille3D, 2, 1 )
+        grille.addWidget( self.barreDeScrollMFCoucheMin, 2, 2 )
+        grille.addWidget( self.barreDeScrollMFCoucheMax, 2, 3 )
+        grille.addWidget( self.barreDeScrollMFTemps, 3, 1 )
         
-        self.setLayout(grille)
-        
-        listeImages = []
-        for i in range(16) :
-            listeImages.append( "../extraction/images/test-" + str(i) + ".pgm" )
-        
-        self.milleFeuille3D.dessinerMilleFeuille3D( listeImages )
+        self.dessinerMilleFeuille3D(0)
         
         self.onglet2.setLayout( grille )
     
@@ -268,6 +287,22 @@ class Fenetre(QTabWidget) :
          self.graphique3D.dessinerGraphique3D( graphe, self.barreDeScrollCourbes.value(), self.barreDeScrollTemps.value() )
          
          print( "[Debug] Temps : " + str( self.barreDeScrollCourbes.value() ) + ", Courbe : " + str( self.barreDeScrollTemps.value() ) + ", Valeur donnée : " + str( value ) )
+    
+    """
+    Gére le dessin du mille feuille 3D
+    """
+    def dessinerMilleFeuille3D(self, value) :
+        listeImages = []
+        if self.barreDeScrollMFCoucheMax.value() != 0 :
+            for i in range(self.barreDeScrollMFCoucheMin.value(), self.barreDeScrollMFCoucheMax.value(), 1) :
+                listeImages.append( "../extraction/images/test-" + str(i + self.barreDeScrollMFTemps.value()) + ".pgm" )
+        else : # Pour ne piloter qu'avec la min, ça évite les lags
+            for i in range(self.barreDeScrollMFCoucheMin.value(), self.barreDeScrollMFCoucheMin.value() + 1, 1) :
+                listeImages.append( "../extraction/images/test-" + str(i + self.barreDeScrollMFTemps.value()) + ".pgm" )
+        
+        self.milleFeuille3D.dessinerMilleFeuille3D( listeImages )
+        
+        print( "[Debug] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
 
 
 
