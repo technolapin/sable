@@ -54,6 +54,8 @@ graphe = [courbe1, courbe2, courbe3]
 
 DESACTIVER_MILLEFEUILLE = False # Parce que ça nécéssite de grosses capacitées de calcul
 
+ANTI_LAG = False # Désactive l'affichache multi-couches dans le mille-feuilles
+
 NB_IMGS = 4000 # Nombre d'images au format PGM
 INTERVALLE = 250 # Intervalle temporel dans cette liste d'images
 
@@ -145,7 +147,7 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
     
     """
     Dessine ou actualise avec un nouveau graphique
-    @param "listeImages" : Liste d'images à afficher, au format PGM (Base 8)
+    @param "listeImages" : Liste d'images à afficher, au format PGM (Base 8), associées à leur hauteur à afficher.
     """
     def dessinerMilleFeuille3D(self, listeImages) : # Procédure qui dessine le graphique      
         self.axes.clear() # Nettoie les axes et leur contenu
@@ -155,11 +157,11 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
             # Source : https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
             # Create a 80 x 80 vertex mesh
             X, Y = numpy.meshgrid(numpy.linspace(0,1,80), numpy.linspace(0,1,80))
-            Z = numpy.zeros(X.shape) + I
+            Z = numpy.zeros(X.shape) + listeImages[I][1]
             
             # Source : https://stackoverflow.com/questions/45663597/plotting-3d-image-form-a-data-in-numpy-array
             # Traitement de l'image
-            image = read_pgm(listeImages[I], byteorder='<') # Matrix au format uint8
+            image = read_pgm(listeImages[I][0], byteorder='<') # Matrix au format uint8
             imageConvertie = image.astype(numpy.float64) / 255 # Convertie en float64
             T = cm.hot(imageConvertie) # Matrix float64 que facecolors peut prendre
             
@@ -240,15 +242,15 @@ class Fenetre(QTabWidget) :
     def tabMilleFeuille3D(self) :
         self.milleFeuille3D = MilleFeuille3D()
         
-        # Défilement de couches inférieures
+        # Défilement de couches inférieures (Valeur de la couche minimum à afficher)
         self.barreDeScrollMFCoucheMin = QScrollBar()
-        self.barreDeScrollMFCoucheMin.setMaximum( INTERVALLE )
+        self.barreDeScrollMFCoucheMin.setMaximum( INTERVALLE - 1 )
         self.barreDeScrollMFCoucheMin.valueChanged.connect( self.dessinerMilleFeuille3D )
         
-        # Défilement de couches supérieures
-        self.barreDeScrollMFCoucheMax = QScrollBar()
-        self.barreDeScrollMFCoucheMax.setMaximum( INTERVALLE )
-        self.barreDeScrollMFCoucheMax.valueChanged.connect( self.dessinerMilleFeuille3D )
+        # Défilement de couches supérieures (Valeur de la couche maximum à afficher)
+        if not ANTI_LAG : self.barreDeScrollMFCoucheMax = QScrollBar()
+        if not ANTI_LAG : self.barreDeScrollMFCoucheMax.setMaximum( INTERVALLE - 1 )
+        if not ANTI_LAG : self.barreDeScrollMFCoucheMax.valueChanged.connect( self.dessinerMilleFeuille3D )
         
         # Défilement temporel
         self.barreDeScrollMFTemps = QScrollBar(Qt.Horizontal)
@@ -259,7 +261,7 @@ class Fenetre(QTabWidget) :
         
         grille.addWidget( self.milleFeuille3D, 2, 1 )
         grille.addWidget( self.barreDeScrollMFCoucheMin, 2, 2 )
-        grille.addWidget( self.barreDeScrollMFCoucheMax, 2, 3 )
+        if not ANTI_LAG : grille.addWidget( self.barreDeScrollMFCoucheMax, 2, 3 )
         grille.addWidget( self.barreDeScrollMFTemps, 3, 1 )
         
         self.dessinerMilleFeuille3D(0)
@@ -295,10 +297,9 @@ class Fenetre(QTabWidget) :
         listeImages = []
         if self.barreDeScrollMFCoucheMax.value() != 0 :
             for i in range(self.barreDeScrollMFCoucheMin.value(), self.barreDeScrollMFCoucheMax.value(), 1) :
-                listeImages.append( "../extraction/images/test-" + str(i + self.barreDeScrollMFTemps.value()) + ".pgm" )
-        else : # Pour ne piloter qu'avec la min, ça évite les lags
-            for i in range(self.barreDeScrollMFCoucheMin.value(), self.barreDeScrollMFCoucheMin.value() + 1, 1) :
-                listeImages.append( "../extraction/images/test-" + str(i + self.barreDeScrollMFTemps.value()) + ".pgm" )
+                listeImages.append( ["../extraction/images/test-" + str(i + self.barreDeScrollMFTemps.value()) + ".pgm", self.barreDeScrollMFCoucheMin.value() + i] )
+        else : # Permet de ne commander qu'avec le défilement de la valeur minimum
+            listeImages.append( ["../extraction/images/test-" + str(self.barreDeScrollMFCoucheMin.value() + self.barreDeScrollMFTemps.value()) + ".pgm", self.barreDeScrollMFCoucheMin.value()] )
         
         self.milleFeuille3D.dessinerMilleFeuille3D( listeImages )
         
