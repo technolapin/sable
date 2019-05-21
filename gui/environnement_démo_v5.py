@@ -9,7 +9,6 @@ Auteurs originaux :
 """
 
 
-import os
 
 import sys # Librairie pour faire des appels systèmes
 from PyQt5.QtCore import * # Librairie Python Qt4 pour créer la GUI
@@ -23,13 +22,16 @@ from matplotlib.figure import Figure # Classe Figure de la librairie Matplotlib
 import matplotlib.pyplot as plt # Librairie pour faire des graphiques
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg # Classe pour mettre du Matplotlib dans Qt
 from mpl_toolkits.mplot3d import Axes3D # Classe pour gérer les axes 3D
+import matplotlib.cm as cm # Pour cm.hot()
 
 from random import choice # Fonction pour choisir aléatoirement un élement dans une liste
 import re # Librairie pour faire des recherches
 
 
+
 """
 Lecture d'un fichier PGM
+Source : https://github.com/jmeyers314/astrophotoreduce/blob/master/pgm.py
 """
 def read_pgm(filename, byteorder='>'):
     """
@@ -109,7 +111,7 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
     
     """
     Dessine ou actualise avec un nouveau graphique
-    @param "listeImages" : Liste d'images à afficher
+    @param "listeImages" : Liste d'images à afficher, au format PGM (Base 8)
     """
     def dessinerMilleFeuille3D(self, listeImages) : # Procédure qui dessine le graphique      
         self.axes.clear() # Nettoie les axes et leur contenu
@@ -120,15 +122,16 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
             # Create a 80 x 80 vertex mesh
             X, Y = numpy.meshgrid(numpy.linspace(0,1,80), numpy.linspace(0,1,80))
             Z = numpy.zeros(X.shape) + I
+            
+            # Source : https://stackoverflow.com/questions/45663597/plotting-3d-image-form-a-data-in-numpy-array
             # Traitement de l'image
-            image = read_pgm("test-0.pgm", byteorder='<')
-            imageConvertie = image.astype(float64) / 255
-            T = mpl.cm.hot(imageConvertie)
+            image = read_pgm(listeImages[I], byteorder='<') # Matrix au format uint8
+            imageConvertie = image.astype(numpy.float64) / 255 # Convertie en float64
+            T = cm.hot(imageConvertie) # Matrix float64 que facecolors peut prendre
+            
             self.axes.plot_surface(X, Y, Z, facecolors=T)
         
         self.draw()
-        
-        # GROSSE MERDE QUI LAG LA MORT PUNAISE !
 
 """
 Classe Fenetre, hérite de la classe QTabWidget (Et plus QWidget vu qu'on veut faire des onglets)
@@ -211,7 +214,11 @@ class Fenetre(QTabWidget) :
         
         self.setLayout(grille)
         
-        self.milleFeuille3D.dessinerMilleFeuille3D( ['JPEG_example_flower.jpg'] )
+        listeImages = []
+        for i in range(16) :
+            listeImages.append( "../extraction/images/test-" + str(i) + ".pgm" )
+        
+        self.milleFeuille3D.dessinerMilleFeuille3D( listeImages )
         
         self.onglet2.setLayout( grille )
     
@@ -236,6 +243,7 @@ class Fenetre(QTabWidget) :
          self.graphique3D.dessinerGraphique3D( graphe, self.barreDeScrollCourbes.value(), self.barreDeScrollTemps.value() )
          
          print( "[Debug] Temps : " + str( self.barreDeScrollCourbes.value() ) + ", Courbe : " + str( self.barreDeScrollTemps.value() ) + ", Valeur donnée : " + str( value ) )
+
 
 
 """
