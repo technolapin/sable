@@ -6,7 +6,17 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.cbook import get_sample_data
 from matplotlib._png import read_png
 
+import re
+
 import numpy
+
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.cbook import get_sample_data
+from matplotlib._png import read_png
+import numpy as np
+
+
 
 def read_pgm(filename, byteorder='>'):
     """Return image data from a raw PGM file as numpy array.
@@ -31,9 +41,35 @@ def read_pgm(filename, byteorder='>'):
                             ).reshape((int(height), int(width)))
 
 
+"""
+img = read_pgm("test-0.pgm", byteorder='<')/255.
+imagequimarche= plt.imread('JPEG_example_flower.jpg')/255.
 
-img = read_pgm("test-0.pgm", byteorder='<')
-x, y = ogrid[0:img.shape[0], 0:img.shape[1]]
+image = img.astype(np.float64)
+
+
+
+#x, y = ogrid[0:img.shape[0], 0:img.shape[1]]
+x, y = numpy.meshgrid(numpy.linspace(0,1,80), numpy.linspace(0,1,80))
 ax = gca(projection='3d')
-ax.plot_surface(x, y, numpy.array([0, 0]), rstride=5, cstride=5, facecolors=img)
+ax.plot_surface(x, y, numpy.array([0, 0]), rstride=5, cstride=5, facecolors=imagequimarche)
 show()
+"""
+
+
+
+
+imgALaCon = read_pgm("test-0.pgm", byteorder='<')
+
+plt.matshow(imgALaCon)
+
+"""
+fn = get_sample_data("C:\Users\Amaury\Desktop\Sable\gui\JPEG_example_flower.png", asfileobj=False)
+img = read_png(fn)
+
+x, y = np.mgrid[0:img.shape[0], 0:img.shape[1]]
+
+ax = plt.gca(projection='3d')
+ax.plot_surface(x, y, np.sin(0.02*x)*np.sin(0.02*y), rstride=2, cstride=2, facecolors=img)
+plt.show()
+"""

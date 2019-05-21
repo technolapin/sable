@@ -23,6 +23,7 @@ from mpl_toolkits.mplot3d import Axes3D # Classe pour gérer les axes 3D
 
 from random import choice # Fonction pour chosir aléatoirement un élement dans une liste
 
+import re
 
 
 def read_pgm(filename, byteorder='>'):
