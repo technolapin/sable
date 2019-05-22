@@ -45,6 +45,7 @@ def parse_list(file_name):
     return liste
 
 def export_list(liste, file_name):
+    os.system("rm "+file_name)
     f = open(file_name, "w")
     f.write("_ "+str(len(liste))+"\n")
     for elements in liste:
@@ -137,6 +138,7 @@ for i in range(0, n_tempo*n_coupe):
         if centres[j][2] < aire_min:
             del(centres[j])
         j += 1
+        
 
     
 
@@ -148,9 +150,8 @@ for i in range(0, n_tempo*n_coupe):
 
     # variable correspondant a la qualite des cercles
     # = 1: on suppose cercles parfaits
-    # < 1: l'algorithmes sera plus laxe
+    # < 1: l'algorithmes sera plus laxe 
     circlisme = 1.0
-
     """
     flag =  True
     while flag:
@@ -163,6 +164,7 @@ for i in range(0, n_tempo*n_coupe):
                     area_b = centres[i_b][2]
                     r_a = np.sqrt(area_a/np.pi)
                     r_b = np.sqrt(area_b/np.pi)
+                    print("distance entre "+str(i_a)+" et "+str(i_b) +" = "+ str(dist), str((r_a+r_b)*circlisme))
                     if dist < (r_a+r_b)*circlisme:
                         command("drawline "+output_file_formes+" "+str(centres[i_a][0])+" "+str(centres[i_a][1])+" "+str(centres[i_b][0])+ " "+str(centres[i_b][1])+" "+output_file_formes)
 
@@ -182,7 +184,6 @@ for i in range(0, n_tempo*n_coupe):
     os.system("./trucs_en_c/fusionne_proches tmp/centrestmp.list tmp/centres_fusion.list "+str(circlisme))
 
     centres = parse_list("tmp/centres_fusion.list")
-
     
     f = open("tmp/centres.lst", "w")
     f.write("b "+str(len(centres))+"\n")
