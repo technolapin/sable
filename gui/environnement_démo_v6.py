@@ -11,6 +11,19 @@ Auteurs originaux :
 
 
 """
+PARAMETRES
+"""
+ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
+
+NB_IMGS = 4000 # Nombre d'images au format PGM
+INTERVALLE = 250 # Intervalle temporel dans cette liste d'images
+URL = "../extraction/images/test-"
+HAUTEUR = 80
+LARGEUR = 80
+
+
+
+"""
 IMPORTATIONS
 """
 import sys # Librairie pour faire des appels systèmes
@@ -33,7 +46,7 @@ import re # Librairie pour faire des recherches
 
 
 """
-PARAMETRES
+PARAMETRES (suite)
 """
 # Graphique que on veut afficher
 theta = numpy.linspace(-10 * numpy.pi, 5 * numpy.pi, 100)
@@ -51,14 +64,6 @@ graphe = [courbe1, courbe2, courbe3]
 # Elle doit être une liste de listes
 # Chaque sous-liste représente une courbe, et toutes ces sous-listes doivent avoir la même longueur
 # Ces sous-listes doivent comprendre 3 sous-sous-listes étant les coordonnées X, Y et Z à tracer
-
-ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
-
-NB_IMGS = 4000 # Nombre d'images au format PGM
-INTERVALLE = 250 # Intervalle temporel dans cette liste d'images
-URL = "../extraction/images/test-"
-HAUTEUR = 80
-LARGEUR = 80
 
 if NB_IMGS % INTERVALLE != 0 :
     print( "On a un problème !" )
