@@ -23,7 +23,7 @@ import numpy # Autre librairie mathématique
 
 from matplotlib.figure import Figure # Classe Figure de la librairie Matplotlib
 import matplotlib.pyplot as plt # Librairie pour faire des graphiques
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg # Classe pour mettre du Matplotlib dans Qt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg # Classe pour mettre du Matplotlib dans Qt
 from mpl_toolkits.mplot3d import Axes3D # Classe pour gérer les axes 3D
 import matplotlib.cm as cm # Pour cm.hot()
 
