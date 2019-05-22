@@ -27,6 +27,7 @@ Clément nous a expliqué qu'il avait fini d'utiliser l'outil du watershade, mais 
 M. Cousty nous a dit qu'il ne fallait pas s'intéresser aux grains tronqués aux extrémités des images car une image complète ne comporterait aucun grain de sable tronqué.
 
 Nous avons montré aux professeurs encadrants des images de séparation et de repérage des barycentres. Les données n'étant pas parfaitement sphériques, nous obtenons deux minimas sur la carte des distances. M. Cousty nous a expliqué un autre moyen que celui de Clément qui consiste à reboucher les minimas qui ne correspondent pas à ce qu'on attend en supprimant les minimas les moins significatifs en fonction de leur pertinence selon leur taille (en pixels), profondeur, ou volume. Différents outils sur 'Pink' permettent de faire du filtrage morphologique comme la fermeture par aire de paramètre 'x' ou en anglais 'area opening' ; la fermeture par volume avec l'outil 'vol minima' ou 'vol maxima'. De manière générale, les outils de la librairie 'Pink' sont linéaires et sont donc très efficaces.
+![Image 1](./images/16_mai_2019_image1.jpg)
 
 D'autre part, M. Cousty nous a demandé d'aller voir l'outil 'pgmtolist' du module 'geometry complenator' pour établir une liste de centres des grains de sables et ne plus avoir besoin de repasser plusieurs fois sur la même image, car notre programme met du temps à s'exécuter.
 
