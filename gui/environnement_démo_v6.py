@@ -150,7 +150,7 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
     """
     def dessinerMilleFeuille3D(self, listeImages) : # Procédure qui dessine le graphique      
         self.axes.clear() # Nettoie les axes et leur contenu
-#        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
+        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
 
         for I in range( len( listeImages ) ) :
             # Source : https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
