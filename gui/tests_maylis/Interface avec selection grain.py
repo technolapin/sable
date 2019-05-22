@@ -239,7 +239,7 @@ class Fenetre(QTabWidget) :
         x=event.pos().x()
         y=event.pos().y()
         print('x=', x, '   ;    y=', y)
-        ## Mofifier pour colorer le grain et changer l'image avec grain coloré
+        ## Mofifier pour colorer le grain et changer l'image avec grain coloré, aller récupérer le grain wlh
 
 
 
