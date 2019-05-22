@@ -1,0 +1,9 @@
+3D View
+Prend une image et génére un VTK
+
+Afficher VTK dans UI (VTK = maillage)
+
+
+
+Afficher des voxels :
+https://matplotlib.org/gallery/mplot3d/voxels.html

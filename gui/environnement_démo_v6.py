@@ -57,6 +57,8 @@ ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
 NB_IMGS = 4000 # Nombre d'images au format PGM
 INTERVALLE = 250 # Intervalle temporel dans cette liste d'images
 URL = "../extraction/images/test-"
+HAUTEUR = 80
+LARGEUR = 80
 
 if NB_IMGS % INTERVALLE != 0 :
     print( "On a un problème !" )
@@ -155,7 +157,7 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
         for I in range( len( listeImages ) ) :
             # Source : https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
             # Create a 80 x 80 vertex mesh
-            X, Y = numpy.meshgrid(numpy.linspace(0,1,80), numpy.linspace(0,1,80))
+            X, Y = numpy.meshgrid(numpy.linspace(0,1,HAUTEUR), numpy.linspace(0,1,LARGEUR))
             Z = numpy.zeros(X.shape) + listeImages[I][1]
             
             # Source : https://stackoverflow.com/questions/45663597/plotting-3d-image-form-a-data-in-numpy-array
