@@ -9,6 +9,8 @@ Cloner le dépôt : `git clone https://github.com/technolapin/sable.git`.
 Enregistrer son adresse mail pour les commits : `git config user.email "user@domain.tld"`.
 Bien mettre l'adresse associée à son compte GitHub pour que les commits soient associés à ce compte.
 
+Enregistrer son nom pour les commits :  `git config user.name "Nom"`
+
 ## Mettre à jour
 
 Pour mettre à jour depuis le dépôt distant : `git pull`.
