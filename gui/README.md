@@ -8,7 +8,8 @@
 
 Ouvrir Anaconda Prompt en tant qu'Administrateur.
 
-Taper la commande suivante : `conda install pyqt=4`.
+Taper la commande suivante : `conda install pyqt=5`.
+(On utilise PyQt5 depuis le 21 mai 2019)
 
 ## Installer PyQt4 sur Linux avec Anaconda
 
