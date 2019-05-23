@@ -53,7 +53,7 @@ class ImageViewer(object):
         
         self.pushButton1.setIcon(icon1) 
         
-        # Boutno 2    
+        # Bouton 2    
     
         self.pushButton2 = QPushButton(self.centralwidget) 
         self.pushButton2.setText("Image suivante") 
