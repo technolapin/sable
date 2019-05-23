@@ -15,7 +15,7 @@ class ImageViewer(object):
     def setupUi(self, Viewer): 
         Viewer.resize(640, 480) 
         Viewer.setWindowTitle(u"Test de création de boutons") 	
-        self.image_1 = "Test1.pgm"       # Image "principale"
+        self.image_1 = "wesh.pgm"       # Image "principale"
         self.image_2 = "Image_btn_g"	# Icone du bouton de gauche
         self.image_3 = "Image_btn_d"     # Icone du couton de droite
         self.centralwidget    = QWidget(Viewer) 
