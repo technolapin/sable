@@ -16,8 +16,9 @@ from random import choice
 import codecs # Pour l'ouverture d'un fichier
 
 # Librairie Python Qt4 pour créer la GUI
-from PyQt4.QtCore import * 
-from PyQt4.QtGui import * 
+from PyQt5.QtCore import * # Librairie Python Qt4 pour créer la GUI
+from PyQt5.QtGui import * # Librairie Python Qt4 pour créer la GUI
+from PyQt5.QtWidgets import * # Librairie Python Qt4 pour créer la GUI
 
 # Outils mathématiques
 from math import *
