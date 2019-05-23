@@ -89,14 +89,12 @@ class Fenetre(QTabWidget) :
         self.setTabShape(1)
         self.visu_graph = QWidget()
         self.aide = QWidget()
-      #  self.selection_grain = QWidget()  
-        self.affichage_image = QWidget()
+        self.selection_grain = QWidget()  
 
         # Dictionnaire des onglets de la fenêtre 
         self.ongl_fen = { 'visu_graph' :        [self.visu_graph,         "Visualisation du Graphique", self.tabGraphique3D()       ] , 
                           'aide' :              [self.aide ,              "Aide",                       self.tabAide()              ] , 
-                         # 'selection_grain' :   [self.selection_grain ,   "Selection du grain",         self.tabselection_grain()   ] , 
-                          'affichage_image' :   [self.affichage_image,    "Affichage coupe 2D",         self.tabaffichage_image()   ]}
+                          'selection_grain' :   [self.selection_grain ,   "Selection du grain",            self.tabselection_grain()  ] }
         
         # Ajout dynamique des onglets dans la fenêtre
         for ongl in self.ongl_fen :
@@ -110,7 +108,7 @@ class Fenetre(QTabWidget) :
     """
     def tabGraphique3D(self) :
         self.graphique3D = Graphique3D()
-        
+
         # Défilement temporel
         self.barreDeScrollCourbes = QScrollBar() 
         self.barreDeScrollCourbes.setMaximum( len(graphe[0]) + 1 ) # Défini le nombre de valeurs qu'on peut y parcourir
@@ -187,7 +185,7 @@ class Fenetre(QTabWidget) :
         scroll_area.setWidgetResizable(True)
         
         # Ouverture du fichier contenant l'aide écrite au format .html  
-        lien_fichier='contenu_aide/'+self.ongl_aide[nom_onglet][2]
+        lien_fichier='C:/Users/Maylis/Documents/1.COURS/4.ESIEE/PROJET/sable/gui/tests_maylis/contenu_aide/'+self.ongl_aide[nom_onglet][2]
         fichier=codecs.open(lien_fichier, 'r',encoding='utf-8')
         texte=QLabel(fichier.read())
         
@@ -205,93 +203,45 @@ class Fenetre(QTabWidget) :
         
 
         
-#    """
-#    Onglet 3
-#    """
-#    def tabselection_grain(self) :
-#        # Sélection de l'image à afficher #### A MODIFIER AVEC DEFILEMENT        
-#        self.image_1 = "C:/Users/Maylis/Documents/1.COURS/4.ESIEE/PROJET/sable/gui/tests_Alexandre/Result1.pgm"             
-#        
-#        # Création d'un contenant
-#        grille = QGridLayout()
-#        
-#        # Création d'un contenant pour l'image 
-#        self.label = QLabel()
-#        self.label.setFixedSize(320,320)
-#        self.image_1_pixmap=QPixmap(self.image_1)
-#        print("width=", self.image_1_pixmap.width(), "height=", self.image_1_pixmap.height())
-#        width=self.label.width()
-#        height=self.label.height()
-#        self.label.setPixmap(QPixmap(self.image_1).scaled(width,height,Qt.KeepAspectRatio))      
-#        self.label.mousePressEvent=self.getPixel
-#        
-#        
-#        # Label explication onglet
-#        self.label_1 = QLabel("<b>Veuillez cliquer sur le grain que vous souhaitez selectionner</b>")
-#        self.label_1.setWordWrap(True)
-#        self.label_1.setAlignment(Qt.AlignJustify)
-#        
-#                
-#        # Ajout des widget dans le contenant et du contenant dans l'onglet
-#        grille.addWidget(self.label,2,1)
-#        grille.addWidget(self.label_1, 1,1)
-#        self.selection_grain.setLayout(grille)
-#        
-
-
     """
-    Onglet 4
+    Onglet 3
     """
-    def tabaffichage_image(self) :
-        # Selection des images de l'onglet        
-        self.image_1 = "../tests_Alexandre/Result1.pgm"         # Image "principale"
-        self.image_2 = "../tests_Alexandre/Image_btn_g.png"  	# Icone du bouton de gauche
-        self.image_3 = "../tests_Alexandre/Image_btn_d.png"     # Icone du couton de droite
-    
-        # Box principale et secondaires contenant les objets de la fenêtre
-        self.gridLayout = QGridLayout() 
-        self.horizontalLayout = QHBoxLayout()#self.gridLayout)
+    def tabselection_grain(self) :
+        # Sélection de l'image à afficher #### A MODIFIER AVEC DEFILEMENT        
+        self.image_1 = "C:/Users/Maylis/Documents/1.COURS/4.ESIEE/PROJET/sable/gui/tests_Alexandre/Result1.pgm"             
         
-        # Création d'un QLabel contenant l'image et ajout dans le contenant
-        self.label=QLabel()
+        # Création d'un contenant
+        grille = QGridLayout()
+        
+        # Création d'un contenant pour l'image 
+        self.label = QLabel()
         self.label.setFixedSize(320,320)
+        self.image_1_pixmap=QPixmap(self.image_1)
+        print("width=", self.image_1_pixmap.width(), "height=", self.image_1_pixmap.height())
         width=self.label.width()
         height=self.label.height()
-        self.label.setPixmap(QPixmap(self.image_1).scaled(width,height,Qt.KeepAspectRatio))
+        self.label.setPixmap(QPixmap(self.image_1).scaled(width,height,Qt.KeepAspectRatio))      
         self.label.mousePressEvent=self.getPixel
-        self.gridLayout.addWidget(self.label,1,1)
         
         
-        # Création des boutons pour passer les images
-        ### Bouton 1
-        self.pushButton1 = QPushButton() 
-        self.pushButton1.setText("Image precedente") 
-        icon1 = QIcon()
-        icon1.addPixmap(QPixmap(self.image_2),QIcon.Normal, QIcon.Off)
-        self.pushButton1.setIcon(icon1) 
+        # Label explication onglet
+        self.label_1 = QLabel("<b>Veuillez cliquer sur le grain que vous souhaitez selectionner</b>")
+        self.label_1.setWordWrap(True)
+        self.label_1.setAlignment(Qt.AlignJustify)
         
-        ### Bouton 2
-        self.pushButton2 = QPushButton() 
-        self.pushButton2.setText("Image suivante") 
-        icon2 = QIcon() 
-        icon2.addPixmap(QPixmap(self.image_3),QIcon.Normal, QIcon.Off)
-        self.pushButton2.setIcon(icon2) 
+                
+        # Ajout des widget dans le contenant et du contenant dans l'onglet
+        grille.addWidget(self.label,2,1)
+        grille.addWidget(self.label_1, 1,1)
+        self.selection_grain.setLayout(grille)
         
-        # Ajout des boutons au Layout
-        self.horizontalLayout.addWidget(self.pushButton1) 
-        self.horizontalLayout.addWidget(self.pushButton2) 
-        self.gridLayout.addLayout(self.horizontalLayout,2,1)
-        
-        # Ajout dans l'onglet
-        self.affichage_image.setLayout(self.gridLayout)
-        
-
     def getPixel(self,event):
         x=event.pos().x()
         y=event.pos().y()
         print('x=', x, '   ;    y=', y)
         ## Mofifier pour colorer le grain et changer l'image avec grain coloré, aller récupérer le grain wlh
-        
+
+
 
 """
 Code principal
