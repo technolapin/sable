@@ -14,6 +14,7 @@ Auteurs originaux :
 import sys 
 from random import choice 
 import codecs # Pour l'ouverture d'un fichier
+import re # Librairie pour faire des recherches
 
 # Librairie Python Qt5 pour créer la GUI
 from PyQt5.QtCore import * 
@@ -29,6 +30,71 @@ from matplotlib.figure import Figure
 import matplotlib.pyplot as plt 
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg 
 from mpl_toolkits.mplot3d import Axes3D 
+
+
+
+
+"""
+PARAMETRES
+"""
+ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
+
+NB_IMGS = 4000 # Nombre d'images au format PGM
+INTERVALLE = 250 # Intervalle temporel dans cette liste d'images
+URL = "../extraction/images/test-"
+HAUTEUR = 80
+LARGEUR = 80
+
+"""
+PARAMETRES (suite)
+"""
+# Graphique que on veut afficher
+theta = numpy.linspace(-10 * numpy.pi, 5 * numpy.pi, 100)
+z = numpy.linspace(-2, 2, 100)
+r = z**2 + 1
+x = r * numpy.sin(theta)
+y = r * numpy.cos(theta)
+
+courbe1 = [x, y, z]
+courbe2 = [y, z, x]
+courbe3 = [z, x, y]
+
+# Note : Notre programme n'utilise que cette variable globale "graphe"
+graphe = [courbe1, courbe2, courbe3]
+# Elle doit être une liste de listes
+# Chaque sous-liste représente une courbe, et toutes ces sous-listes doivent avoir la même longueur
+# Ces sous-listes doivent comprendre 3 sous-sous-listes étant les coordonnées X, Y et Z à tracer
+
+if NB_IMGS % INTERVALLE != 0 :
+    print( "On a un problème !" )
+    sys.exit(1)
+
+
+"""
+Lecture d'un fichier PGM
+Source : https://github.com/jmeyers314/astrophotoreduce/blob/master/pgm.py
+"""
+def read_pgm(filename, byteorder='>'):
+    """
+    Return image data from a raw PGM file as numpy array.
+    Format specification: http://netpbm.sourceforge.net/doc/pgm.html
+    """
+    with open(filename, 'rb') as f:
+        buffer = f.read()
+    try:
+        header, width, height, maxval = re.search(
+            b"(^P5\s(?:\s*#.*[\r\n])*"
+            b"(\d+)\s(?:\s*#.*[\r\n])*"
+            b"(\d+)\s(?:\s*#.*[\r\n])*"
+            b"(\d+)\s(?:\s*#.*[\r\n]\s)*)", buffer).groups()
+    except AttributeError:
+        raise ValueError("Not a raw PGM file: '%s'" % filename)
+    return numpy.frombuffer(buffer,
+                            dtype='u1' if int(maxval) < 256 else byteorder+'u2',
+                            count=int(width)*int(height),
+                            offset=len(header)
+                            ).reshape((int(height), int(width)))
+
 
 
 
@@ -70,6 +136,49 @@ class Graphique3D(FigureCanvasQTAgg) :
         self.draw() 
 
 
+
+"""
+Classe MilleFeuille3D, hérite de FigureCanvasQTAgg
+Cette classe permet de gérer un graphique 3D d'images pouvant être tourné et inséré dans un environnement Qt
+Ces images sont affichées sous la forme d'un mille-feuilles
+"""
+class MilleFeuille3D(FigureCanvasQTAgg) :
+    """
+    Constructeur, initialise le graphique
+    """
+    def __init__(self) :
+        self.figure = plt.figure()
+        self.figure.subplots_adjust(bottom=0, top=1, left=0, right=1) # Supprime les marges
+        FigureCanvasQTAgg.__init__( self, self.figure ) # Objet de type FigureCanvas
+        self.axes = self.figure.gca( projection = '3d' ) # On lui dit qu'on veut des axes 3D, et on les stockes dans un attribut
+    
+    """
+    Dessine ou actualise avec un nouveau graphique
+    @param "listeImages" : Liste d'images à afficher, au format PGM (Base 8), associées à leur hauteur à afficher.
+    """
+    def dessinerMilleFeuille3D(self, listeImages) : # Procédure qui dessine le graphique      
+        self.axes.clear() # Nettoie les axes et leur contenu
+#        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
+
+        for I in range( len( listeImages ) ) :
+            # Source : https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
+            # Create a 80 x 80 vertex mesh
+            X, Y = numpy.meshgrid(numpy.linspace(0,1,HAUTEUR), numpy.linspace(0,1,LARGEUR))
+            Z = numpy.zeros(X.shape) + listeImages[I][1]
+            
+            # Source : https://stackoverflow.com/questions/45663597/plotting-3d-image-form-a-data-in-numpy-array
+            # Traitement de l'image
+            image = read_pgm(listeImages[I][0], byteorder='<') # Matrix au format uint8
+            imageConvertie = image.astype(numpy.float64) / 255 # Convertie en float64
+            T = cm.hot(imageConvertie) # Matrix float64 que facecolors peut prendre
+            
+            self.axes.plot_surface(X, Y, Z, facecolors=T)
+        
+        self.draw()
+
+
+
+
 """
 Classe Fenetre, hérite de la classe QTabWidget (Et plus QWidget vu qu'on veut faire des onglets)
 Cette classe permet de gérer la fenêtre Qt avec onglets (Appel de la procédure "addTab()")
@@ -83,8 +192,9 @@ class Fenetre(QTabWidget) :
         # Appel du constructeur de QWidget
         super(Fenetre, self).__init__(parent) 
         
-        # Impose la taille minimale de la fenêtre, en pixels
-        self.setMinimumSize( QSize(500, 500) );
+        # Impose la taille minimale de la fenêtre, en pixels et affiche en grand écran
+        self.setMinimumSize( QSize(500, 500) )
+        self.setWindowState(Qt.WindowMaximized)
         
         # Création des onglets de la fenêtre
         self.setTabShape(1)
@@ -92,12 +202,14 @@ class Fenetre(QTabWidget) :
         self.aide = QWidget()
       #  self.selection_grain = QWidget()  
         self.affichage_image = QWidget()
+        self.millefeuille = QWidget()
 
         # Dictionnaire des onglets de la fenêtre 
         self.ongl_fen = { 'visu_graph' :        [self.visu_graph,         "Visualisation du Graphique", self.tabGraphique3D()       ] , 
                           'aide' :              [self.aide ,              "Aide",                       self.tabAide()              ] , 
-                         # 'selection_grain' :   [self.selection_grain ,   "Selection du grain",         self.tabselection_grain()   ] , 
-                          'affichage_image' :   [self.affichage_image,    "Affichage coupe 2D",         self.tabaffichage_image()   ]}
+                          'affichage_image' :   [self.affichage_image,    "Affichage coupe 2D",         self.tabaffichage_image()   ] ,
+                          'millefeuille' :      [self.millefeuille,       "Mille-feuilles" ,            self.tabmillefeuille()      ]}
+        
         
         # Ajout dynamique des onglets dans la fenêtre
         for ongl in self.ongl_fen :
@@ -203,41 +315,6 @@ class Fenetre(QTabWidget) :
         zone_de_texte.addWidget(scroll_area)
         self.ongl_aide[nom_onglet][0].setLayout(zone_de_texte)
 
-        
-
-        
-#    """
-#    Onglet 3
-#    """
-#    def tabselection_grain(self) :
-#        # Sélection de l'image à afficher #### A MODIFIER AVEC DEFILEMENT        
-#        self.image_1 = "C:/Users/Maylis/Documents/1.COURS/4.ESIEE/PROJET/sable/gui/tests_Alexandre/Result1.pgm"             
-#        
-#        # Création d'un contenant
-#        grille = QGridLayout()
-#        
-#        # Création d'un contenant pour l'image 
-#        self.label = QLabel()
-#        self.label.setFixedSize(320,320)
-#        self.image_1_pixmap=QPixmap(self.image_1)
-#        print("width=", self.image_1_pixmap.width(), "height=", self.image_1_pixmap.height())
-#        width=self.label.width()
-#        height=self.label.height()
-#        self.label.setPixmap(QPixmap(self.image_1).scaled(width,height,Qt.KeepAspectRatio))      
-#        self.label.mousePressEvent=self.getPixel
-#        
-#        
-#        # Label explication onglet
-#        self.label_1 = QLabel("<b>Veuillez cliquer sur le grain que vous souhaitez selectionner</b>")
-#        self.label_1.setWordWrap(True)
-#        self.label_1.setAlignment(Qt.AlignJustify)
-#        
-#                
-#        # Ajout des widget dans le contenant et du contenant dans l'onglet
-#        grille.addWidget(self.label,2,1)
-#        grille.addWidget(self.label_1, 1,1)
-#        self.selection_grain.setLayout(grille)
-#        
 
 
     """
@@ -294,20 +371,60 @@ class Fenetre(QTabWidget) :
         ## Mofifier pour colorer le grain et changer l'image avec grain coloré, aller récupérer le grain wlh
         
 
+
+
+
+    def tabmillefeuille(self):
+        self.milleFeuille3D = MilleFeuille3D()
+        
+        # Défilement de couches inférieures (Valeur de la couche minimum à afficher)
+        self.barreDeScrollMFCoucheMin = QScrollBar()
+        self.barreDeScrollMFCoucheMin.setMaximum( INTERVALLE - 1 )
+        self.barreDeScrollMFCoucheMin.valueChanged.connect( self.dessinerMilleFeuille3D )
+        
+        # Défilement de couches supérieures (Valeur de la couche maximum à afficher)
+        self.barreDeScrollMFCoucheMax = QScrollBar()
+        self.barreDeScrollMFCoucheMax.setMaximum( INTERVALLE - 1 )
+        self.barreDeScrollMFCoucheMax.valueChanged.connect( self.dessinerMilleFeuille3D )
+        
+        # Défilement temporel
+        self.barreDeScrollMFTemps = QScrollBar(Qt.Horizontal)
+        self.barreDeScrollMFTemps.setMaximum( NB_IMGS / INTERVALLE - 1 )
+        self.barreDeScrollMFTemps.valueChanged.connect( self.dessinerMilleFeuille3D )
+        
+        grille = QGridLayout()
+        
+        grille.addWidget( self.milleFeuille3D, 2, 1 )
+        grille.addWidget( self.barreDeScrollMFCoucheMin, 2, 2 )
+        if not ANTI_LAG : grille.addWidget( self.barreDeScrollMFCoucheMax, 2, 3 )
+        # Ne pas l'afficher quand l'ANTI_LAG est activé, donc inutilisable, donc une seule couche affichée
+        grille.addWidget( self.barreDeScrollMFTemps, 3, 1 )
+        
+        self.dessinerMilleFeuille3D(0)
+        
+        self.millefeuille.setLayout( grille )
+
+    """
+    Gére le dessin et les changements du mille feuille 3D
+    """
+    def dessinerMilleFeuille3D(self, value) :
+        listeImages = []
+        if self.barreDeScrollMFCoucheMax.value() != 0 :
+            for i in range(self.barreDeScrollMFCoucheMin.value(), self.barreDeScrollMFCoucheMax.value(), 1) :
+                listeImages.append( [URL + str(self.barreDeScrollMFTemps.value() * INTERVALLE + i) + ".pgm", self.barreDeScrollMFCoucheMin.value() + i] )
+        else : # Permet de ne commander qu'avec le défilement de la valeur minimum, forcément si ANTI_LAG activé
+            numeroImage = self.barreDeScrollMFTemps.value() * INTERVALLE + self.barreDeScrollMFCoucheMin.value()
+            listeImages.append( [URL + str(numeroImage) + ".pgm", self.barreDeScrollMFCoucheMin.value()] )
+        
+        self.milleFeuille3D.dessinerMilleFeuille3D( listeImages )
+        
+        print( "[Debug] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
+        if ANTI_LAG : print( "[Debug] Affichage : " + URL + str(numeroImage) + ".pgm" )
+
+
 """
 Code principal
 """
-# Fonctions et courbes que l'on veut afficher
-theta = numpy.linspace(-10 * numpy.pi, 5 * numpy.pi, 100)
-z = numpy.linspace(-2, 2, 100)
-r = z**2 + 1
-x = r * numpy.sin(theta)
-y = r * numpy.cos(theta)
-
-courbe1 = [x, y, z]
-courbe2 = [y, z, x]
-courbe3 = [z, x, y]
-graphe = [courbe1, courbe2, courbe3]
 
 if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
