@@ -30,6 +30,7 @@ from matplotlib.figure import Figure
 import matplotlib.pyplot as plt 
 from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg 
 from mpl_toolkits.mplot3d import Axes3D 
+import matplotlib.cm as cm 
 
 
 
@@ -41,7 +42,7 @@ ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
 
 NB_IMGS = 4000 # Nombre d'images au format PGM
 INTERVALLE = 250 # Intervalle temporel dans cette liste d'images
-URL = "../extraction/images/test-"
+URL = "C:/Users/Maylis/Documents/1.COURS/4.ESIEE/PROJET/sable/extraction/images/test-"
 HAUTEUR = 80
 LARGEUR = 80
 
