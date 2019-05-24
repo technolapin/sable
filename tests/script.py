@@ -39,7 +39,7 @@ command("3dlabel "+output_file_formes+" labels.pgm")
 command("pgm2vtk labels.pgm 2 test.vtk")
 command("barycentrelab labels.pgm bary.pgm")
 command("pgm2vtk bary.pgm 2 bary.vtk")
-command("add labels.pgm bary.pgm labels.pgm")
+#command("add labels.pgm bary.pgm labels.pgm") juste pour visualiser les barycentres, à ne pas laisser dans la version finale
 command("pgm2list bary.pgm B bary.list")
 
 
