@@ -1,0 +1,7 @@
+import os
+
+def command(cmd):
+    os.system("../pink/linux/bin/"+cmd)
+
+command("seuil originale.pgm seuil.pgm")
+command("inverse seuil.pgm")
