@@ -4,8 +4,11 @@
 import os
 
 
-n_tempo = 16 #nb de temps
-n_coupe = 250
+n_tempo = 16 # nb de temps
+n_coupes_xy = 250 # dimensions des colones en nombres de coupes
+n_coupes_xz = 80
+n_coupes_yz = 80
+
 seuil = 170 #pour les images en noir et blanc
 
 #appel de fc de pink
@@ -19,6 +22,7 @@ def numerote(n, l):
    while len(s) < l:
        s = '0' + s
    return s   
+
     
 os.system("rm -R images_3D")
 os.system("rm -R images_2D_for_3D")
@@ -31,54 +35,87 @@ os.system("mkdir coupes_3D/x_z")
 os.system("mkdir coupes_3D/y_z")
 
 #copie des images de test et renommage aux standard de la fc catpgm
-for i in range(0, n_tempo*n_coupe):
+for i in range(0, n_tempo*n_coupes_xy):
     os.system("cp images/test-"+str(i)+".pgm images_2D_for_3D/image_2D_for_3D_"+numerote(i,4)+".pgm")
 
 
     
-coupe=0
-for i in range(0,n_tempo):
-    print("image 3D numero "+str(i)+" en traitement")
-    fin_coupe=coupe+n_coupe-1
+for t in range(0, n_tempo):
+    print("image 3D numero "+str(t)+" en traitement")
+
+    debut_colone = t * n_coupes_xy
+    fin_colone   = debut_colone + n_coupes_xy - 1
+
+    padding_temporel = numerote(t, 2) # pour pas trop recalculer
+    
     
     #generation de l image 3D a partir des 250 coupes
-    ligne="catpgm images_2D_for_3D/image_2D_for_3D_ "+ str(coupe)+ " "+str(fin_coupe)+" [80 80 250] images_3D/image_3D_t"+numerote(i,2)+".pgm"
-    command(ligne)
+    command("catpgm images_2D_for_3D/image_2D_for_3D_ "+
+            str(debut_colone)+" "+str(fin_colone)+
+            " [80 80 250] images_3D/image_3D_t"+padding_temporel+".pgm")
+
     
     #seuillage + nettoyage d impurtes
-    command("seuil images_3D/image_3D_t"+numerote(i,2)+".pgm"" "+str(seuil)+" "+"images_3D/image_3D_s_t"+numerote(i,2)+".pgm")
-    command("inverse images_3D/image_3D_s_t"+numerote(i,2)+".pgm images_3D/image_3D_s_inv_t"+numerote(i,2)+".pgm")
+    command("seuil images_3D/image_3D_t"+padding_temporel+".pgm "+
+            str(seuil)+" "+
+            "images_3D/image_3D_s_t"+padding_temporel+".pgm")
+    
+    command("inverse images_3D/image_3D_s_t"+padding_temporel+".pgm "+
+            "images_3D/image_3D_s_inv_t"+padding_temporel+".pgm")
+
     
      # carte des distances, 180:18dist 3D (byte outpout)
-    command("dist images_3D/image_3D_s_inv_t"+numerote(i,2)+".pgm 0 images_3D/image_3D_dist_proc_t"+numerote(i,2)+".pgm")
-    command("long2byte images_3D/image_3D_dist_proc_t"+numerote(i,2)+".pgm 0 images_3D/image_3D_dist_t"+numerote(i,2)+".pgm")
-    command("inverse images_3D/image_3D_dist_t"+numerote(i,2)+".pgm images_3D/image_3D_dist_inv_t"+numerote(i,2)+".pgm")
-    
-    # minimas
-    command("minima images_3D/image_3D_dist_inv_t"+numerote(i,2)+".pgm 6 images_3D/image_3D_min_t"+numerote(i,2)+".pgm")
+    command("dist images_3D/image_3D_s_inv_t"+padding_temporel+".pgm "+
+            "0 images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm")
 
-    #ligne de separation des eaux
-    command("watershed images_3D/image_3D_dist_inv_t"+numerote(i,2)+".pgm images_3D/image_3D_min_t"+numerote(i,2)+".pgm 26 images_3D/image_3D_wat_t"+numerote(i,2)+".pgm")
-    command("add images_3D/image_3D_s_inv_t"+numerote(i,2)+".pgm images_3D/image_3D_wat_t"+numerote(i,2)+".pgm images_3D/image_3D_superpose_t"+numerote(i,2)+".pgm")
-    command("inverse images_3D/image_3D_superpose_t"+numerote(i,2)+".pgm images_3D/image_3D_superpose_inv_t"+numerote(i,2)+".pgm ")
+    command("long2byte images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+
+            "0 images_3D/image_3D_dist_t"+padding_temporel+".pgm")
     
+    command("inverse images_3D/image_3D_dist_t"+padding_temporel+".pgm "+
+            "images_3D/image_3D_dist_inv_t"+padding_temporel+".pgm")
+    
+
+    # minimas
+    command("minima images_3D/image_3D_dist_inv_t"+padding_temporel+".pgm "+
+            "6 images_3D/image_3D_min_t"+padding_temporel+".pgm")
+
+    
+    #ligne de separation des eaux
+    command("watershed images_3D/image_3D_dist_inv_t"+padding_temporel+".pgm "+
+            "images_3D/image_3D_min_t"+padding_temporel+".pgm "+
+            "26 images_3D/image_3D_wat_t"+padding_temporel+".pgm")
+    
+    command("add images_3D/image_3D_s_inv_t"+padding_temporel+".pgm "+
+            "images_3D/image_3D_wat_t"+padding_temporel+".pgm "+
+            "images_3D/image_3D_superpose_t"+padding_temporel+".pgm")
+    
+    command("inverse images_3D/image_3D_superpose_t"+padding_temporel+".pgm "+
+            "images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm ")
+
+
+    # pour moins de repetitions
+    debut_commande = "extractplane images_3D/image_3D_t"+padding_temporel+".pgm "
+
     #extraction des coupes sur (x,y)
-    os.system("mkdir coupes_3D/x_y/"+numerote(i,2))
-    for u in range(0,n_coupe):
-        command("extractplane images_3D/image_3D_t"+numerote(i,2)+".pgm u xy coupes_3D/x_y/"+numerote(i,2)+"/t_"+numerote(i,2)+"coupe_xy_"+numerote(u,4)+"pgm")
+    os.system("mkdir coupes_3D/x_y/"+padding_temporel)
+    for u in range(0, n_coupes_xy):
+        command(debut_commande + str(u)+" xy "+
+                "coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"pgm")
     
     
     #extraction des coupes sur (x,z)
-    os.system("mkdir coupes_3D/x_z/"+numerote(i,2))
-    for u in range(0,n_coupe):
-        command("extractplane images_3D/image_3D_t"+numerote(i,2)+".pgm u xz coupes_3D/x_z/"+numerote(i,2)+"/t_"+numerote(i,2)+"coupe_xz_"+numerote(u,4)+"pgm")
+    os.system("mkdir coupes_3D/x_z/"+padding_temporel)
+    for u in range(0, n_coupes_xz):
+        command(debut_commande + str(u)+" xz "+
+                "coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"pgm")
     
     
     #extraction des coupes sur (y,z)
-    os.system("mkdir coupes_3D/y_z/"+numerote(i,2))
-    for u in range(0,n_coupe):
-        command("extractplane images_3D/image_3D_t"+numerote(i,2)+".pgm u yz coupes_3D/y_z/"+numerote(i,2)+"/t_"+numerote(i,2)+"coupe_yz_"+numerote(u,4)+"pgm")
+    os.system("mkdir coupes_3D/y_z/"+padding_temporel)
+    for u in range(0, n_coupes_yz):
+        command(debut_commande + str(u)+" yz "+
+                "coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"pgm")
     
-    coupe=coupe+250
     
     
+
