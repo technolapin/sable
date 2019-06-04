@@ -11,29 +11,7 @@ Auteurs originaux :
 """
 
 
-import sys 
-from random import choice 
-import codecs # Pour l'ouverture d'un fichier
-import re # Librairie pour faire des recherches
-
-# Librairie Python Qt5 pour créer la GUI
-from PyQt5.QtCore import * 
-from PyQt5.QtGui import * 
-from PyQt5.QtWidgets import * 
-
-# Outils mathématiques
-from math import *
-import numpy 
-
-# Outils de visualisation graphique
-from matplotlib.figure import Figure
-import matplotlib.pyplot as plt 
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg 
-from mpl_toolkits.mplot3d import Axes3D 
-import matplotlib.cm as cm 
-
-
-
+import codecs
 
 """
 PARAMETRES
@@ -41,10 +19,38 @@ PARAMETRES
 ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
 
 NB_IMGS = 4000 # Nombre d'images au format PGM
-INTERVALLE = 250 # Intervalle temporel dans cette liste d'images
-URL = "C:/Users/Maylis/Documents/1.COURS/4.ESIEE/PROJET/sable/extraction/images/test-"
-HAUTEUR = 80
-LARGEUR = 80
+INTERVALLE_XY = 250 # Intervalle temporel dans cette liste d'images
+URL_POUR_MF = "../../extraction/images/test-"
+
+URL_POUR_IRM = "../../extraction/coupes_3D/"
+INTERVALLE_XZ = 80
+INTERVALLE_YZ = 80
+
+
+
+"""
+IMPORTATIONS
+"""
+import os # Librairie d'interface avec l'OS
+import sys # Librairie pour faire des appels systèmes
+
+from PyQt5.QtCore import * # Librairie Python Qt4 pour créer la GUI
+from PyQt5.QtGui import * # Librairie Python Qt4 pour créer la GUI
+from PyQt5.QtWidgets import * # Librairie Python Qt4 pour créer la GUI
+
+from math import * # Librairie mathématique, pour utiliser la fonction log()
+import numpy # Autre librairie mathématique
+
+from matplotlib.figure import Figure # Classe Figure de la librairie Matplotlib
+import matplotlib.pyplot as plt # Librairie pour faire des graphiques
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg # Classe pour mettre du Matplotlib dans Qt
+from mpl_toolkits.mplot3d import Axes3D # Classe pour gérer les axes 3D
+import matplotlib.cm as cm # Pour cm.hot()
+
+from random import choice # Fonction pour choisir aléatoirement un élement dans une liste
+import re # Librairie pour faire des recherches
+
+
 
 """
 PARAMETRES (suite)
@@ -66,7 +72,7 @@ graphe = [courbe1, courbe2, courbe3]
 # Chaque sous-liste représente une courbe, et toutes ces sous-listes doivent avoir la même longueur
 # Ces sous-listes doivent comprendre 3 sous-sous-listes étant les coordonnées X, Y et Z à tracer
 
-if NB_IMGS % INTERVALLE != 0 :
+if NB_IMGS % INTERVALLE_XY != 0 :
     print( "On a un problème !" )
     sys.exit(1)
 
@@ -99,19 +105,20 @@ def read_pgm(filename, byteorder='>'):
 
 
 
+# Note : Une variable commencant par "self." est un attribut de l'objet
 """
 Classe Graphique3D, hérite de FigureCanvasQTAgg
 Cette classe permet de gérer un graphique 3D Matplotlib pouvant être tourné et inséré dans un environnement Qt
 """
 class Graphique3D(FigureCanvasQTAgg) :
     """
-    Constructeur
+    Constructeur, initialise le graphique
     """
     def __init__(self) :
         self.figure = plt.figure()
         self.figure.subplots_adjust(bottom=0, top=1, left=0, right=1) # Supprime les marges
-        FigureCanvasQTAgg.__init__( self, self.figure ) 
-        self.axes = self.figure.gca( projection = '3d' ) # Axes 3D, et stockage dans un attribut
+        FigureCanvasQTAgg.__init__( self, self.figure ) # Objet de type FigureCanvas
+        self.axes = self.figure.gca( projection = '3d' ) # On lui dit qu'on veut des axes 3D, et on les stockes dans un attribut
     
     """
     Dessine ou actualise avec un nouveau graphique
@@ -121,22 +128,20 @@ class Graphique3D(FigureCanvasQTAgg) :
     @param "courbeAfficher" : La courbe à afficher dans "liste" + 1, 0 si il faut les afficher toutes
     @param "tempsAfficher" : L'instant à afficher dans "liste" + 1, 0 si il faut afficher tous les instants
     """
-    def dessinerGraphique3D(self, liste, courbeAfficher, tempsAfficher) : 
-        self.axes.clear() 
-        self.axes.set_xlabel( 'Axe X' ) 
-        self.axes.set_ylabel( 'Axe Y' )
-        self.axes.set_zlabel( 'Axe Z' ) 
-        #self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
+    def dessinerGraphique3D(self, liste, courbeAfficher, tempsAfficher) : # Procédure qui dessine le graphique
+        self.axes.clear() # Nettoie les axes et leur contenu
+        self.axes.set_xlabel( 'Axe X' ) # Label sur l'axe X
+        self.axes.set_ylabel( 'Axe Y' ) # Label sur l'axe Y
+        self.axes.set_zlabel( 'Axe Z' ) # Label sur l'axe Z
+#        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
         if courbeAfficher != 0 :
-            couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choix aléatoire de couleurs de base de Matplotlib
-            self.axes.plot( liste[courbeAfficher - 1][0], liste[courbeAfficher - 1][1], liste[courbeAfficher - 1][2], couleur + 'o-' ) 
+            couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
+            self.axes.plot( liste[courbeAfficher - 1][0], liste[courbeAfficher - 1][1], liste[courbeAfficher - 1][2], couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
         else :
             for courbe in liste :
-                couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choix aléatoire de couleurs de base de Matplotlib
-                self.axes.plot( courbe[0], courbe[1], courbe[2], couleur + 'o-' )
-        self.draw() 
-
-
+                couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
+                self.axes.plot( courbe[0], courbe[1], courbe[2], couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
+        self.draw() # Dessine le graphique 3D avec les axes
 
 """
 Classe MilleFeuille3D, hérite de FigureCanvasQTAgg
@@ -155,25 +160,36 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
     
     """
     Dessine ou actualise avec un nouveau graphique
-    @param "listeImages" : Liste d'images à afficher, au format PGM (Base 8), associées à leur hauteur à afficher.
+    @param "listeImages" : Liste d'images à afficher, au format PGM (Base 8), associées à leur hauteur à afficher
     """
     def dessinerMilleFeuille3D(self, listeImages) : # Procédure qui dessine le graphique      
         self.axes.clear() # Nettoie les axes et leur contenu
+        self.axes.set_xlabel( 'Axe X' ) # Label sur l'axe X
+        self.axes.set_ylabel( 'Axe Y' ) # Label sur l'axe Y
+        self.axes.set_zlabel( 'Axe Z' ) # Label sur l'axe Z
 #        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
 
         for I in range( len( listeImages ) ) :
-            # Source : https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
-            # Create a 80 x 80 vertex mesh
-            X, Y = numpy.meshgrid(numpy.linspace(0,1,HAUTEUR), numpy.linspace(0,1,LARGEUR))
-            Z = numpy.zeros(X.shape) + listeImages[I][1]
+            if os.path.isfile( listeImages[I][0] ) : # Si le chemin d'accès à l'image existe
+                # Source : https://stackoverflow.com/questions/45663597/plotting-3d-image-form-a-data-in-numpy-array
+                # Traitement de l'image
+                image = read_pgm(listeImages[I][0], byteorder='<') # Matrix au format uint8
+                imageConvertie = image.astype(numpy.float64) / 255 # Convertie en float64
+                T = cm.gist_gray(imageConvertie) # Matrix float64 que facecolors peut prendre
+                # Liste des colormaps disponibles sur matplotlib.cm :
+                # https://matplotlib.org/3.1.0/gallery/color/colormap_reference.html
+                
+                # Source : https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
+                # Create a vertex mesh
+                X, Y = numpy.meshgrid(numpy.linspace(0, len(image)-2, len(image)-1 ), numpy.linspace(0, len(image[0])-2, len(image[0])-1 ))
+                Z = numpy.zeros(X.shape) + listeImages[I][1]
+                
+                self.axes.plot_surface(X, Y, Z, facecolors=T)
+                
+                print( "[Debug MF] Ajout : " + listeImages[I][0] )
             
-            # Source : https://stackoverflow.com/questions/45663597/plotting-3d-image-form-a-data-in-numpy-array
-            # Traitement de l'image
-            image = read_pgm(listeImages[I][0], byteorder='<') # Matrix au format uint8
-            imageConvertie = image.astype(numpy.float64) / 255 # Convertie en float64
-            T = cm.hot(imageConvertie) # Matrix float64 que facecolors peut prendre
-            
-            self.axes.plot_surface(X, Y, Z, facecolors=T)
+            else :
+                print( "[Erreur MF] " + listeImages[I][0] + " n'existe pas !" )
         
         self.draw()
 
@@ -382,17 +398,17 @@ class Fenetre(QTabWidget) :
         
         # Défilement de couches inférieures (Valeur de la couche minimum à afficher)
         self.barreDeScrollMFCoucheMin = QScrollBar()
-        self.barreDeScrollMFCoucheMin.setMaximum( INTERVALLE - 1 )
+        self.barreDeScrollMFCoucheMin.setMaximum( INTERVALLE_XY - 1 )
         self.barreDeScrollMFCoucheMin.valueChanged.connect( self.dessinerMilleFeuille3D )
         
         # Défilement de couches supérieures (Valeur de la couche maximum à afficher)
         self.barreDeScrollMFCoucheMax = QScrollBar()
-        self.barreDeScrollMFCoucheMax.setMaximum( INTERVALLE - 1 )
+        self.barreDeScrollMFCoucheMax.setMaximum( INTERVALLE_XY - 1 )
         self.barreDeScrollMFCoucheMax.valueChanged.connect( self.dessinerMilleFeuille3D )
         
         # Défilement temporel
         self.barreDeScrollMFTemps = QScrollBar(Qt.Horizontal)
-        self.barreDeScrollMFTemps.setMaximum( NB_IMGS / INTERVALLE - 1 )
+        self.barreDeScrollMFTemps.setMaximum( NB_IMGS / INTERVALLE_XY - 1 )
         self.barreDeScrollMFTemps.valueChanged.connect( self.dessinerMilleFeuille3D )
         
         grille = QGridLayout()
@@ -414,53 +430,88 @@ class Fenetre(QTabWidget) :
         listeImages = []
         if self.barreDeScrollMFCoucheMax.value() != 0 :
             for i in range(self.barreDeScrollMFCoucheMin.value(), self.barreDeScrollMFCoucheMax.value(), 1) :
-                listeImages.append( [URL + str(self.barreDeScrollMFTemps.value() * INTERVALLE + i) + ".pgm", self.barreDeScrollMFCoucheMin.value() + i] )
+                listeImages.append( [URL_POUR_MF + str(self.barreDeScrollMFTemps.value() * INTERVALLE_XY + i) + ".pgm", self.barreDeScrollMFCoucheMin.value() + i] )
         else : # Permet de ne commander qu'avec le défilement de la valeur minimum, forcément si ANTI_LAG activé
-            numeroImage = self.barreDeScrollMFTemps.value() * INTERVALLE + self.barreDeScrollMFCoucheMin.value()
-            listeImages.append( [URL + str(numeroImage) + ".pgm", self.barreDeScrollMFCoucheMin.value()] )
+            numeroImage = self.barreDeScrollMFTemps.value() * INTERVALLE_XY + self.barreDeScrollMFCoucheMin.value()
+            listeImages.append( [URL_POUR_MF + str(numeroImage) + ".pgm", self.barreDeScrollMFCoucheMin.value()] )
         
         self.milleFeuille3D.dessinerMilleFeuille3D( listeImages )
         
         print( "[Debug] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
-        if ANTI_LAG : print( "[Debug] Affichage : " + URL + str(numeroImage) + ".pgm" )
+        if ANTI_LAG : print( "[Debug] Affichage : " + URL_POUR_MF + str(numeroImage) + ".pgm" )
 
 
 
     def tabaffichage_coupes(self) :
         # Création d'un contenant de l'onglet
         grille=QGridLayout()
-
-
+        
+        
+        
+########### Barres de scroll      
+        horizontalLayout = QGridLayout()
+        
+        label_temps = QLabel("Temps")
+        
+        # Défilement de la couche X
+        self.barreScrollAxeX = QScrollBar()
+        self.barreScrollAxeX.setMaximum( INTERVALLE_YZ - 1 )
+        self.barreScrollAxeX.valueChanged.connect( self.changeImages )
+        
+        # Défilement de la couche Y
+        self.barreScrollAxeY = QScrollBar()
+        self.barreScrollAxeY.setMaximum( INTERVALLE_XZ - 1 )
+        self.barreScrollAxeY.valueChanged.connect( self.changeImages )
+        
+        # Défilement de la couche Z
+        self.barreScrollAxeZ = QScrollBar()
+        self.barreScrollAxeZ.setMaximum( INTERVALLE_XY - 1 )
+        self.barreScrollAxeZ.valueChanged.connect( self.changeImages )
+        
+        # Défilement temporel
+        self.barreScrollTemps = QScrollBar(Qt.Horizontal)
+        self.barreScrollTemps.setMaximum( NB_IMGS / INTERVALLE_XY - 1 )
+        self.barreScrollTemps.valueChanged.connect( self.changeImages )
+        
+        # Scroll Bar des axes
+        label_axex=QLabel("X")
+        label_axey=QLabel("Y")
+        label_axez=QLabel("Z")
+        
+        # Ajout des barres de scroll 
+        horizontalLayout.addWidget(label_temps,1,1)
+        horizontalLayout.addWidget(label_axex,2,1)
+        horizontalLayout.addWidget(label_axey,3,1)
+        horizontalLayout.addWidget(label_axez,4,1)
+        horizontalLayout.addWidget(self.barreScrollTemps,1,2)
+        horizontalLayout.addWidget(self.barreScrollAxeX,2,2)
+        horizontalLayout.addWidget(self.barreScrollAxeY,2,3)
+        horizontalLayout.addWidget(self.barreScrollAxeZ,2,4)
+        grille.addLayout(horizontalLayout,3,1)
+        
+        
 ######## Images
 
         # Création d'un contenant pour les images 
         contenant_widget=QWidget()
         contenant_grille=QGridLayout()
         
-        # Image axe (x,y)
-        image_xy = "../tests_Alexandre/Result1.pgm"  
-        label_image_xy = QLabel()
-        label_image_xy.setFixedSize(160,160)
-        width=label_image_xy.width()
-        height=label_image_xy.height()
-        label_image_xy.setPixmap(QPixmap(image_xy).scaled(width,height,Qt.KeepAspectRatio))
-
-        # Image axe (y,z)
-        image_yz = "../tests_Alexandre/Result1.pgm"  
-        label_image_yz = QLabel()
-        label_image_yz.setFixedSize(160,160)
-        label_image_yz.setPixmap(QPixmap(image_yz).scaled(width,height,Qt.KeepAspectRatio))
         
-        # Image axe (z,x)
-        image_zx = "../tests_Alexandre/Result1.pgm"  
-        label_image_zx = QLabel()
-        label_image_zx.setFixedSize(160,160)
-        label_image_zx.setPixmap(QPixmap(image_zx).scaled(width,height,Qt.KeepAspectRatio))
+        self.label_image_xy = QLabel()
+        self.label_image_yz = QLabel()
+        self.label_image_zx = QLabel()
+        
+        self.label_image_xy.setFixedSize(160,160)
+        self.label_image_yz.setFixedSize(160,160)
+        self.label_image_zx.setFixedSize(160,160)
+        
+        self.changeImages(0)
+
         
         # Ajout des images dans le contenant à images
-        contenant_grille.addWidget(label_image_xy,5,2)
-        contenant_grille.addWidget(label_image_yz,2,3)
-        contenant_grille.addWidget(label_image_zx,2,1)
+        contenant_grille.addWidget(self.label_image_xy,5,2)
+        contenant_grille.addWidget(self.label_image_yz,2,3)
+        contenant_grille.addWidget(self.label_image_zx,2,1)
         contenant_widget.setLayout(contenant_grille)
         
         # Textes correspondant aux images
@@ -480,36 +531,6 @@ class Fenetre(QTabWidget) :
         
         # Ajout du contenant d'images dans la grille globale
         grille.addWidget(contenant_widget,2,1)
-        
-        
-        
-########### Barres de scroll      
-        horizontalLayout = QGridLayout()
-        
-        # Scroll Bar de temps
-        label_temps=QLabel("Temps")
-        barreScrollTemps=QScrollBar(Qt.Horizontal)
-        barreScrollTemps.setMinimum(0)
-        barreScrollTemps.setMaximum(250)
-
-        # Scroll Bar des axes
-        label_axex=QLabel("X")
-        barreScrollAxeX=QScrollBar(Qt.Horizontal)
-        label_axey=QLabel("Y")
-        barreScrollAxeY=QScrollBar(Qt.Horizontal)
-        label_axez=QLabel("Z")
-        barreScrollAxeZ=QScrollBar(Qt.Horizontal)
-        
-        # Ajout des barres de scroll 
-        horizontalLayout.addWidget(label_temps,1,1)
-        horizontalLayout.addWidget(label_axex,2,1)
-        horizontalLayout.addWidget(label_axey,3,1)
-        horizontalLayout.addWidget(label_axez,4,1)
-        horizontalLayout.addWidget(barreScrollTemps,1,2)
-        horizontalLayout.addWidget(barreScrollAxeX,2,2)
-        horizontalLayout.addWidget(barreScrollAxeY,3,2)
-        horizontalLayout.addWidget(barreScrollAxeZ,4,2)
-        grille.addLayout(horizontalLayout,3,1)
 
 ######## Positions actuelles x,y,z et temps
         valeur_temps=QLabel("Temps : 0")
@@ -524,6 +545,35 @@ class Fenetre(QTabWidget) :
 
         # Ajout du contenu à l'onglet
         self.affichage_coupes.setLayout(grille)
+    
+    
+    
+    def changeImages(self, value) :
+        print ( "[Debug Imgs] " + str(self.barreScrollTemps.value()) + ", "
+                                + str(self.barreScrollAxeX.value()) + ", "
+                                + str(self.barreScrollAxeY.value()) + ", "
+                                + str(self.barreScrollAxeZ.value()) )
+        
+        coucheXFormate = format(self.barreScrollAxeX.value(), '04d') # String sur 4 digits
+        coucheYFormate = format(self.barreScrollAxeY.value(), '04d') # String sur 4 digits
+        coucheZFormate = format(self.barreScrollAxeZ.value(), '04d') # String sur 4 digits
+        tempsFormate = format(self.barreScrollTemps.value(), '02d') # String sur 2 digits
+        
+        # Image axe (x,y)
+        image_xy = URL_POUR_IRM + "x_y/" + tempsFormate + "/t_" + tempsFormate + "coupe_xy_" + coucheZFormate + ".pgm"
+        width=self.label_image_xy.width()
+        height=self.label_image_xy.height()
+        self.label_image_xy.setPixmap(QPixmap(image_xy).scaled(width,height,Qt.KeepAspectRatio))
+
+        # Image axe (y,z)
+        image_yz = URL_POUR_IRM + "y_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_yz_" + coucheXFormate + ".pgm" 
+        self.label_image_yz.setPixmap(QPixmap(image_yz).scaled(width,height,Qt.KeepAspectRatio))
+        
+        # Image axe (z,x)
+        image_zx = URL_POUR_IRM + "x_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_xz_" + coucheYFormate + ".pgm" 
+        self.label_image_zx.setPixmap(QPixmap(image_zx).scaled(width,height,Qt.KeepAspectRatio))
+        
+        print("prout")
 
 
 
