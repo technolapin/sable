@@ -449,7 +449,7 @@ class Fenetre(QTabWidget) :
         
         
 ########### Barres de scroll      
-        horizontalLayout = QGridLayout()
+        
         
         label_temps = QLabel("Temps")
         
@@ -479,15 +479,10 @@ class Fenetre(QTabWidget) :
         label_axez=QLabel("Z")
         
         # Ajout des barres de scroll 
-        horizontalLayout.addWidget(label_temps,1,1)
-        horizontalLayout.addWidget(label_axex,2,1)
-        horizontalLayout.addWidget(label_axey,3,1)
-        horizontalLayout.addWidget(label_axez,4,1)
-        horizontalLayout.addWidget(self.barreScrollTemps,1,2)
-        horizontalLayout.addWidget(self.barreScrollAxeX,2,2)
-        horizontalLayout.addWidget(self.barreScrollAxeY,2,3)
-        horizontalLayout.addWidget(self.barreScrollAxeZ,2,4)
-        grille.addLayout(horizontalLayout,3,1)
+        grille.addWidget(self.barreScrollTemps,3,1)
+        grille.addWidget(self.barreScrollAxeX,2,2)
+        grille.addWidget(self.barreScrollAxeY,2,3)
+        grille.addWidget(self.barreScrollAxeZ,2,4)
         
         
 ######## Images
@@ -501,10 +496,17 @@ class Fenetre(QTabWidget) :
         self.label_image_yz = QLabel()
         self.label_image_zx = QLabel()
         
-        self.label_image_xy.setFixedSize(160,160)
-        self.label_image_yz.setFixedSize(160,160)
-        self.label_image_zx.setFixedSize(160,160)
+        self.label_image_xy.setFixedSize(240,240)
+        self.label_image_yz.setFixedSize(240,500)
+        self.label_image_zx.setFixedSize(240,500)
         
+
+        self.valeur_temps=QLabel("Temps : 0")
+        self.valeur_X=QLabel("X : 0")
+        self.valeur_Y=QLabel("Y : 0")
+        self.valeur_Z=QLabel("Z : 0")
+
+
         self.changeImages(0)
 
         
@@ -518,7 +520,7 @@ class Fenetre(QTabWidget) :
         texte_xy=QLabel("Image (x,y)")
         texte_yz=QLabel("Image (y,z)")
         texte_zx=QLabel("Image (z,x)")
-        contenant_grille.addWidget(texte_xy,4,2)
+        contenant_grille.addWidget(texte_xy,3,2)
         contenant_grille.addWidget(texte_yz,1,3)
         contenant_grille.addWidget(texte_zx,1,1)
 
@@ -526,7 +528,7 @@ class Fenetre(QTabWidget) :
         image_axes = "axesxyz.png"
         label_image_axes = QLabel()
         label_image_axes.setPixmap(QPixmap(image_axes))
-        contenant_grille.addWidget(label_image_axes,3,2)
+        contenant_grille.addWidget(label_image_axes,2,2)
         
         
         # Ajout du contenant d'images dans la grille globale
@@ -536,10 +538,16 @@ class Fenetre(QTabWidget) :
         
 
 ######## Positions actuelles x,y,z et temps
-        valeur_temps=QLabel("Temps : 0")
-        grille.addWidget(valeur_temps,1,1)
+        horizontal_layout=QHBoxLayout()
+        
+        
+        horizontal_layout.addWidget(self.valeur_temps)
+        horizontal_layout.addWidget(self.valeur_X)
+        horizontal_layout.addWidget(self.valeur_Y)
+        horizontal_layout.addWidget(self.valeur_Z)
+        
 
-
+        grille.addLayout(horizontal_layout,1,1)
 
 
 
@@ -570,13 +578,21 @@ class Fenetre(QTabWidget) :
 
         # Image axe (y,z)
         image_yz = URL_POUR_IRM + "y_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_yz_" + coucheXFormate + ".pgm" 
+        width=self.label_image_yz.width()
+        height=self.label_image_yz.height()
         self.label_image_yz.setPixmap(QPixmap(image_yz).scaled(width,height,Qt.KeepAspectRatio))
         
         # Image axe (z,x)
         image_zx = URL_POUR_IRM + "x_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_xz_" + coucheYFormate + ".pgm" 
+        width=self.label_image_zx.width()
+        height=self.label_image_zx.height()
         self.label_image_zx.setPixmap(QPixmap(image_zx).scaled(width,height,Qt.KeepAspectRatio))
         
-        print("prout")
+        
+        self.valeur_temps.setText("Temps : " + str(self.barreScrollTemps.value()))
+        self.valeur_X.setText("X : " + str(self.barreScrollAxeX.value()))
+        self.valeur_Y.setText("Y : " + str(self.barreScrollAxeY.value()))
+        self.valeur_Z.setText("Z : " + str(self.barreScrollAxeZ.value()))
 
 
 
