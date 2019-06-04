@@ -531,39 +531,9 @@ class Fenetre(QTabWidget) :
         
         # Ajout du contenant d'images dans la grille globale
         grille.addWidget(contenant_widget,2,1)
-<<<<<<< HEAD
-=======
-        
-        
-        
-########### Barres de scroll      
-        horizontalLayout = QGridLayout()
-        
-        # Scroll Bar de temps
-        label_temps=QLabel("Temps")
-        barreScrollTemps=QScrollBar(Qt.Horizontal)
-#        barreScrollTemps.setMinimum(0)
-        barreScrollTemps.setMaximum(250)
 
-        # Scroll Bar des axes
-        label_axex=QLabel("X")
-        barreScrollAxeX=QScrollBar(Qt.Horizontal)
-        label_axey=QLabel("Y")
-        barreScrollAxeY=QScrollBar(Qt.Horizontal)
-        label_axez=QLabel("Z")
-        barreScrollAxeZ=QScrollBar(Qt.Horizontal)
         
-        # Ajout des barres de scroll 
-        horizontalLayout.addWidget(label_temps,1,1)
-        horizontalLayout.addWidget(label_axex,2,1)
-        horizontalLayout.addWidget(label_axey,3,1)
-        horizontalLayout.addWidget(label_axez,4,1)
-        horizontalLayout.addWidget(barreScrollTemps,1,2)
-        horizontalLayout.addWidget(barreScrollAxeX,2,2)
-        horizontalLayout.addWidget(barreScrollAxeY,3,2)
-        horizontalLayout.addWidget(barreScrollAxeZ,4,2)
-        grille.addLayout(horizontalLayout,2,2)
->>>>>>> 4d0817bda0cb1ed05510db1246decf5d0de68cc4
+        
 
 ######## Positions actuelles x,y,z et temps
         valeur_temps=QLabel("Temps : 0")
