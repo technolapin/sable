@@ -17,16 +17,18 @@ ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
 
 NB_IMGS = 4000 # Nombre d'images au format PGM
 INTERVALLE = 250 # Intervalle temporel dans cette liste d'images
-URL = "../extraction/images/test-"
-HAUTEUR = 80
-LARGEUR = 80
+URL_POUR_MF = "../extraction/images/test-"
+
+URL_POUR_IRM = "../extraction/coupes3D/"
 
 
 
 """
 IMPORTATIONS
 """
+import os # Librairie d'interface avec l'OS
 import sys # Librairie pour faire des appels systèmes
+
 from PyQt5.QtCore import * # Librairie Python Qt4 pour créer la GUI
 from PyQt5.QtGui import * # Librairie Python Qt4 pour créer la GUI
 from PyQt5.QtWidgets import * # Librairie Python Qt4 pour créer la GUI
@@ -94,7 +96,7 @@ def read_pgm(filename, byteorder='>'):
                             dtype='u1' if int(maxval) < 256 else byteorder+'u2',
                             count=int(width)*int(height),
                             offset=len(header)
-                            ).reshape((int(height), int(width)))
+                            ).reshape((int(height), int(width))), int(height), int(width)
 
 
 
@@ -153,25 +155,104 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
     
     """
     Dessine ou actualise avec un nouveau graphique
-    @param "listeImages" : Liste d'images à afficher, au format PGM (Base 8), associées à leur hauteur à afficher.
+    @param "listeImages" : Liste d'images à afficher, au format PGM (Base 8), associées à leur hauteur à afficher
     """
     def dessinerMilleFeuille3D(self, listeImages) : # Procédure qui dessine le graphique      
         self.axes.clear() # Nettoie les axes et leur contenu
 #        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
 
         for I in range( len( listeImages ) ) :
-            # Source : https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
-            # Create a 80 x 80 vertex mesh
-            X, Y = numpy.meshgrid(numpy.linspace(0,1,HAUTEUR), numpy.linspace(0,1,LARGEUR))
-            Z = numpy.zeros(X.shape) + listeImages[I][1]
+            if os.path.isfile( listeImages[I][0] ) : # Si le chemin d'accès à l'image existe
+                # Source : https://stackoverflow.com/questions/45663597/plotting-3d-image-form-a-data-in-numpy-array
+                # Traitement de l'image
+                image = read_pgm(listeImages[I][0], byteorder='<') # Matrix au format uint8
+                imageConvertie = image.astype(numpy.float64) / 255 # Convertie en float64
+                T = cm.hot(imageConvertie) # Matrix float64 que facecolors peut prendre
+                
+                # Source : https://stackoverflow.com/questions/25287861/creating-intersecting-images-in-matplotlib-with-imshow-or-other-function/25295272#25295272
+                # Create a vertex mesh
+                X, Y = numpy.meshgrid(numpy.linspace(0, 1, len(image) ), numpy.linspace(0, 1, len(image[0]) ))
+                Z = numpy.zeros(X.shape) + listeImages[I][1]
+                
+                self.axes.plot_surface(X, Y, Z, facecolors=T)
             
-            # Source : https://stackoverflow.com/questions/45663597/plotting-3d-image-form-a-data-in-numpy-array
+            else :
+                print( "[Erreur] " + listeImages[I][0] + " n'existe pas !" )
+        
+        self.draw()
+
+"""
+Classe MilleFeuilleIRM, hérite de FigureCanvasQTAgg
+Cette classe permet de gérer un graphique 3D d'images pouvant être tourné et inséré dans un environnement Qt
+Ces images sont affichées sous la forme de 3 plans perpidenculaires, similaire à un IRM
+"""
+class MilleFeuilleIRM(FigureCanvasQTAgg) :
+    """
+    Constructeur, initialise le graphique
+    """
+    def __init__(self) :
+        self.figure = plt.figure()
+        self.figure.subplots_adjust(bottom=0, top=1, left=0, right=1) # Supprime les marges
+        FigureCanvasQTAgg.__init__( self, self.figure ) # Objet de type FigureCanvas
+        self.axes = self.figure.gca( projection = '3d' ) # On lui dit qu'on veut des axes 3D, et on les stockes dans un attribut
+    
+    """
+    Dessine ou actualise avec un nouveau graphique
+    @param "imageX" : Liste contenant une image au format PGM (Base 8) à afficher dans un plan YZ, ainsi que sa position en X.
+    @param "imageY" : Liste contenant une image au format PGM (Base 8) à afficher dans un plan XZ, ainsi que sa position en Y.
+    @param "imageZ" : Liste contenant une image au format PGM (Base 8) à afficher dans un plan XY, ainsi que sa position en Z.
+    """
+    def dessinerMilleFeuilleIRM(self, imageX, imageY, imageZ) : # Procédure qui dessine le graphique      
+        self.axes.clear() # Nettoie les axes et leur contenu
+#        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
+        
+        """ Plan en YZ (Pour imageX) """
+        if os.path.isfile( imageX[0] ) : # Si le chemin d'accès à l'image existe
             # Traitement de l'image
-            image = read_pgm(listeImages[I][0], byteorder='<') # Matrix au format uint8
+            image = read_pgm(imageX[0], byteorder='<') # Matrix au format uint8
             imageConvertie = image.astype(numpy.float64) / 255 # Convertie en float64
             T = cm.hot(imageConvertie) # Matrix float64 que facecolors peut prendre
             
+            # Create a vertex mesh
+            Y, Z = numpy.meshgrid(numpy.linspace(0, 1, len(image) ), numpy.linspace(0, 1, len(image[0]) ))
+            X = numpy.zeros(Y.shape) + imageX[1]
+            
             self.axes.plot_surface(X, Y, Z, facecolors=T)
+            
+        else :
+            print( "[Erreur] " + imageX[0] + " n'existe pas !" )
+        
+        """ Plan en XZ (Pour imageY) """
+        if os.path.isfile( imageY[0] ) : # Si le chemin d'accès à l'image existe
+            # Traitement de l'image
+            image = read_pgm(imageY[0], byteorder='<') # Matrix au format uint8
+            imageConvertie = image.astype(numpy.float64) / 255 # Convertie en float64
+            T = cm.hot(imageConvertie) # Matrix float64 que facecolors peut prendre
+            
+            # Create a vertex mesh
+            X, Z = numpy.meshgrid(numpy.linspace(0, 1, len(image) ), numpy.linspace(0, 1, len(image[0]) ))
+            Y = numpy.zeros(X.shape) + imageY[1]
+            
+            self.axes.plot_surface(X, Y, Z, facecolors=T)
+            
+        else :
+            print( "[Erreur] " + imageX[0] + " n'existe pas !" )
+        
+        """ Plan en XY (Pour imageZ) """
+        if os.path.isfile( imageZ[0] ) : # Si le chemin d'accès à l'image existe
+            # Traitement de l'image
+            image = read_pgm(imageZ[0], byteorder='<') # Matrix au format uint8
+            imageConvertie = image.astype(numpy.float64) / 255 # Convertie en float64
+            T = cm.hot(imageConvertie) # Matrix float64 que facecolors peut prendre
+            
+            # Create a vertex mesh
+            X, Y = numpy.meshgrid(numpy.linspace(0, 1, len(image) ), numpy.linspace(0, 1, len(image[0]) ))
+            Z = numpy.zeros(X.shape) + imageZ[1]
+            
+            self.axes.plot_surface(X, Y, Z, facecolors=T)
+            
+        else :
+            print( "[Erreur] " + imageX[0] + " n'existe pas !" )
         
         self.draw()
 
@@ -193,17 +274,20 @@ class Fenetre(QTabWidget) :
         # Création des onglets de la fenêtre
         self.onglet1 = QWidget()
         self.onglet2 = QWidget()
-        self.onglet3 = QWidget()  
+        self.onglet3 = QWidget()
+        self.onglet4 = QWidget()  
         
         # Ajout des onglets à la fenêtre  	    
         self.addTab( self.onglet1, "Visualisation du Graphique" ) 
         self.addTab( self.onglet2, "Mille-feuilles" )
-        self.addTab( self.onglet3, "Nouvel Onglet" )
+        self.addTab( self.onglet3, "Vision IRM" )
+        self.addTab( self.onglet4, "Onglet Inutilisé" )
         
         # Appel des procédures qui remplissent les onglets
         self.tabGraphique3D()
         self.tabMilleFeuille3D()
-        self.tabOnglet3()
+        self.tabMilleFeuilleIRM()
+        self.tabOngletInutile()
     
     """
     Onglet du graphique 3D
@@ -276,12 +360,50 @@ class Fenetre(QTabWidget) :
         self.onglet2.setLayout( grille )
     
     """
-    Onglet 3
+    Onglet du mille-feuilles IRM
     """
-    def tabOnglet3(self) :
+    def tabMilleFeuilleIRM(self) :
+        self.milleFeuilleIRM = MilleFeuilleIRM()
+        
+        # Défilement de la couche X
+        self.barreDeScrollIRMCoucheX = QScrollBar()
+        self.barreDeScrollIRMCoucheX.setMaximum( INTERVALLE - 1 )
+        self.barreDeScrollIRMCoucheX.valueChanged.connect( self.dessinerMilleFeuilleIRM )
+        
+        # Défilement de la couche Y
+        self.barreDeScrollIRMCoucheY = QScrollBar()
+        self.barreDeScrollIRMCoucheY.setMaximum( INTERVALLE - 1 )
+        self.barreDeScrollIRMCoucheY.valueChanged.connect( self.dessinerMilleFeuilleIRM )
+        
+        # Défilement de la couche Z
+        self.barreDeScrollIRMCoucheZ = QScrollBar()
+        self.barreDeScrollIRMCoucheZ.setMaximum( INTERVALLE - 1 )
+        self.barreDeScrollIRMCoucheZ.valueChanged.connect( self.dessinerMilleFeuilleIRM )
+        
+        # Défilement temporel
+        self.barreDeScrollIRMTemps = QScrollBar(Qt.Horizontal)
+        self.barreDeScrollIRMTemps.setMaximum( NB_IMGS / INTERVALLE - 1 )
+        self.barreDeScrollIRMTemps.valueChanged.connect( self.dessinerMilleFeuilleIRM )
+        
         grille = QGridLayout()
         
+        grille.addWidget( self.milleFeuilleIRM, 2, 1 )
+        grille.addWidget( self.barreDeScrollIRMCoucheX, 2, 2 )
+        grille.addWidget( self.barreDeScrollIRMCoucheY, 2, 3 )
+        grille.addWidget( self.barreDeScrollIRMCoucheZ, 2, 4 )
+        grille.addWidget( self.barreDeScrollIRMTemps, 3, 1 )
+        
+        self.dessinerMilleFeuille3D(0)
+        
         self.onglet3.setLayout( grille )
+    
+    """
+    Onglet Inutilisé
+    """
+    def tabOngletInutile(self) :
+        grille = QGridLayout()
+        
+        self.onglet4.setLayout( grille )
     
     """
     Gère le dessin et les changements par l'utilisateur dans les barres de défilement
@@ -295,24 +417,44 @@ class Fenetre(QTabWidget) :
 #       Devenu inutlie puisqu'on a supprimé les menus déroulants
          self.graphique3D.dessinerGraphique3D( graphe, self.barreDeScrollCourbes.value(), self.barreDeScrollTemps.value() )
          
-         print( "[Debug] Temps : " + str( self.barreDeScrollCourbes.value() ) + ", Courbe : " + str( self.barreDeScrollTemps.value() ) + ", Valeur donnée : " + str( value ) )
+         print( "[Debug 3D] Temps : " + str( self.barreDeScrollCourbes.value() ) + ", Courbe : " + str( self.barreDeScrollTemps.value() ) + ", Valeur donnée : " + str( value ) )
     
     """
-    Gére le dessin et les changements du mille feuille 3D
+    Gére le dessin et les changements du mille-feuilles 3D (Onglet 2)
     """
     def dessinerMilleFeuille3D(self, value) :
         listeImages = []
         if self.barreDeScrollMFCoucheMax.value() != 0 :
             for i in range(self.barreDeScrollMFCoucheMin.value(), self.barreDeScrollMFCoucheMax.value(), 1) :
-                listeImages.append( [URL + str(self.barreDeScrollMFTemps.value() * INTERVALLE + i) + ".pgm", self.barreDeScrollMFCoucheMin.value() + i] )
+                listeImages.append( [URL_POUR_MF + str(self.barreDeScrollMFTemps.value() * INTERVALLE + i) + ".pgm", self.barreDeScrollMFCoucheMin.value() + i] )
         else : # Permet de ne commander qu'avec le défilement de la valeur minimum, forcément si ANTI_LAG activé
             numeroImage = self.barreDeScrollMFTemps.value() * INTERVALLE + self.barreDeScrollMFCoucheMin.value()
-            listeImages.append( [URL + str(numeroImage) + ".pgm", self.barreDeScrollMFCoucheMin.value()] )
+            listeImages.append( [URL_POUR_MF + str(numeroImage) + ".pgm", self.barreDeScrollMFCoucheMin.value()] )
         
         self.milleFeuille3D.dessinerMilleFeuille3D( listeImages )
         
-        print( "[Debug] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
-        if ANTI_LAG : print( "[Debug] Affichage : " + URL + str(numeroImage) + ".pgm" )
+        print( "[Debug MF] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
+        if ANTI_LAG : print( "[Debug MF] Affichage : " + URL_POUR_MF + str(numeroImage) + ".pgm" )
+        
+    """
+    Gére le dessin et les changements de l'affichage IRM (Onglet 3)
+    """
+    def dessinerMilleFeuilleIRM(self, value) :
+        coucheXFormaté = format(self.barreDeScrollIRMCoucheX.value(), '04d') # String sur 4 digits
+        coucheYFormaté = format(self.barreDeScrollIRMCoucheY.value(), '04d') # String sur 4 digits
+        coucheZFormaté = format(self.barreDeScrollIRMCoucheZ.value(), '04d') # String sur 4 digits
+        tempsFormaté = format(self.barreDeScrollIRMTemps.value(), '02d') # String sur 2 digits
+        
+        imageX = URL_POUR_IRM + "y_z" + tempsFormaté + "/t_" + tempsFormaté + "coupe_yz_" + coucheXFormaté + ".pgm"
+        imageY = URL_POUR_IRM + "x_z" + tempsFormaté + "/t_" + tempsFormaté + "coupe_xz_" + coucheYFormaté + ".pgm"
+        imageZ = URL_POUR_IRM + "x_y" + tempsFormaté + "/t_" + tempsFormaté + "coupe_xy_" + coucheZFormaté + ".pgm"
+        
+        self.milleFeuilleIRM.dessinerMilleFeuilleIRM( [imageX, self.barreDeScrollIRMCoucheX.value() ],
+                                                    [imageY, self.barreDeScrollIRMCoucheY.value() ], 
+                                                    [imageZ, self.barreDeScrollIRMCoucheZ.value() ] )
+        
+        print( "[Debug IRM] X : " + str( self.barreDeScrollIRMCoucheX.value() ) + ", Y : " + str( self.barreDeScrollIRMCoucheY.value() ) + ", Z : " + str( self.barreDeScrollIRMCoucheZ.value() ) + ", Temps : " + str( self.barreDeScrollIRMTemps.value() ) )
+        print( "[Debug IRM] Affichage : " + imageX + ", " + imageY + ", " + imageZ )
 
 
 
