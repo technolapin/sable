@@ -464,14 +464,14 @@ class Fenetre(QTabWidget) :
     Gére le dessin et les changements de l'affichage IRM (Onglet 3)
     """
     def dessinerMilleFeuilleIRM(self, value) :
-        coucheXFormaté = format(self.barreDeScrollIRMCoucheX.value(), '04d') # String sur 4 digits
-        coucheYFormaté = format(self.barreDeScrollIRMCoucheY.value(), '04d') # String sur 4 digits
-        coucheZFormaté = format(self.barreDeScrollIRMCoucheZ.value(), '04d') # String sur 4 digits
-        tempsFormaté = format(self.barreDeScrollIRMTemps.value(), '02d') # String sur 2 digits
+        coucheXFormate = format(self.barreDeScrollIRMCoucheX.value(), '04d') # String sur 4 digits
+        coucheYFormate = format(self.barreDeScrollIRMCoucheY.value(), '04d') # String sur 4 digits
+        coucheZFormate = format(self.barreDeScrollIRMCoucheZ.value(), '04d') # String sur 4 digits
+        tempsFormate = format(self.barreDeScrollIRMTemps.value(), '02d') # String sur 2 digits
         
-        imageX = URL_POUR_IRM + "y_z/" + tempsFormaté + "/t_" + tempsFormaté + "coupe_yz_" + coucheXFormaté + ".pgm"
-        imageY = URL_POUR_IRM + "x_z/" + tempsFormaté + "/t_" + tempsFormaté + "coupe_xz_" + coucheYFormaté + ".pgm"
-        imageZ = URL_POUR_IRM + "x_y/" + tempsFormaté + "/t_" + tempsFormaté + "coupe_xy_" + coucheZFormaté + ".pgm"
+        imageX = URL_POUR_IRM + "y_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_yz_" + coucheXFormate + ".pgm"
+        imageY = URL_POUR_IRM + "x_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_xz_" + coucheYFormate + ".pgm"
+        imageZ = URL_POUR_IRM + "x_y/" + tempsFormate + "/t_" + tempsFormate + "coupe_xy_" + coucheZFormate + ".pgm"
         
         self.milleFeuilleIRM.dessinerMilleFeuilleIRM( [imageX, self.barreDeScrollIRMCoucheX.value() ],
                                                       [imageY, self.barreDeScrollIRMCoucheY.value() ], 
