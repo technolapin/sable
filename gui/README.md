@@ -1,6 +1,6 @@
 # Note
 
-**NE PLUS TOUCHER A CE QU'IL Y A DANS `tests/` ET `old/` !** Merci ! ^^
+**NE PLUS TOUCHER A CE QU'IL Y A DANS `tests_amaury/tests/` ET `tests_amaury/old/` !** Merci ! ^^
 
 # Dépendances
 
