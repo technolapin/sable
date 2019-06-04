@@ -447,10 +447,15 @@ class Fenetre(QTabWidget) :
     Gére le dessin et les changements du mille-feuilles 3D (Onglet 2)
     """
     def dessinerMilleFeuille3D(self, value) :
-        listeImages = []
-        if self.barreDeScrollMFCoucheMax.value() != 0 :
+        # Si ANTI_LAG est activé, ET/OU que barreDeScrollMFCoucheMax est à 0 (Forcément si ANTI_LAG),
+        # on ne commande qu'avec barreDeScrollMFCoucheMin !
+        
+        listeImages = [] # Liste des images que on veut afficher dans le mille-feuilles
+        if self.barreDeScrollMFCoucheMax.value() != 0 : # Commander le défilement avec les deux barres
             for i in range(self.barreDeScrollMFCoucheMin.value(), self.barreDeScrollMFCoucheMax.value(), 1) :
-                listeImages.append( [URL_POUR_MF + str(self.barreDeScrollMFTemps.value() * INTERVALLE_X + i) + ".pgm", self.barreDeScrollMFCoucheMin.value() + i] )
+                urlImage = URL_POUR_MF + str(self.barreDeScrollMFTemps.value() * INTERVALLE_X + i) + ".pgm" # Chemin de l'image
+                hauteurImage = self.barreDeScrollMFCoucheMin.value() + i # Hauteur de l'image dans le mille-feuille
+                listeImages.append( [urlImage, hauteurImage] )
         else : # Permet de ne commander qu'avec le défilement de la valeur minimum, forcément si ANTI_LAG activé
             numeroImage = self.barreDeScrollMFTemps.value() * INTERVALLE_XY + self.barreDeScrollMFCoucheMin.value()
             listeImages.append( [URL_POUR_MF + str(numeroImage) + ".pgm", self.barreDeScrollMFCoucheMin.value()] )
