@@ -489,7 +489,7 @@ class Fenetre(QTabWidget) :
         # Scroll Bar de temps
         label_temps=QLabel("Temps")
         barreScrollTemps=QScrollBar(Qt.Horizontal)
-        barreScrollTemps.setMinimum(0)
+#        barreScrollTemps.setMinimum(0)
         barreScrollTemps.setMaximum(250)
 
         # Scroll Bar des axes
@@ -509,7 +509,7 @@ class Fenetre(QTabWidget) :
         horizontalLayout.addWidget(barreScrollAxeX,2,2)
         horizontalLayout.addWidget(barreScrollAxeY,3,2)
         horizontalLayout.addWidget(barreScrollAxeZ,4,2)
-        grille.addLayout(horizontalLayout,3,1)
+        grille.addLayout(horizontalLayout,2,2)
 
 ######## Positions actuelles x,y,z et temps
         valeur_temps=QLabel("Temps : 0")
