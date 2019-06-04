@@ -512,7 +512,7 @@ if __name__ == '__main__' :
     fileDialog = QFileDialog() # Crée un objet de type QFileDialog (Fenêtre pour choisir un fichier)
     fileDialog.setWindowTitle("Veuillez choisir le fichier TIFF") # Définit le nom de la fenêtre
     fichierDemande = fileDialog.getOpenFileName()[0] # Permet aussi d'attendre qu'il y ait un fichier demandé
-    print( "[Debug] Fichier demandé : " + fichierDemande )
+    print( u"[Debug] Fichier demandé : " + fichierDemande ) # "u" pour Unicode
     fileDialog.close() # Fermer la fenêtre
     
     if not validationFichier( fichierDemande ) : # Si la validation de ce fichier échoue
