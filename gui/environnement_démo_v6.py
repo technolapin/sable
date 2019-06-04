@@ -444,7 +444,7 @@ class Fenetre(QTabWidget) :
          print( "[Debug 3D] Temps : " + str( self.barreDeScrollCourbes.value() ) + ", Courbe : " + str( self.barreDeScrollTemps.value() ) + ", Valeur donnée : " + str( value ) )
     
     """
-    Gére le dessin et les changements du mille-feuilles 3D (Onglet 2)
+    Gère le dessin et les changements du mille-feuilles 3D (Onglet 2)
     """
     def dessinerMilleFeuille3D(self, value) :
         # Si ANTI_LAG est activé, ET/OU que barreDeScrollMFCoucheMax est à 0 (Forcément si ANTI_LAG), on ne commande qu'avec barreDeScrollMFCoucheMin
@@ -464,7 +464,7 @@ class Fenetre(QTabWidget) :
         if ANTI_LAG : print( "[Debug MF] Affichage : " + URL_POUR_MF + str(numeroImage) + ".pgm" )
         
     """
-    Gére le dessin et les changements de l'affichage IRM (Onglet 3)
+    Gère le dessin et les changements de l'affichage IRM (Onglet 3)
     """
     def dessinerMilleFeuilleIRM(self, value) :
         coucheXFormate = format(self.barreDeScrollIRMCoucheX.value(), '04d') # String sur 4 digits
