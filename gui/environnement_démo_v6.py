@@ -301,7 +301,7 @@ class Fenetre(QTabWidget) :
         self.onglet3 = QWidget()
         self.onglet4 = QWidget()  
         
-        # Ajout des onglets à la fenêtre  	    
+        # Ajout des onglets à la fenêtre
         self.addTab( self.onglet1, "Visualisation du Graphique" ) 
         self.addTab( self.onglet2, "Mille-feuilles" )
         self.addTab( self.onglet3, "Vision IRM" )
@@ -486,6 +486,21 @@ class Fenetre(QTabWidget) :
 
 
 """
+Fonction de validation du fichier demandé
+"""
+# TODO : A améliorer !
+def validationFichier( fichier ) :
+    if fichier == "" :
+        return False
+    return True
+
+"""
+Fonction de traitement d'image (Appel tout le travail de traitement d'image)
+"""
+def traitementImage( fichier ) :
+    return
+
+"""
 Code principal
 """
 # Si on est le script principal
@@ -493,7 +508,22 @@ Code principal
 # Source : https://stackoverflow.com/questions/419163/what-does-if-name-main-do
 if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
-    fenetre = Fenetre() # Crée un objet de type Fenetre
-    fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
-    fenetre.show() # Affiche la fenêtre
-    sys.exit(application.exec_()) # application.exec_() attend que tout ce qui est en cours soit exécuté
+    
+    fileDialog = QFileDialog() # Crée un objet de type QFileDialog (Fenêtre pour choisir un fichier)
+    fileDialog.setWindowTitle("Veuillez choisir le fichier TIFF") # Définit le nom de la fenêtre
+    fileDialog.show() # Affiche la fenêtre
+    fichierDemande = fileDialog.getOpenFileName()[0] # Permet aussi d'attendre qu'il y ait un fichier demandé
+    print( "[Debug] Fichier demandé : " + fichierDemande )
+    fileDialog.close() # Fermer la fenêtre
+    
+    if not validationFichier( fichierDemande ) : # Si la validation de ce fichier échoue
+        QMessageBox.about(None, "Information", "Ce fichier est invalide !")
+    else :
+        traitementImage( fichierDemande )
+        
+        fenetre = Fenetre() # Crée un objet de type Fenetre
+        fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
+        fenetre.show() # Affiche la fenêtre
+        application.exec_() # Attendre que tout ce qui est en cours soit exécuté
+
+# EOF
