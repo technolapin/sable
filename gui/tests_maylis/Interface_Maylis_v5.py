@@ -204,12 +204,14 @@ class Fenetre(QTabWidget) :
       #  self.selection_grain = QWidget()  
         self.affichage_image = QWidget()
         self.millefeuille = QWidget()
+        self.affichage_coupes= QWidget()
 
         # Dictionnaire des onglets de la fenêtre 
         self.ongl_fen = { 'visu_graph' :        [self.visu_graph,         "Visualisation du Graphique", self.tabGraphique3D()       ] , 
                           'aide' :              [self.aide ,              "Aide",                       self.tabAide()              ] , 
                           'affichage_image' :   [self.affichage_image,    "Affichage coupe 2D",         self.tabaffichage_image()   ] ,
-                          'millefeuille' :      [self.millefeuille,       "Mille-feuilles" ,            self.tabmillefeuille()      ]}
+                          'millefeuille' :      [self.millefeuille,       "Mille-feuilles" ,            self.tabmillefeuille()      ] ,
+                          'affichage_coupes' :  [self.affichage_coupes,   "Affichage coupes 3D",        self.tabaffichage_coupes()  ]}
         
         
         # Ajout dynamique des onglets dans la fenêtre
@@ -421,6 +423,32 @@ class Fenetre(QTabWidget) :
         
         print( "[Debug] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
         if ANTI_LAG : print( "[Debug] Affichage : " + URL + str(numeroImage) + ".pgm" )
+
+
+
+    def tabaffichage_coupes(self) :
+        grille=QGridLayout()
+        
+        barreScrollTemps=QScrollBar(Qt.Horizontal)
+        barreScrollTemps.setMinimum(0)
+        barreScrollTemps.setMaximum(250)
+#        temps=barreScrollTemps.value()
+#        
+#        barreScrollTemps.valueChanged(temps)
+#        
+        barreScrollAxeX=QScrollBar(Qt.Horizontal)
+        barreScrollAxeY=QScrollBar(Qt.Horizontal)
+        barreScrollAxeZ=QScrollBar(Qt.Horizontal)
+        
+        grille.addWidget(barreScrollTemps)
+        grille.addWidget(barreScrollAxeX)
+        grille.addWidget(barreScrollAxeY)
+        grille.addWidget(barreScrollAxeZ)
+#        print(temps)
+        
+        self.affichage_coupes.setLayout(grille)
+
+
 
 
 """
