@@ -4,6 +4,7 @@
 import os
 
 
+#donnes
 n_tempo = 16 # nb de temps
 n_coupes_xy = 250 # dimensions des colones en nombres de coupes
 n_coupes_xz = 80
@@ -23,7 +24,7 @@ def numerote(n, l):
        s = '0' + s
    return s   
 
-    
+#gestion repertoires
 os.system("rm -R images_3D")
 os.system("rm -R images_2D_for_3D")
 os.system("rm -R coupes_3D")
@@ -39,8 +40,10 @@ for i in range(0, n_tempo*n_coupes_xy):
     os.system("cp images/test-"+str(i)+".pgm images_2D_for_3D/image_2D_for_3D_"+numerote(i,4)+".pgm")
 
 
+#traitement pour chaque temps
     
 for t in range(0, n_tempo):
+    
     print("image 3D numero "+str(t)+" en traitement")
 
     debut_colone = t * n_coupes_xy
@@ -55,7 +58,7 @@ for t in range(0, n_tempo):
             " [80 80 250] images_3D/image_3D_t"+padding_temporel+".pgm")
 
     
-    #seuillage + nettoyage d impurtes
+    #seuillage
     command("seuil images_3D/image_3D_t"+padding_temporel+".pgm "+
             str(seuil)+" "+
             "images_3D/image_3D_s_t"+padding_temporel+".pgm")
@@ -64,7 +67,7 @@ for t in range(0, n_tempo):
             "images_3D/image_3D_s_inv_t"+padding_temporel+".pgm")
 
     
-     # carte des distances, 180:18dist 3D (byte outpout)
+     # carte des distances, avec distance euclidienne
     command("dist images_3D/image_3D_s_inv_t"+padding_temporel+".pgm "+
             "0 images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm")
 
@@ -98,23 +101,26 @@ for t in range(0, n_tempo):
 
     #extraction des coupes sur (x,y)
     os.system("mkdir coupes_3D/x_y/"+padding_temporel)
+    
     for u in range(0, n_coupes_xy):
         command(debut_commande + str(u)+" xy "+
-                "coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"pgm")
+                "coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+".pgm")
     
     
     #extraction des coupes sur (x,z)
     os.system("mkdir coupes_3D/x_z/"+padding_temporel)
+    
     for u in range(0, n_coupes_xz):
         command(debut_commande + str(u)+" xz "+
-                "coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"pgm")
+                "coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+".pgm")
     
     
     #extraction des coupes sur (y,z)
     os.system("mkdir coupes_3D/y_z/"+padding_temporel)
+    
     for u in range(0, n_coupes_yz):
         command(debut_commande + str(u)+" yz "+
-                "coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"pgm")
+                "coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+".pgm")
     
     
     
