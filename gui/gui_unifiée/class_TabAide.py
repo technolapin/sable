@@ -15,20 +15,17 @@ FICHIER_CONTENU_AIDE = './contenu_aide/'
 
 
 """
-Classe TabAide, hérite de la classe QWidget uniquement pour pouvoir l'exécuter indépendemment
-Cette classe permet de gérer la fenêtre Qt, mais elle peut aussi être utilisée comme un onglet dans une autre fenêtre
-@author Maylis et Alexandre
+Classe TabAide, hérite de la classe QGridLayout, c'est donc une grille
+Cette classe représente le contenu d'une fenêtre PyQt
+Elle peut donc aussi être utilisée comme un onglet dans une fenêtre
+@author Amaury
 """
-class TabAide(QWidget) :
+class TabAide(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
     def __init__(self, parent=None) :
-        if __name__ == '__main__' :
-            super(TabAide, self).__init__(parent) # Appel du constructeur de QWidget, uniquement pour pouvoir l'exécuter indépendemment
-        
-        # Création d'un layout
-        self.layout = QGridLayout()
+        super(TabAide, self).__init__(parent) # Appel du constructeur de QGridLayout
 
         # Création d'onglets dans la page d'aide
         onglets = QTabWidget()
@@ -50,18 +47,7 @@ class TabAide(QWidget) :
             self.contenuOngletAide(ongl)
         
         # Ajout du conteneur d'onglets dans la grille et du layout dans l'onglet Aide de la fenêtre
-        self.layout.addWidget(onglets)
-        
-        if __name__ == '__main__' :
-            self.setLayout(self.layout) # Definit notre grille comme grille à utiliser, uniquement pour pouvoir l'exécuter indépendemment
-    
-    """
-    Accesseur à la grille de l'onglet
-    @return La grille de l'onglet, c'est à dire sont contenu
-    Cette grille est utilisable par : onglet.setLayout( grille )
-    """
-    def getGrille(self) :
-        return self.layout
+        self.addWidget(onglets)
     
     """
     Affiche dans l'onglet indiqué le contenu du fichier .html associé
@@ -101,7 +87,8 @@ Code principal pour démonstration
 # Source : https://stackoverflow.com/questions/419163/what-does-if-name-main-do
 if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
-    fenetre = TabAide() # Crée un objet de type TabAide
+    fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
+    fenetre.setLayout( TabAide() )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

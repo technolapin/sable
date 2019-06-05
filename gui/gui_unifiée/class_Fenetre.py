@@ -4,8 +4,6 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-import numpy
-
 from class_TabGraphique3D import TabGraphique3D
 from class_TabMilleFeuille3D import TabMilleFeuille3D
 from class_TabMilleFeuilleIRM import TabMilleFeuilleIRM
@@ -44,19 +42,12 @@ class Fenetre(QTabWidget) :
         self.addTab( self.onglet4, "Coupes" )
         self.addTab( self.onglet5, "Aide" )
         
-        # Création des objets contenant le contenu de chaque onglet
-        grilleOnglet1 = TabGraphique3D(grapheDonne)
-        grilleOnglet2 = TabMilleFeuille3D()
-        grilleOnglet3 = TabMilleFeuilleIRM()
-        grilleOnglet4 = TabAffichageCoupes()
-        grilleOnglet5 = TabAide()
-        
-        # Remplissage des onglets avec les objets ci-dessus
-        self.onglet1.setLayout( grilleOnglet1.getGrille() )
-        self.onglet2.setLayout( grilleOnglet2.getGrille() )
-        self.onglet3.setLayout( grilleOnglet3.getGrille() )
-        self.onglet4.setLayout( grilleOnglet4.getGrille() )
-        self.onglet5.setLayout( grilleOnglet5.getGrille() )
+        # Remplissage des onglets en créant les grilles
+        self.onglet1.setLayout( TabGraphique3D(grapheDonne) )
+        self.onglet2.setLayout( TabMilleFeuille3D() )
+        self.onglet3.setLayout( TabMilleFeuilleIRM() )
+        self.onglet4.setLayout( TabAffichageCoupes() )
+        self.onglet5.setLayout( TabAide() )
 
 
 """

@@ -10,17 +10,17 @@ from parametres import *
 
 
 """
-Classe TabGraphique3D, hérite de la classe QWidget uniquement pour pouvoir l'exécuter indépendemment
-Cette classe permet de gérer la fenêtre Qt, mais elle peut aussi être utilisée comme un onglet dans une autre fenêtre
+Classe TabMilleFeuille3D, hérite de la classe QGridLayout, c'est donc une grille
+Cette classe représente le contenu d'une fenêtre PyQt
+Elle peut donc aussi être utilisée comme un onglet dans une fenêtre
 @author Amaury
 """
-class TabMilleFeuille3D(QWidget) :
+class TabMilleFeuille3D(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
     def __init__(self, parent=None) :
-        if __name__ == '__main__' :
-            super(TabMilleFeuille3D, self).__init__(parent) # Appel du constructeur de QWidget, uniquement pour pouvoir l'exécuter indépendemment
+        super(TabMilleFeuille3D, self).__init__(parent) # Appel du constructeur de QGridLayout
         
         # Graphe à afficher
         self.milleFeuille3D = MilleFeuille3D()
@@ -40,26 +40,14 @@ class TabMilleFeuille3D(QWidget) :
         self.barreDeScrollMFTemps.setMaximum( NB_IMGS / INTERVALLE_XY - 1 )
         self.barreDeScrollMFTemps.valueChanged.connect( self.dessinerMilleFeuille3D )
         
-        self.grille = QGridLayout()
-        
-        self.grille.addWidget( self.milleFeuille3D, 2, 1 )
-        self.grille.addWidget( self.barreDeScrollMFCoucheMin, 2, 2 )
-        if not ANTI_LAG : grille.addWidget( self.barreDeScrollMFCoucheMax, 2, 3 )
+        # Ajout des Widgets
+        self.addWidget( self.milleFeuille3D, 2, 1 )
+        self.addWidget( self.barreDeScrollMFCoucheMin, 2, 2 )
+        if not ANTI_LAG : self.addWidget( self.barreDeScrollMFCoucheMax, 2, 3 )
         # Ne pas l'afficher quand l'ANTI_LAG est activé, donc inutilisable, donc une seule couche affichée
-        self.grille.addWidget( self.barreDeScrollMFTemps, 3, 1 )
+        self.addWidget( self.barreDeScrollMFTemps, 3, 1 )
         
         self.dessinerMilleFeuille3D(0)
-        
-        if __name__ == '__main__' :
-            self.setLayout(self.grille) # Definit notre grille comme grille à utiliser, uniquement pour pouvoir l'exécuter indépendemment
-    
-    """
-    Accesseur à la grille de l'onglet
-    @return La grille de l'onglet, c'est à dire sont contenu
-    Cette grille est utilisable par : onglet.setLayout( grille )
-    """
-    def getGrille(self) :
-        return self.grille
     
     """
     Gère le dessin et les changements du mille-feuilles 3D
@@ -90,7 +78,8 @@ Code principal pour démonstration
 # Source : https://stackoverflow.com/questions/419163/what-does-if-name-main-do
 if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
-    fenetre = TabMilleFeuille3D() # Crée un objet de type TabMilleFeuille3D
+    fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
+    fenetre.setLayout( TabMilleFeuille3D() )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

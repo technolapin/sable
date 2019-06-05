@@ -10,17 +10,17 @@ from parametres import *
 
 
 """
-Classe TabGraphique3D, hérite de la classe QWidget uniquement pour pouvoir l'exécuter indépendemment
-Cette classe permet de gérer la fenêtre Qt, mais elle peut aussi être utilisée comme un onglet dans une autre fenêtre
+Classe TabMilleFeuilleIRM, hérite de la classe QGridLayout, c'est donc une grille
+Cette classe représente le contenu d'une fenêtre PyQt
+Elle peut donc aussi être utilisée comme un onglet dans une fenêtre
 @author Amaury
 """
-class TabMilleFeuilleIRM(QWidget) :
+class TabMilleFeuilleIRM(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
     def __init__(self, parent=None) :
-        if __name__ == '__main__' :
-            super(TabMilleFeuilleIRM, self).__init__(parent) # Appel du constructeur de QWidget, uniquement pour pouvoir l'exécuter indépendemment
+        super(TabMilleFeuilleIRM, self).__init__(parent) # Appel du constructeur de QGridLayout
         
         # Graphe à afficher
         self.milleFeuilleIRM = MilleFeuilleIRM()
@@ -45,26 +45,14 @@ class TabMilleFeuilleIRM(QWidget) :
         self.barreDeScrollIRMTemps.setMaximum( NB_IMGS / INTERVALLE_XY - 1 )
         self.barreDeScrollIRMTemps.valueChanged.connect( self.dessinerMilleFeuilleIRM )
         
-        self.grille = QGridLayout()
-        
-        self.grille.addWidget( self.milleFeuilleIRM, 2, 1 )
-        self.grille.addWidget( self.barreDeScrollIRMCoucheX, 2, 2 )
-        self.grille.addWidget( self.barreDeScrollIRMCoucheY, 2, 3 )
-        self.grille.addWidget( self.barreDeScrollIRMCoucheZ, 2, 4 )
-        self.grille.addWidget( self.barreDeScrollIRMTemps, 3, 1 )
+        # Ajout des Widgets
+        self.addWidget( self.milleFeuilleIRM, 2, 1 )
+        self.addWidget( self.barreDeScrollIRMCoucheX, 2, 2 )
+        self.addWidget( self.barreDeScrollIRMCoucheY, 2, 3 )
+        self.addWidget( self.barreDeScrollIRMCoucheZ, 2, 4 )
+        self.addWidget( self.barreDeScrollIRMTemps, 3, 1 )
         
         self.dessinerMilleFeuilleIRM(0)
-        
-        if __name__ == '__main__' :
-            self.setLayout(self.grille) # Definit notre grille comme grille à utiliser, uniquement pour pouvoir l'exécuter indépendemment
-    
-    """
-    Accesseur à la grille de l'onglet
-    @return La grille de l'onglet, c'est à dire sont contenu
-    Cette grille est utilisable par : onglet.setLayout( grille )
-    """
-    def getGrille(self) :
-        return self.grille
     
     """
     Gère le dessin et les changements de l'affichage IRM
@@ -95,7 +83,8 @@ Code principal pour démonstration
 # Source : https://stackoverflow.com/questions/419163/what-does-if-name-main-do
 if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
-    fenetre = TabMilleFeuilleIRM() # Crée un objet de type TabMilleFeuilleIRM
+    fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
+    fenetre.setLayout( TabMilleFeuilleIRM() )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

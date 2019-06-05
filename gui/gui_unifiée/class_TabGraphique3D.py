@@ -10,17 +10,17 @@ from parametres_pour_demo import grapheDeDemonstration
 
 
 """
-Classe TabGraphique3D, hérite de la classe QWidget uniquement pour pouvoir l'exécuter indépendemment
-Cette classe permet de gérer la fenêtre Qt, mais elle peut aussi être utilisée comme un onglet dans une autre fenêtre
+Classe TabGraphique3D, hérite de la classe QGridLayout, c'est donc une grille
+Cette classe représente le contenu d'une fenêtre PyQt
+Elle peut donc aussi être utilisée comme un onglet dans une fenêtre
 @author Amaury
 """
-class TabGraphique3D(QWidget) :
+class TabGraphique3D(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
     def __init__(self, grapheDonne, parent=None) :
-        if __name__ == '__main__' :
-            super(TabGraphique3D, self).__init__(parent) # Appel du constructeur de QWidget, uniquement pour pouvoir l'exécuter indépendemment
+        super(TabGraphique3D, self).__init__(parent) # Appel du constructeur de QGridLayout
         
         # Graphe à afficher
         self.graphe = grapheDonne
@@ -47,25 +47,12 @@ class TabGraphique3D(QWidget) :
         # len(self.graphe[0][0]) est le nombre d'échantillons temporels dont on dispose
         self.barreDeScrollTemps.valueChanged.connect( self.dessinerGraphique3D )
         
-        self.grille = QGridLayout() # C'est l'intérieur de la fenêtre, une grille ("layout")
-        
-#        self.grille.addWidget( self.menuSelection, 1, 1 ) # Ajoute le menu déroulant en position ligne 2 colonne 1
-        self.grille.addWidget( self.graphique3D, 2, 1 ) # Ajoute le graphique 3D en position ligne 2 colonne 1
-        self.grille.addWidget( self.barreDeScrollCourbes, 2, 2 ) # Ajoute la barre de défilement 1 en position ligne 2 colonne 2
-        self.grille.addWidget( self.barreDeScrollTemps, 2, 3 ) # Ajoute la barre de défilement 2 en position ligne 2 colonne 2
+#        self.addWidget( self.menuSelection, 1, 1 ) # Ajoute le menu déroulant en position ligne 2 colonne 1
+        self.addWidget( self.graphique3D, 2, 1 ) # Ajoute le graphique 3D en position ligne 2 colonne 1
+        self.addWidget( self.barreDeScrollCourbes, 2, 2 ) # Ajoute la barre de défilement 1 en position ligne 2 colonne 2
+        self.addWidget( self.barreDeScrollTemps, 2, 3 ) # Ajoute la barre de défilement 2 en position ligne 2 colonne 2
             
         self.dessinerGraphique3D(0) # Afficher graphique de base
-        
-        if __name__ == '__main__' :
-            self.setLayout(self.grille) # Definit notre grille comme grille à utiliser, uniquement pour pouvoir l'exécuter indépendemment
-    
-    """
-    Accesseur à la grille de l'onglet
-    @return La grille de l'onglet, c'est à dire sont contenu
-    Cette grille est utilisable par : onglet.setLayout( grille )
-    """
-    def getGrille(self) :
-        return self.grille
     
     """
     Gère le dessin et les changements par l'utilisateur dans les barres de défilement
@@ -90,7 +77,8 @@ Code principal pour démonstration
 # Source : https://stackoverflow.com/questions/419163/what-does-if-name-main-do
 if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
-    fenetre = TabGraphique3D( grapheDeDemonstration ) # Crée un objet de type TabMilleFeuille3D
+    fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
+    fenetre.setLayout( TabGraphique3D(grapheDeDemonstration) )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

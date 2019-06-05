@@ -8,20 +8,17 @@ from parametres import *
 
 
 """
-Classe TabAffichageCoupes, hérite de la classe QWidget uniquement pour pouvoir l'exécuter indépendemment
-Cette classe permet de gérer la fenêtre Qt, mais elle peut aussi être utilisée comme un onglet dans une autre fenêtre
-@author Maylis et Alexandre
+Classe TabAffichageCoupes, hérite de la classe QGridLayout, c'est donc une grille
+Cette classe représente le contenu d'une fenêtre PyQt
+Elle peut donc aussi être utilisée comme un onglet dans une fenêtre
+@author Amaury
 """
-class TabAffichageCoupes(QWidget) :
+class TabAffichageCoupes(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
     def __init__(self, parent=None) :
-        if __name__ == '__main__' :
-            super(TabAffichageCoupes, self).__init__(parent) # Appel du constructeur de QWidget, uniquement pour pouvoir l'exécuter indépendemment
-        
-        # Création d'un contenant de l'onglet
-        self.grille=QGridLayout()
+        super(TabAffichageCoupes, self).__init__(parent) # Appel du constructeur de QGridLayout
         
 ########### Barres de scroll
         
@@ -53,10 +50,10 @@ class TabAffichageCoupes(QWidget) :
         label_axez=QLabel("Z")
         
         # Ajout des barres de scroll 
-        self.grille.addWidget(self.barreScrollTemps,3,1)
-        self.grille.addWidget(self.barreScrollAxeX,2,2)
-        self.grille.addWidget(self.barreScrollAxeY,2,3)
-        self.grille.addWidget(self.barreScrollAxeZ,2,4)
+        self.addWidget(self.barreScrollTemps,3,1)
+        self.addWidget(self.barreScrollAxeX,2,2)
+        self.addWidget(self.barreScrollAxeY,2,3)
+        self.addWidget(self.barreScrollAxeZ,2,4)
         
 ######## Images
 
@@ -104,7 +101,7 @@ class TabAffichageCoupes(QWidget) :
         
         
         # Ajout du contenant d'images dans la grille globale
-        self.grille.addWidget(contenant_widget,2,1)
+        self.addWidget(contenant_widget,2,1)
 
 ######## Positions actuelles x,y,z et temps
         horizontal_layout=QHBoxLayout()
@@ -116,18 +113,7 @@ class TabAffichageCoupes(QWidget) :
         horizontal_layout.addWidget(self.valeur_Z)
         
 
-        self.grille.addLayout(horizontal_layout,1,1)
-        
-        if __name__ == '__main__' :
-            self.setLayout(self.grille) # Definit notre grille comme grille à utiliser, uniquement pour pouvoir l'exécuter indépendemment
-    
-    """
-    Accesseur à la grille de l'onglet
-    @return La grille de l'onglet, c'est à dire sont contenu
-    Cette grille est utilisable par : onglet.setLayout( grille )
-    """
-    def getGrille(self) :
-        return self.grille
+        self.addLayout(horizontal_layout,1,1)
     
     """
     Gère l'affichage et son actualisatin
@@ -176,7 +162,8 @@ Code principal pour démonstration
 # Source : https://stackoverflow.com/questions/419163/what-does-if-name-main-do
 if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
-    fenetre = TabAffichageCoupes() # Crée un objet de type TabAide
+    fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
+    fenetre.setLayout( TabAffichageCoupes() )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté
