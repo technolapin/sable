@@ -11,7 +11,7 @@ from parametres import *
 Classe TabAffichageCoupes, hérite de la classe QGridLayout, c'est donc une grille
 Cette classe représente le contenu d'une fenêtre PyQt
 Elle peut donc aussi être utilisée comme un onglet dans une fenêtre
-@author Amaury
+@author Maylis et Alexandre
 """
 class TabAffichageCoupes(QGridLayout) :
     """
