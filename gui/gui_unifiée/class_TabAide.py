@@ -30,7 +30,7 @@ class TabAide(QGridLayout) :
         # Création d'onglets dans la page d'aide
         onglets = QTabWidget()
         onglets.setTabPosition(2)
-        onglets.setTabShape(1)
+#        onglets.setTabShape(1) # C'est très moche quand même
 
         aide_ongl = QWidget()
         aide_onglet1 = QWidget()
