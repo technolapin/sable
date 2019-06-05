@@ -1,0 +1,3 @@
+Mesh.
+
+Ou affichers des cubes avec Matplotlib.
