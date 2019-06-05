@@ -227,7 +227,7 @@ class MilleFeuilleIRM(FigureCanvasQTAgg) :
         """ Plan en YZ (Pour imageX) """
         if os.path.isfile( imageX[0] ) : # Si le chemin d'accès à l'image existe
             # Traitement de l'image
-            image = read_pgm("../extraction/coupes_3D/y_z/00/t_00coupe_yz_0017.pgm", byteorder='<') # Matrix au format uint8
+            image = read_pgm(imageX[0] , byteorder='<') # Matrix au format uint8
             imageConvertie = image.astype(numpy.float64) / 255 # Convertie en float64
             T = cm.gist_gray(imageConvertie) # Matrix float64 que facecolors peut prendre
             
