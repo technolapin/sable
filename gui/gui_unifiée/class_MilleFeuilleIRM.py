@@ -58,10 +58,10 @@ class MilleFeuilleIRM(FigureCanvasQTAgg) :
             
             self.axes.plot_surface(X, Y, Z, facecolors=T)
             
-            print( "[Debug IRM] Ajout : " + imageX[0] )
+            print( "[Debug MilleFeuilleIRM] Ajout : " + imageX[0] )
             
         else :
-            print( "[Erreur IRM] " + imageX[0] + " n'existe pas !" )
+            print( "[Erreur MilleFeuilleIRM] " + imageX[0] + " n'existe pas !" )
         
         """ Plan en XZ (Pour imageY) """
         if os.path.isfile( imageY[0] ) : # Si le chemin d'accès à l'image existe
@@ -76,10 +76,10 @@ class MilleFeuilleIRM(FigureCanvasQTAgg) :
             
             self.axes.plot_surface(X, Y, Z, facecolors=T)
             
-            print( "[Debug IRM] Ajout : " + imageY[0] )
+            print( "[Debug MilleFeuilleIRM] Ajout : " + imageY[0] )
             
         else :
-            print( "[Erreur IRM] " + imageY[0] + " n'existe pas !" )
+            print( "[Erreur MilleFeuilleIRM] " + imageY[0] + " n'existe pas !" )
         
         """ Plan en XY (Pour imageZ) """
         if os.path.isfile( imageZ[0] ) : # Si le chemin d'accès à l'image existe
@@ -94,9 +94,9 @@ class MilleFeuilleIRM(FigureCanvasQTAgg) :
             
             self.axes.plot_surface(X, Y, Z, facecolors=T)
             
-            print( "[Debug IRM] Ajout : " + imageZ[0] )
+            print( "[Debug MilleFeuilleIRM] Ajout : " + imageZ[0] )
             
         else :
-            print( "[Erreur IRM] " + imageZ[0] + " n'existe pas !" )
+            print( "[Erreur MilleFeuilleIRM] " + imageZ[0] + " n'existe pas !" )
         
         self.draw()

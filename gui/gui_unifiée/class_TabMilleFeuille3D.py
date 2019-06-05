@@ -66,8 +66,8 @@ class TabMilleFeuille3D(QGridLayout) :
         
         self.milleFeuille3D.dessinerMilleFeuille3D( listeImages )
         
-        print( "[Debug MF] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
-        if ANTI_LAG : print( "[Debug MF] Affichage : " + URL_POUR_MF + str(numeroImage) + ".pgm" )
+        print( "[Debug TabMilleFeuille3D] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
+        if ANTI_LAG : print( "[Debug TabMilleFeuille3D] Affichage : " + URL_POUR_MF + str(numeroImage) + ".pgm" )
 
 
 """

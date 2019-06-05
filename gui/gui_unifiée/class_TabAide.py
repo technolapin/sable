@@ -66,6 +66,7 @@ class TabAide(QGridLayout) :
             texte = QLabel(fichier.read())
         else :
             texte = QLabel("Le fichier suivant est manquant : " + lien_fichier)
+            print( "[Erreur TabAide] " + lien_fichier + " n'existe pas !" )
         
         # Ajutement de la forme du texte à la taille de la fenêtre
         texte.adjustSize()

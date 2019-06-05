@@ -71,8 +71,8 @@ class TabMilleFeuilleIRM(QGridLayout) :
                                                       [imageY, self.barreDeScrollIRMCoucheY.value() ], 
                                                       [imageZ, self.barreDeScrollIRMCoucheZ.value() ] )
         
-        print( "[Debug IRM] X : " + str( self.barreDeScrollIRMCoucheX.value() ) + ", Y : " + str( self.barreDeScrollIRMCoucheY.value() ) + ", Z : " + str( self.barreDeScrollIRMCoucheZ.value() ) + ", Temps : " + str( self.barreDeScrollIRMTemps.value() ) )
-        print( "[Debug IRM] Affichage : " + imageX + ", " + imageY + ", " + imageZ )
+        print( "[Debug TabMilleFeuilleIRM] X : " + str( self.barreDeScrollIRMCoucheX.value() ) + ", Y : " + str( self.barreDeScrollIRMCoucheY.value() ) + ", Z : " + str( self.barreDeScrollIRMCoucheZ.value() ) + ", Temps : " + str( self.barreDeScrollIRMTemps.value() ) )
+        print( "[Debug TabMilleFeuilleIRM] Affichage : " + imageX + ", " + imageY + ", " + imageZ )
 
 
 """

@@ -66,7 +66,7 @@ class TabGraphique3D(QGridLayout) :
 #       Devenu inutlie puisqu'on a supprimé les menus déroulants
          self.graphique3D.dessinerGraphique3D( self.graphe, self.barreDeScrollCourbes.value(), self.barreDeScrollTemps.value() )
          
-         print( "[Debug 3D] Temps : " + str( self.barreDeScrollCourbes.value() ) + ", Courbe : " + str( self.barreDeScrollTemps.value() ) + ", Valeur donnée : " + str( value ) )
+         print( "[Debug TabGraphique3D] Temps : " + str( self.barreDeScrollCourbes.value() ) + ", Courbe : " + str( self.barreDeScrollTemps.value() ) + ", Valeur donnée : " + str( value ) )
 
 
 """
