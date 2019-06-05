@@ -11,7 +11,7 @@ import codecs
 """
 PARAMETRES
 """
-FICHIER_CONTENU_AIDE = 'contenu_aide/'
+FICHIER_CONTENU_AIDE = './contenu_aide/'
 
 
 """
@@ -40,7 +40,7 @@ class TabAide(QWidget) :
         aide_onglet2 = QWidget()
     
         # Dictionnaire des onglets de la page d'aide
-        self.ongl_aide = { 'aide_ongl' :    [aide_ongl,     "Introduction", 'Aide_generale.html'] , 
+        self.ongl_aide = { 'aide_ongl' :    [aide_ongl,     "Introduction", 'aide_generale.html'] , 
                            'aide_onglet1' : [aide_onglet1 , "Aide Onglet1", 'coucou.html'       ] , 
                            'aide_onglet2' : [aide_onglet2 , "Aide_Onglet2", 'salut.html'        ] }
         
