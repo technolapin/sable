@@ -28,12 +28,17 @@ def numerote(n, l):
 os.system("rm -R images_3D")
 os.system("rm -R images_2D_for_3D")
 os.system("rm -R coupes_3D")
+os.system("rm -R coupes_3D_pre")
 os.system("mkdir images_3D")
 os.system("mkdir images_2D_for_3D")
 os.system("mkdir coupes_3D")
+os.system("mkdir coupes_3D_pre")
 os.system("mkdir coupes_3D/x_y")
+os.system("mkdir coupes_3D_pre/x_y")
 os.system("mkdir coupes_3D/x_z")
+os.system("mkdir coupes_3D_pre/x_z")
 os.system("mkdir coupes_3D/y_z")
+os.system("mkdir coupes_3D_pre/y_z")
 
 #copie des images de test et renommage aux standard de la fc catpgm
 for i in range(0, n_tempo*n_coupes_xy):
@@ -99,29 +104,126 @@ for t in range(0, n_tempo):
     # pour moins de repetitions
     debut_commande = "extractplane images_3D/image_3D_t"+padding_temporel+".pgm "
 
+
     #extraction des coupes sur (x,y)
-    os.system("mkdir coupes_3D/x_y/"+padding_temporel)
+    
+    os.system("mkdir coupes_3D_/x_y/"+padding_temporel)
+    os.system("mkdir coupes_3D_pre/x_y/"+padding_temporel)
     
     for u in range(0, n_coupes_xy):
+        
         command(debut_commande + str(u)+" xy "+
-                "coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+".pgm")
+                "coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+".pgm")
+        
+        #traitement pour separation des grains(seuil,cartes des distances, minima, watershed)
+        command("seuil coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+".pgm "+
+                str(seuil)+
+                " coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_s.pgm")
+        
+        command("inverse coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                "_s.pgm  coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_sinv.pgm")
+        
+        command("dist coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                "_sinv.pgm 0 coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_dist.pgm")
+        
+        command("inverse coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                "_dist.pgm coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_distinv.pgm")
     
+        command("minima coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                "_distinv.pgm 4 coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_min.pgm")
+        
+        dist_inv="coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_distinv.pgm"
+        minima="coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_min.pgm"
+        
+        command("watershed "+dist_inv+" "+minima+" 6 coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_wat.pgm")
+        
+        command("add coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                "_sinv.pgm coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                "_wat.pgm coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_add.pgm")
     
+        command("inverse coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                "_add.pgm coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+".pgm")
+        
+        
+        
+        
+        
     #extraction des coupes sur (x,z)
+    
     os.system("mkdir coupes_3D/x_z/"+padding_temporel)
+    os.system("mkdir coupes_3D_pre/x_z/"+padding_temporel)
     
     for u in range(0, n_coupes_xz):
+        
         command(debut_commande + str(u)+" xz "+
-                "coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+".pgm")
+                "coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+".pgm")
+        
+        #traitement pour separation des grains(seuil,cartes des distances, minima, watershed)
+        command("seuil coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+".pgm "+
+                str(seuil)+
+                " coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_s.pgm")
+        
+        command("inverse coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                "_s.pgm  coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_sinv.pgm")
+        
+        command("dist coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                "_sinv.pgm 0 coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_dist.pgm")
+        
+        command("inverse coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                "_dist.pgm coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_distinv.pgm")
     
+        command("minima coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                "_distinv.pgm 4 coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_min.pgm")
+        
+        command("watershed coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                "_distinv.pgm coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                "_min.pgm 8 coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_water.pgm")
+        
+        command("add coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                "_sinv.pgm coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                "_water.pgm coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_add.pgm")
+    
+        command("inverse coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                "_add.pgm coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+".pgm")
+        
+        
     
     #extraction des coupes sur (y,z)
+    
     os.system("mkdir coupes_3D/y_z/"+padding_temporel)
+    os.system("mkdir coupes_3D_pre/y_z/"+padding_temporel)
     
     for u in range(0, n_coupes_yz):
+        
         command(debut_commande + str(u)+" yz "+
-                "coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+".pgm")
+                "coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+".pgm")
     
+        #traitement pour separation des grains(seuil,cartes des distances, minima, watershed)
+        command("seuil coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+".pgm "+
+                str(seuil)+
+                " coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_s.pgm")
+        
+        command("inverse coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                "_s.pgm  coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_sinv.pgm")
+        
+        command("dist coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                "_sinv.pgm 0 coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_dist.pgm")
+        
+        command("inverse coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                "_dist.pgm coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_distinv.pgm")
     
+        command("minima coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                "_distinv.pgm 4 coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_min.pgm")
+        
+        command("watershed coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                "_distinv.pgm coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                "_min.pgm 8 coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_water.pgm")
+        
+        command("add coupes_3D_pre/y_zy/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                "_sinv.pgm coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                "_water.pgm coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_add.pgm")
+    
+        command("inverse coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                "_add.pgm coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+".pgm")
     
 
