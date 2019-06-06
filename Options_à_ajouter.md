@@ -15,7 +15,7 @@
 
 -Afficher les "fantomes" des autres positions du grain de sable cliqué (position à t0, t1, t2...)
 
--Pouvoir faire défiler les images 2D et 3D 
+-Pouvoir faire défiler les images 3D 
 
 -Pouvoir enregistrer la suite d'images 2D ou 3D sous forme de vidéo (format AVI, mp4, gif,...)
 
