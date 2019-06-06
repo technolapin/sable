@@ -1,15 +1,15 @@
-import numpy
+from numpy import linspace, pi, sin, cos
 
 """
 PARAMETRES
 Graphique pour démonstration
 """
 # Graphique que on veut afficher
-theta = numpy.linspace(-10 * numpy.pi, 5 * numpy.pi, 100)
-z = numpy.linspace(-2, 2, 100)
+theta = linspace(-10 * pi, 5 * pi, 100)
+z = linspace(-2, 2, 100)
 r = z**2 + 1
-x = r * numpy.sin(theta)
-y = r * numpy.cos(theta)
+x = r * sin(theta)
+y = r * cos(theta)
 
 courbe1 = [x, y, z]
 courbe2 = [y, z, x]

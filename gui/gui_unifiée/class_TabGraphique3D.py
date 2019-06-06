@@ -1,8 +1,9 @@
 import sys
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+#from PyQt5.QtCore import *
+#from PyQt5.QtGui import *
+#from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar
 
 from class_Graphique3D import Graphique3D
 

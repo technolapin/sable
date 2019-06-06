@@ -1,9 +1,11 @@
 import os
 import sys
 
+#from PyQt5.QtCore import *
+#from PyQt5.QtGui import *
+#from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QTabWidget, QHBoxLayout, QScrollArea, QLabel, QSizePolicy
 
 import codecs
 
@@ -70,7 +72,7 @@ class TabAide(QGridLayout) :
         
         # Ajutement de la forme du texte à la taille de la fenêtre
         texte.adjustSize()
-        texte.setSizePolicy(QSizePolicy.Expanding,QSizePolicy.Expanding)
+        texte.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         texte.setWordWrap(True)
         texte.setAlignment(Qt.AlignJustify)
         scroll_area.setWidget(texte)
