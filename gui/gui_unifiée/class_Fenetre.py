@@ -10,6 +10,7 @@ from class_TabGraphique3D import TabGraphique3D
 from class_TabMilleFeuille3D import TabMilleFeuille3D
 from class_TabMilleFeuilleIRM import TabMilleFeuilleIRM
 from class_TabAffichageCoupes import TabAffichageCoupes
+from class_TabVTK import TabVTK
 from class_TabAide import TabAide
 
 from parametres_pour_demo import grapheDeDemonstration
@@ -27,28 +28,31 @@ class Fenetre(QTabWidget) :
         super(Fenetre, self).__init__(parent) # Appel du constructeur de QTabWidget
         
         # Taille minimale de la fenêtre, en pixels
-        self.setMinimumSize( QSize(400, 400) );
+        self.setMinimumSize( QSize(400, 400) )
         
         # Création des onglets de la fenêtre
         self.onglet1 = QWidget()
         self.onglet2 = QWidget()
         self.onglet3 = QWidget()
         self.onglet4 = QWidget()
-        self.onglet5 = QWidget() 
+        self.onglet5 = QWidget()
+        self.onglet6 = QWidget() 
         
         # Ajout des onglets à la fenêtre
         self.addTab( self.onglet1, "Visualisation du Graphique" ) 
         self.addTab( self.onglet2, "Mille-feuilles" )
         self.addTab( self.onglet3, "Vision IRM" )
         self.addTab( self.onglet4, "Coupes" )
-        self.addTab( self.onglet5, "Aide" )
+        self.addTab( self.onglet5, "VTK" )
+        self.addTab( self.onglet6, "Aide" )
         
         # Remplissage des onglets en créant les grilles
         self.onglet1.setLayout( TabGraphique3D(grapheDonne) )
         self.onglet2.setLayout( TabMilleFeuille3D() )
         self.onglet3.setLayout( TabMilleFeuilleIRM() )
         self.onglet4.setLayout( TabAffichageCoupes() )
-        self.onglet5.setLayout( TabAide() )
+        self.onglet5.setLayout( TabVTK() )
+        self.onglet6.setLayout( TabAide() )
 
 
 """

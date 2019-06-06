@@ -3,17 +3,20 @@ import sys
 #from PyQt5.QtCore import *
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QFrame, QVBoxLayout
 
 import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 
+FICHIER = "../amaury/tests/test.vtk"
+
+
 """
-Classe TabAide, hérite de la classe QGridLayout, c'est donc une grille
+Classe TabVTK, hérite de la classe QGridLayout, c'est donc une grille
 Cette classe représente le contenu d'une fenêtre PyQt
 Elle peut donc aussi être utilisée comme un onglet dans une fenêtre
-@author Maylis et Alexandre
+Basé sur ce script : https://stackoverflow.com/questions/48105646/embedding-vtk-object-in-pyqt5-window
 """
 class TabVTK(QGridLayout) :
     """
@@ -22,6 +25,48 @@ class TabVTK(QGridLayout) :
     def __init__(self, parent=None) :
         super(TabVTK, self).__init__(parent) # Appel du constructeur de QGridLayout
         
+        self.colors = vtk.vtkNamedColors() # PouR pouvoir mettre des couleurs
+        
+        self.frame = QFrame()
+        self.vl = QVBoxLayout()
+        self.vtkWidget = QVTKRenderWindowInteractor(self.frame)
+        self.vl.addWidget(self.vtkWidget)
+        
+        self.ren = vtk.vtkRenderer()
+        self.vtkWidget.GetRenderWindow().AddRenderer(self.ren)
+        self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
+        
+        self.dessinerVTK(0)
+        
+        self.ren.SetBackground(self.colors.GetColor3d('White')) # Couleur du fond
+#        self.ren.ResetCamera()
+        
+        self.frame.setLayout(self.vl)
+        self.addWidget(self.frame, 1, 1)
+        
+        self.iren.Initialize()
+        self.iren.Start()
+    
+    """
+    Gère le dessin et les changements du VTK
+    """
+    def dessinerVTK(self, value) :
+        # Create source
+        # Source : https://lorensen.github.io/VTKExamples/site/Python/IO/ReadVTP/
+        reader = vtk.vtkPolyDataReader()
+        reader.SetFileName(FICHIER)
+        reader.Update()
+        
+        # Create a mapper
+        mapper = vtk.vtkPolyDataMapper()
+        mapper.SetInputConnection(reader.GetOutputPort())
+        
+        # Create an actor
+        actor = vtk.vtkActor()
+        actor.SetMapper(mapper)
+        actor.GetProperty().SetColor(self.colors.GetColor3d('Tan')) # Couleur de l'objet 3D
+        
+        self.ren.AddActor(actor)
 
 
 """
