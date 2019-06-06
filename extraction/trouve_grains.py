@@ -106,7 +106,7 @@ for i in range(0, n_tempo*n_coupe):
     command("inverse tmp/seuil_clean.pgm tmp/seuil_inverse.pgm")
 
     # carte des distances
-    command("dist tmp/seuil_inverse.pgm 80 tmp/dist.pgm")
+    command("dist tmp/seuil_inverse.pgm 0 tmp/dist.pgm")
     command("inverse tmp/dist.pgm tmp/dist_inv.pgm")
 
     # minimas

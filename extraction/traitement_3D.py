@@ -24,22 +24,26 @@ def numerote(n, l):
        s = '0' + s
    return s   
 
-#gestion repertoires
+#gestion des repertoires
+   
 os.system("rm -R images_3D")
-os.system("rm -R images_2D_for_3D")
-os.system("rm -R coupes_3D")
-os.system("rm -R coupes_3D_pre")
 os.system("mkdir images_3D")
+
+os.system("rm -R images_2D_for_3D")
 os.system("mkdir images_2D_for_3D")
+
+os.system("rm -R coupes_3D")
 os.system("mkdir coupes_3D")
-os.system("mkdir coupes_3D_pre")
 os.system("mkdir coupes_3D/x_y")
-os.system("mkdir coupes_3D_pre/x_y")
 os.system("mkdir coupes_3D/x_z")
-os.system("mkdir coupes_3D_pre/x_z")
 os.system("mkdir coupes_3D/y_z")
-os.system("mkdir coupes_3D_pre/y_z")
-os.system("mkdir vtks")
+
+os.system("rm -R labels_3D")
+os.system("mkdir labels_3D")
+
+os.system("rm -R bary_3D")
+os.system("mkdir bary_3D")
+os.system("mkdir bary_3D/liste")
 
 #copie des images de test et renommage aux standard de la fc catpgm
 for i in range(0, n_tempo*n_coupes_xy):
@@ -99,138 +103,57 @@ for t in range(0, n_tempo):
             "images_3D/image_3D_superpose_t"+padding_temporel+".pgm")
     
     command("inverse images_3D/image_3D_superpose_t"+padding_temporel+".pgm "+
-            "images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm")
-
-    command("pgm2vtk images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 2 vtks/"+padding_temporel+".vtk")
+            "images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm ")
 
 
-    # pour moins de repetitions
-    debut_commande = "extractplane images_3D/image_3D_t"+padding_temporel+".pgm "
+
+
+    #barycentres
+    
+    command("3dlabel images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm labels_3D/label_t_"+padding_temporel+".pgm")
+    command("barycentrelab labels_3D/label_t_"+padding_temporel+".pgm bary_3D/bary_3D_t"+padding_temporel+".pgm")
+    command("pgm2list bary_3D/bary_3D_t"+padding_temporel+".pgm B bary_3D/liste/bary_list_t"+padding_temporel+".list")
+
+
+
+
+
+    #extraction des coupes 2D sur les 3 plans
+    
+
+     # pour moins de repetitions
+    debut_commande = "extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "
+
 
 
     #extraction des coupes sur (x,y)
     
-    os.system("mkdir coupes_3D_/x_y/"+padding_temporel)
-    os.system("mkdir coupes_3D_pre/x_y/"+padding_temporel)
-    
+    os.system("mkdir coupes_3D/x_y/"+padding_temporel)
+
     for u in range(0, n_coupes_xy):
-        print("xy", u)
-        prefix = "coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)
-        
-        image_coupe = prefix + ".pgm"
-        image_seuil = prefix + "_s.pgm"
-        image_seuil_inv = prefix + "_sinv.pgm"
-        image_dist = prefix + "_dist.pgm"
-        image_dist_inv = prefix + "_dist_inv.pgm"
-        image_dist_inv_byte = prefix + "_dist_inv_byte.pgm"
-        image_min = prefix + "_min.pgm"
-        image_water = prefix + "_water.pgm"
-        image_add = prefix + "_add.pgm"
-        image_sortie = prefix+".pgm"
-        
-        command(debut_commande + str(u)+" xy "+ image_coupe)
 
-        command("seuil " + image_coupe + " " + str(seuil) + " " + image_seuil)
-        
-        command("inverse "+image_seuil+" "+image_seuil_inv)
-        
-        command("dist " + image_seuil_inv + " 0 " + image_dist)
-        
-        command("inverse " + image_dist + " " + image_dist_inv)
-
-        command("long2byte "+image_dist_inv + " 0 "+image_dist_inv_byte)
-        
-        command("minima " + image_dist_inv_byte + " 4 " + image_min)
-        
-        command("watershed " + image_dist_inv_byte + " " + image_min + " 8 " + image_water)
-        command("add " + image_seuil_inv + " " + image_water + " " + image_add)
-    
-        command("inverse "+image_add+" "+image_sortie )
-        
-        
+        command(debut_commande+str(u)+" xy "+ "coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+".pgm")
         
         
     #extraction des coupes sur (x,z)
     
     os.system("mkdir coupes_3D/x_z/"+padding_temporel)
-    os.system("mkdir coupes_3D_pre/x_z/"+padding_temporel)
     
     for u in range(0, n_coupes_xz):
-        print("xz", u)
-
-        prefix = "coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)
-        
-        image_coupe = prefix + ".pgm"
-        image_seuil = prefix + "_s.pgm"
-        image_seuil_inv = prefix + "_sinv.pgm"
-        image_dist = prefix + "_dist.pgm"
-        image_dist_inv = prefix + "_dist_inv.pgm"
-        image_min = prefix + "_min.pgm"
-        image_water = prefix + "_water.pgm"
-        image_add = prefix +"_add.pgm"
-        image_sortie = prefix+".pgm"
-        
-        command(debut_commande + str(u)+" xz "+ image_coupe)
-        #traitement pour separation des grains(seuil,cartes des distances, minima, watershed)
-        command("seuil " + image_coupe + " " + str(seuil) + " " + image_seuil)
-        
-        command("inverse "+image_seuil+" "+image_seuil_inv)
-        
-        command("dist " + image_seuil_inv + " 0 " + image_dist)
-        
-        command("inverse " + image_dist + " " + image_dist_inv)
     
-        command("long2byte "+image_dist_inv + " 0 "+image_dist_inv_byte)
-
-        command("minima " + image_dist_inv_byte + " 4 " + image_min)
-        
-        command("watershed " + image_dist_inv_byte + " " + image_min + " 8 " + image_water)
-        
-        command("add "+image_seuil_inv+" "+image_water+" "+image_add)
-    
-        command("inverse "+image_add+" "+image_sortie )
-        
+        command(debut_commande+str(u)+" xz "+ "coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+".pgm")
         
     
     #extraction des coupes sur (y,z)
     
     os.system("mkdir coupes_3D/y_z/"+padding_temporel)
-    os.system("mkdir coupes_3D_pre/y_z/"+padding_temporel)
     
     for u in range(0, n_coupes_yz):
-        print("yz", u)
         
-        prefix = "coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)
+        command(debut_commande+str(u)+" yz "+ "coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+".pgm")        
         
-        image_coupe = prefix + ".pgm"
-        image_seuil = prefix + "_s.pgm"
-        image_seuil_inv = prefix + "_sinv.pgm"
-        image_dist = prefix + "_dist.pgm"
-        image_dist_inv = prefix + "_dist_inv.pgm"
-        image_min = prefix + "_min.pgm"
-        image_water = prefix + "_water.pgm"
-        image_add = prefix +"_add.pgm"
-        image_sortie = prefix+".pgm"
-        
-        command(debut_commande + str(u)+" yz "+ image_coupe)
-        #traitement pour separation des grains(seuil,cartes des distances, minima, watershed)
-        command("seuil " + image_coupe + " " + str(seuil) + " " + image_seuil)
-        
-        command("inverse "+image_seuil+" "+image_seuil_inv)
-        
-        command("dist " + image_seuil_inv + " 0 " + image_dist)
-        
-#        command("long2byte coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_dist.pgm 0 coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_dist.pgm")
-        command("inverse " + image_dist + " " + image_dist_inv)
-    
-        command("long2byte "+image_dist_inv + " 0 "+image_dist_inv_byte)
-
-        command("minima " + image_dist_inv_byte + " 4 " + image_min)
-        
-        command("watershed " + image_dist_inv_byte + " " + image_min + " 8 " + image_water)
-        
-        command("add "+image_seuil_inv+" "+image_water+" "+image_add)
-    
-        command("inverse "+image_add+" "+image_sortie )
-    
-
+#        prefix_sortie = "coupes_3D_/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)
+#        image_coupe = prefix_sortie + ".pgm"
+#    
+#        command(debut_commande + str(u)+" yz "+ image_coupe)
+       
