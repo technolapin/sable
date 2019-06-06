@@ -39,6 +39,7 @@ os.system("mkdir coupes_3D/x_z")
 os.system("mkdir coupes_3D_pre/x_z")
 os.system("mkdir coupes_3D/y_z")
 os.system("mkdir coupes_3D_pre/y_z")
+os.system("mkdir vtks")
 
 #copie des images de test et renommage aux standard de la fc catpgm
 for i in range(0, n_tempo*n_coupes_xy):
@@ -98,7 +99,9 @@ for t in range(0, n_tempo):
             "images_3D/image_3D_superpose_t"+padding_temporel+".pgm")
     
     command("inverse images_3D/image_3D_superpose_t"+padding_temporel+".pgm "+
-            "images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm ")
+            "images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm")
+
+    command("pgm2vtk images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 2 vtks/"+padding_temporel+".vtk")
 
 
     # pour moins de repetitions
