@@ -3,10 +3,13 @@ import sys
 #from PyQt5.QtCore import *
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QFrame, QVBoxLayout
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QFrame, QVBoxLayout, QScrollBar
 
 import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
+
+from parametres import *
 
 
 FICHIER = "../amaury/tests/test.vtk"
@@ -25,7 +28,19 @@ class TabVTK(QGridLayout) :
     def __init__(self, parent=None) :
         super(TabVTK, self).__init__(parent) # Appel du constructeur de QGridLayout
         
-        self.colors = vtk.vtkNamedColors() # PouR pouvoir mettre des couleurs
+        """
+        Divers
+        """
+        # Défilement temporel
+        self.barreDeScrollTemps = QScrollBar(Qt.Horizontal)
+        self.barreDeScrollTemps.setMaximum( NB_IMGS / INTERVALLE_XY - 1 )
+        self.barreDeScrollTemps.valueChanged.connect( self.dessinerVTK )
+        self.addWidget( self.barreDeScrollTemps, 2, 1 )
+        
+        """
+        VTK
+        """
+        self.colors = vtk.vtkNamedColors() # Pour pouvoir mettre des couleurs
         
         self.frame = QFrame()
         self.vl = QVBoxLayout()
@@ -36,6 +51,7 @@ class TabVTK(QGridLayout) :
         self.vtkWidget.GetRenderWindow().AddRenderer(self.ren)
         self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
         
+        self.actor = vtk.vtkActor()
         self.dessinerVTK(0)
         
         self.ren.SetBackground(self.colors.GetColor3d('White')) # Couleur du fond
@@ -51,6 +67,8 @@ class TabVTK(QGridLayout) :
     Gère le dessin et les changements du VTK
     """
     def dessinerVTK(self, value) :
+        self.ren.RemoveActor(self.actor)
+        
         # Create source
         # Source : https://lorensen.github.io/VTKExamples/site/Python/IO/ReadVTP/
         reader = vtk.vtkPolyDataReader()
@@ -62,11 +80,10 @@ class TabVTK(QGridLayout) :
         mapper.SetInputConnection(reader.GetOutputPort())
         
         # Create an actor
-        actor = vtk.vtkActor()
-        actor.SetMapper(mapper)
-        actor.GetProperty().SetColor(self.colors.GetColor3d('Tan')) # Couleur de l'objet 3D
+        self.actor.SetMapper(mapper)
+        self.actor.GetProperty().SetColor(self.colors.GetColor3d('Tan')) # Couleur de l'objet 3D
         
-        self.ren.AddActor(actor)
+        self.ren.AddActor(self.actor)
 
 
 """
