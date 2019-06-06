@@ -31,7 +31,7 @@
 
 -Faire une liste des pixels appartenant à un grain OU à partir de l'aire et des centres déterminer quels pixels appartiennent au grain (quand on clique, savoir dans quel grain on se trouve)
 
-
+-FAIRE LE POSTER ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! !
 
 
 
