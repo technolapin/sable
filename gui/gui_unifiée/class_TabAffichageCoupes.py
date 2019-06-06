@@ -30,7 +30,6 @@ class TabAffichageCoupes(QGridLayout) :
         """
         Barres de Scroll
         """
-        
         label_temps = QLabel("Temps")
         
         # Défilement de la couche X
@@ -67,7 +66,6 @@ class TabAffichageCoupes(QGridLayout) :
         """
         Images
         """
-        
         # Création d'un contenant pour les images 
         contenant_widget = QWidget()
         contenant_grille = QGridLayout()
@@ -114,7 +112,6 @@ class TabAffichageCoupes(QGridLayout) :
         """
         Positions actuelles X, Y, Z et temps
         """
-        
         horizontal_layout = QHBoxLayout()
         
         horizontal_layout.addWidget(self.valeur_temps)

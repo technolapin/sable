@@ -1,8 +1,10 @@
 import sys
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+#from PyQt5.QtCore import *
+#from PyQt5.QtGui import *
+#from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QSize
+from PyQt5.QtWidgets import QApplication, QTabWidget, QWidget
 
 from class_TabGraphique3D import TabGraphique3D
 from class_TabMilleFeuille3D import TabMilleFeuille3D
@@ -10,7 +12,6 @@ from class_TabMilleFeuilleIRM import TabMilleFeuilleIRM
 from class_TabAffichageCoupes import TabAffichageCoupes
 from class_TabAide import TabAide
 
-from parametres import *
 from parametres_pour_demo import grapheDeDemonstration
     
 
