@@ -111,7 +111,7 @@ for t in range(0, n_tempo):
     os.system("mkdir coupes_3D_pre/x_y/"+padding_temporel)
     
     for u in range(0, n_coupes_xy):
-        print("CHAAAAAUD CACAO!")
+        print("xy", u)
         prefix = "coupes_3D_pre/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)
         
         image_coupe = prefix + ".pgm"
@@ -137,11 +137,9 @@ for t in range(0, n_tempo):
 
         command("long2byte "+image_dist_inv + " 0 "+image_dist_inv_byte)
         
-        command("minima " + image_dist_inv + " 4 " + image_min)
+        command("minima " + image_dist_inv_byte + " 4 " + image_min)
         
-        cmd = ("watershed " + image_dist_inv_byte + " " + image_min + " 8 " + image_water)
-        print(cmd)
-        command(cmd)
+        command("watershed " + image_dist_inv_byte + " " + image_min + " 8 " + image_water)
         command("add " + image_seuil_inv + " " + image_water + " " + image_add)
     
         command("inverse "+image_add+" "+image_sortie )
@@ -155,6 +153,7 @@ for t in range(0, n_tempo):
     os.system("mkdir coupes_3D_pre/x_z/"+padding_temporel)
     
     for u in range(0, n_coupes_xz):
+        print("xz", u)
 
         prefix = "coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)
         
@@ -176,12 +175,13 @@ for t in range(0, n_tempo):
         
         command("dist " + image_seuil_inv + " 0 " + image_dist)
         
-#        command("long2byte coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_dist.pgm 0 coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_dist.pgm")
         command("inverse " + image_dist + " " + image_dist_inv)
     
-        command("minima " + image_dist_inv + " 4 " + image_min)
+        command("long2byte "+image_dist_inv + " 0 "+image_dist_inv_byte)
+
+        command("minima " + image_dist_inv_byte + " 4 " + image_min)
         
-        command("watershed " + image_dist_inv + " " + image_min + " 8 " + image_water)
+        command("watershed " + image_dist_inv_byte + " " + image_min + " 8 " + image_water)
         
         command("add "+image_seuil_inv+" "+image_water+" "+image_add)
     
@@ -195,6 +195,7 @@ for t in range(0, n_tempo):
     os.system("mkdir coupes_3D_pre/y_z/"+padding_temporel)
     
     for u in range(0, n_coupes_yz):
+        print("yz", u)
         
         prefix = "coupes_3D_pre/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)
         
@@ -219,9 +220,11 @@ for t in range(0, n_tempo):
 #        command("long2byte coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_dist.pgm 0 coupes_3D_pre/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_dist.pgm")
         command("inverse " + image_dist + " " + image_dist_inv)
     
-        command("minima " + image_dist_inv + " 4 " + image_min)
+        command("long2byte "+image_dist_inv + " 0 "+image_dist_inv_byte)
+
+        command("minima " + image_dist_inv_byte + " 4 " + image_min)
         
-        command("watershed " + image_dist_inv + " " + image_min + " 8 " + image_water)
+        command("watershed " + image_dist_inv_byte + " " + image_min + " 8 " + image_water)
         
         command("add "+image_seuil_inv+" "+image_water+" "+image_add)
     
