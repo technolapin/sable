@@ -4,9 +4,6 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-from math import *
-import numpy
-
 from class_Fenetre import Fenetre
 from parametres_pour_demo import grapheDeDemonstration
 
