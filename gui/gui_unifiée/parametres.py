@@ -12,6 +12,8 @@ URL_POUR_IRM = "../../extraction/coupes_3D/"
 INTERVALLE_XZ = 80
 INTERVALLE_YZ = 80
 
+URL_POUR_VTK = "../../extraction/vtks/"
+
 if NB_IMGS % INTERVALLE_XY != 0 :
     print( "On a un problème !" )
     sys.exit(1)
