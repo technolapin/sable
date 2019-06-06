@@ -7,7 +7,9 @@
 
 import vtk
 
-
+"""
+Source : https://lorensen.github.io/VTKExamples/site/Python/IO/ReadVTP/
+"""
 def main():
     colors = vtk.vtkNamedColors()
 

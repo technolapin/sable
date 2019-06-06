@@ -7,6 +7,12 @@ from PyQt5 import Qt
 
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
+filename = "test.vtk"
+
+
+"""
+Source : https://stackoverflow.com/questions/48105646/embedding-vtk-object-in-pyqt5-window
+"""
 class MainWindow(Qt.QMainWindow):
 
     def __init__(self, parent = None):
@@ -22,13 +28,14 @@ class MainWindow(Qt.QMainWindow):
         self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
 
         # Create source
-        source = vtk.vtkSphereSource()
-        source.SetCenter(0, 0, 0)
-        source.SetRadius(5.0)
+        # Source : https://lorensen.github.io/VTKExamples/site/Python/IO/ReadVTP/
+        reader = vtk.vtkPolyDataReader()
+        reader.SetFileName(filename)
+        reader.Update()
 
         # Create a mapper
         mapper = vtk.vtkPolyDataMapper()
-        mapper.SetInputConnection(source.GetOutputPort())
+        mapper.SetInputConnection(reader.GetOutputPort())
 
         # Create an actor
         actor = vtk.vtkActor()
