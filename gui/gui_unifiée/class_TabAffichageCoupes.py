@@ -4,7 +4,9 @@ import sys
 #from PyQt5.QtCore import *
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar
+from PyQt5.QtCore import *
+from PyQt5.QtGui import QPixmap
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QScrollBar, QHBoxLayout
 
 from parametres import *
 
