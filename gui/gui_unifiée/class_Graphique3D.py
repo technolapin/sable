@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+from matplotlib.pyplot import figure as Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from mpl_toolkits.mplot3d import Axes3D
 
@@ -15,7 +15,7 @@ class Graphique3D(FigureCanvasQTAgg) :
     Constructeur, initialise le graphique
     """
     def __init__(self) :
-        self.figure = plt.figure()
+        self.figure = Figure()
         self.figure.subplots_adjust(bottom=0, top=1, left=0, right=1) # Supprime les marges
         FigureCanvasQTAgg.__init__( self, self.figure ) # Objet de type FigureCanvas
         self.axes = self.figure.gca( projection = '3d' ) # On lui dit qu'on veut des axes 3D, et on les stockes dans un attribut
