@@ -37,11 +37,19 @@ class TabAide(QGridLayout) :
         aide_ongl = QWidget()
         aide_onglet1 = QWidget()
         aide_onglet2 = QWidget()
+        aide_onglet3 = QWidget()
+        aide_onglet4 = QWidget()
+        aide_onglet5 = QWidget()
+    
     
         # Dictionnaire des onglets de la page d'aide
-        self.ongl_aide = { 'aide_ongl' :    [aide_ongl,     "Introduction", 'aide_generale.html'] , 
-                           'aide_onglet1' : [aide_onglet1 , "Aide Onglet1", 'coucou.html'       ] , 
-                           'aide_onglet2' : [aide_onglet2 , "Aide_Onglet2", 'salut.html'        ] }
+        self.ongl_aide = { 'aide_ongl' :    [aide_ongl,     "Introduction",                 'aide_generale.html'] , 
+                           'aide_onglet1' : [aide_onglet1 , "Aide Visualisation graphique", 'aide_visu_graph.html'       ] ,
+                           'aide_onglet2' : [aide_onglet2 , "Aide Mille-feuilles",          'aide_millefeuille.html'       ] ,
+                           'aide_onglet3' : [aide_onglet3 , "Aide Vision IRM",              'aide_vision_IRM.html'       ] ,
+                           'aide_onglet4' : [aide_onglet4 , "Aide Coupes",                  'aide_coupes.html'       ] ,
+                           'aide_onglet5' : [aide_onglet5 , "Aide VTK",                     'aide_VTK.html'       ] }
+        
         
         # Ajout dynamique des onglets à la page d'aide
         for ongl in self.ongl_aide :
