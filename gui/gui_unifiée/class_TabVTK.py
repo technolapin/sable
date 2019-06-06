@@ -67,12 +67,19 @@ class TabVTK(QGridLayout) :
     Gère le dessin et les changements du VTK
     """
     def dessinerVTK(self, value) :
+        tempsFormate = format(self.barreDeScrollIRMTemps.value(), '02d') # String sur 2 digits
+        fichierVTK = URL_POUR_VTK + tempsFormate + ".vtk"
+        
+        if not os.path.isfile( fichierVTK ) :
+            print ( "[Erreur TabVTK] " + fichierVTK + " n'existe pas !" )
+        
+        
         self.ren.RemoveActor(self.actor)
         
         # Create source
         # Source : https://lorensen.github.io/VTKExamples/site/Python/IO/ReadVTP/
         reader = vtk.vtkPolyDataReader()
-        reader.SetFileName(FICHIER)
+        reader.SetFileName(fichierVTK)
         reader.Update()
         
         # Create a mapper
