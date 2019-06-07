@@ -55,7 +55,7 @@ class TabVTK(QGridLayout) :
         #self.actor = vtk.vtkActor()
         
         self.actors = []
-        for instantTemporel in range( int(nombreInstantsTemporels()) ) :
+        for instantTemporel in range( int(nombreInstantsTemporels()) + 1 ) :
             fichierVTK = genererURLdesVTK( instantTemporel )
             
             if not os.path.isfile( fichierVTK ) :
