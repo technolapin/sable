@@ -37,7 +37,7 @@ def add_volume(file_name, image_name):
         command("showpoint "+image_name+" "+lines[i][:-1]+" | trucs_en_c/filtre_showpoint_3D >> " + file_name)
 
 
-#pour récupérer les éléments d'un .list
+#recupere les elements d un .list
 def parse_list(file_name):
     f = open(file_name, "r")
     line = f.readline()
@@ -158,14 +158,6 @@ for t in range(0, n_tempo):
     command("attribute images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 0 0 0 volumes_3D/volume_3D_t_"+padding_temporel+".pgm")
     add_volume("bary_3D/liste/bary_list_t"+padding_temporel+".list","volumes_3D/volume_3D_t_"+padding_temporel+".pgm")
     
-#    #enleve de la liste les grains de vol<100
-#    liste= "bary_3D/liste/bary_list_t"+padding_temporel+".list"
-#    volume_min=100
-#    g=0
-#    while g< len(liste):
-#        if (liste[g][3]<volume_min):
-#            del(liste[g])
-#        g += 1
         
 
     #extraction des coupes 2D sur les 3 plans
@@ -190,8 +182,10 @@ for t in range(0, n_tempo):
     os.system("mkdir coupes_3D/x_z/"+padding_temporel)
     
     for u in range(0, n_coupes_xz):
+        
+        v=n_coupes_xz-u
     
-        command(debut_commande+str(u)+" xz "+ "coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+".pgm")
+        command(debut_commande+str(u)+" xz "+ "coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+".pgm")
         
     
     #extraction des coupes sur (y,z)
