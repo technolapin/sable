@@ -8,7 +8,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QScrollBar, QHBoxLayout
 
-from parametres import *
+from functions_urlDesFichiersTraites import *
 
 
 """
@@ -33,32 +33,25 @@ class TabAffichageCoupes(QGridLayout) :
         """
         Barres de Scroll
         """
-        label_temps = QLabel("Temps")
-        
         # Défilement de la couche X
         self.barreScrollAxeX = QScrollBar()
-        self.barreScrollAxeX.setMaximum( INTERVALLE_YZ - 1 )
+        self.barreScrollAxeX.setMaximum( nombreImagesPlanYZ() )
         self.barreScrollAxeX.valueChanged.connect( self.changeImages )
         
         # Défilement de la couche Y
         self.barreScrollAxeY = QScrollBar()
-        self.barreScrollAxeY.setMaximum( INTERVALLE_XZ - 1 )
+        self.barreScrollAxeY.setMaximum( nombreImagesPlanXZ() )
         self.barreScrollAxeY.valueChanged.connect( self.changeImages )
         
         # Défilement de la couche Z
         self.barreScrollAxeZ = QScrollBar()
-        self.barreScrollAxeZ.setMaximum( INTERVALLE_XY - 1 )
+        self.barreScrollAxeZ.setMaximum( nombreImagesPlanXY() )
         self.barreScrollAxeZ.valueChanged.connect( self.changeImages )
         
         # Défilement temporel
         self.barreScrollTemps = QScrollBar(Qt.Horizontal)
-        self.barreScrollTemps.setMaximum( NB_IMGS / INTERVALLE_XY - 1 )
+        self.barreScrollTemps.setMaximum( nombreInstantsTemporels() )
         self.barreScrollTemps.valueChanged.connect( self.changeImages )
-        
-        # Scroll Bar des axes
-        label_axex = QLabel("X")
-        label_axey = QLabel("Y")
-        label_axez = QLabel("Z")
         
         # Ajout des barres de scroll 
         self.addWidget(self.barreScrollTemps, 3, 1)
@@ -95,9 +88,9 @@ class TabAffichageCoupes(QGridLayout) :
         contenant_widget.setLayout(contenant_grille)
         
         # Textes correspondant aux images
-        texte_xy=QLabel("Image (x,y)")
-        texte_yz=QLabel("Image (y,z)")
-        texte_zx=QLabel("Image (z,x)")
+        texte_xy = QLabel("Image (X, Y)")
+        texte_yz = QLabel("Image (Y, Z)")
+        texte_zx = QLabel("Image (X, Z)")
         contenant_grille.addWidget(texte_xy, 3, 2)
         contenant_grille.addWidget(texte_yz, 1, 3)
         contenant_grille.addWidget(texte_zx, 1, 1)
@@ -128,18 +121,13 @@ class TabAffichageCoupes(QGridLayout) :
     Gère l'affichage et son actualisatin
     """    
     def changeImages(self, value) :
-        print ( "[Debug TabAffichageCoupes] " + str(self.barreScrollTemps.value()) + ", "
-                                + str(self.barreScrollAxeX.value()) + ", "
-                                + str(self.barreScrollAxeY.value()) + ", "
-                                + str(self.barreScrollAxeZ.value()) )
+        print ( "[Debug TabAffichageCoupes] Temps : " + str(self.barreScrollTemps.value()) +
+                                             ", X : " + str(self.barreScrollAxeX.value()) +
+                                             ", Y : " + str(self.barreScrollAxeY.value()) +
+                                             ", Z : " + str(self.barreScrollAxeZ.value()) )
         
-        coucheXFormate = format(self.barreScrollAxeX.value(), '04d') # String sur 4 digits
-        coucheYFormate = format(self.barreScrollAxeY.value(), '04d') # String sur 4 digits
-        coucheZFormate = format(self.barreScrollAxeZ.value(), '04d') # String sur 4 digits
-        tempsFormate = format(self.barreScrollTemps.value(), '02d') # String sur 2 digits
-        
-        # Image axe (x,y)
-        image_xy = URL_POUR_IRM + "x_y/" + tempsFormate + "/t_" + tempsFormate + "coupe_xy_" + coucheZFormate + ".pgm"
+        # Image plan (X, Y)
+        image_xy = genererURLdesPGM3D( 'XY', self.barreScrollTemps.value(), self.barreScrollAxeZ.value() )
         if os.path.isfile( image_xy ) : # Si le chemin d'accès à l'image existe
             width=self.label_image_xy.width()
             height=self.label_image_xy.height()
@@ -147,8 +135,8 @@ class TabAffichageCoupes(QGridLayout) :
         else :
             print( "[Erreur TabAffichageCoupes] " + image_xy + " n'existe pas !" )
 
-        # Image axe (y,z)
-        image_yz = URL_POUR_IRM + "y_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_yz_" + coucheXFormate + ".pgm"
+        # Image plan (Y, Z)
+        image_yz = genererURLdesPGM3D( 'YZ', self.barreScrollTemps.value(), self.barreScrollAxeX.value() )
         if os.path.isfile( image_yz ) : # Si le chemin d'accès à l'image existe
             width=self.label_image_yz.width()
             height=self.label_image_yz.height()
@@ -156,8 +144,8 @@ class TabAffichageCoupes(QGridLayout) :
         else :
             print( "[Erreur TabAffichageCoupes] " + image_yz + " n'existe pas !" )
         
-        # Image axe (z,x)
-        image_zx = URL_POUR_IRM + "x_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_xz_" + coucheYFormate + ".pgm"
+        # Image plan (X, Z)
+        image_zx = genererURLdesPGM3D( 'XZ', self.barreScrollTemps.value(), self.barreScrollAxeY.value() )
         if os.path.isfile( image_zx ) : # Si le chemin d'accès à l'image existe
             width=self.label_image_zx.width()
             height=self.label_image_zx.height()

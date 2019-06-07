@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar
 
 from class_MilleFeuille3D import MilleFeuille3D
 
-from parametres import *
+from functions_urlDesFichiersTraites import *
 
 
 """
@@ -29,17 +29,17 @@ class TabMilleFeuille3D(QGridLayout) :
         
         # Défilement de couches inférieures (Valeur de la couche minimum à afficher)
         self.barreDeScrollMFCoucheMin = QScrollBar()
-        self.barreDeScrollMFCoucheMin.setMaximum( INTERVALLE_XY - 1 )
+        self.barreDeScrollMFCoucheMin.setMaximum( nombreImagesPlanXY() )
         self.barreDeScrollMFCoucheMin.valueChanged.connect( self.dessinerMilleFeuille3D )
         
         # Défilement de couches supérieures (Valeur de la couche maximum à afficher)
         self.barreDeScrollMFCoucheMax = QScrollBar()
-        self.barreDeScrollMFCoucheMax.setMaximum( INTERVALLE_XY - 1 )
+        self.barreDeScrollMFCoucheMax.setMaximum( nombreImagesPlanXY() )
         self.barreDeScrollMFCoucheMax.valueChanged.connect( self.dessinerMilleFeuille3D )
         
         # Défilement temporel
         self.barreDeScrollMFTemps = QScrollBar(Qt.Horizontal)
-        self.barreDeScrollMFTemps.setMaximum( NB_IMGS / INTERVALLE_XY - 1 )
+        self.barreDeScrollMFTemps.setMaximum( nombreInstantsTemporels() )
         self.barreDeScrollMFTemps.valueChanged.connect( self.dessinerMilleFeuille3D )
         
         # Ajout des Widgets
@@ -59,17 +59,17 @@ class TabMilleFeuille3D(QGridLayout) :
         listeImages = [] # Liste des images que on veut afficher dans le mille-feuilles
         if self.barreDeScrollMFCoucheMax.value() != 0 : # Commander le défilement avec les deux barres
             for i in range(self.barreDeScrollMFCoucheMin.value(), self.barreDeScrollMFCoucheMax.value(), 1) :
-                urlImage = URL_POUR_MF + str(self.barreDeScrollMFTemps.value() * INTERVALLE_X + i) + ".pgm" # Chemin de l'image
+                urlImage = genererURLdesPGM3D( 'XY', self.barreDeScrollMFTemps.value(), i ) # Chemin de l'image
                 hauteurImage = self.barreDeScrollMFCoucheMin.value() + i # Hauteur de l'image dans le mille-feuille
                 listeImages.append( [urlImage, hauteurImage] )
         else : # Permet de ne commander qu'avec le défilement de la valeur minimum, forcément si ANTI_LAG activé
-            numeroImage = self.barreDeScrollMFTemps.value() * INTERVALLE_XY + self.barreDeScrollMFCoucheMin.value()
-            listeImages.append( [URL_POUR_MF + str(numeroImage) + ".pgm", self.barreDeScrollMFCoucheMin.value()] )
+            urlImage = genererURLdesPGM3D( 'XY', self.barreDeScrollMFTemps.value(), self.barreDeScrollMFCoucheMin.value() )
+            listeImages.append( [urlImage, self.barreDeScrollMFCoucheMin.value()] )
         
         self.milleFeuille3D.dessinerMilleFeuille3D( listeImages )
         
         print( "[Debug TabMilleFeuille3D] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
-        if ANTI_LAG : print( "[Debug TabMilleFeuille3D] Affichage : " + URL_POUR_MF + str(numeroImage) + ".pgm" )
+        if ANTI_LAG : print( "[Debug TabMilleFeuille3D] Affichage : " + urlImage )
 
 
 """
