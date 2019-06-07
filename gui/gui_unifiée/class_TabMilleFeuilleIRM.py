@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar
 
 from class_MilleFeuilleIRM import MilleFeuilleIRM
 
-from parametres import *
+from urlDesFichiersTraites import *
 
 
 """
@@ -29,22 +29,22 @@ class TabMilleFeuilleIRM(QGridLayout) :
         
         # Défilement de la couche X
         self.barreDeScrollIRMCoucheX = QScrollBar()
-        self.barreDeScrollIRMCoucheX.setMaximum( INTERVALLE_YZ - 1 )
+        self.barreDeScrollIRMCoucheX.setMaximum( nombreImagesPlanYZ() )
         self.barreDeScrollIRMCoucheX.valueChanged.connect( self.dessinerMilleFeuilleIRM )
         
         # Défilement de la couche Y
         self.barreDeScrollIRMCoucheY = QScrollBar()
-        self.barreDeScrollIRMCoucheY.setMaximum( INTERVALLE_XZ - 1 )
+        self.barreDeScrollIRMCoucheY.setMaximum( nombreImagesPlanXZ() )
         self.barreDeScrollIRMCoucheY.valueChanged.connect( self.dessinerMilleFeuilleIRM )
         
         # Défilement de la couche Z
         self.barreDeScrollIRMCoucheZ = QScrollBar()
-        self.barreDeScrollIRMCoucheZ.setMaximum( INTERVALLE_XY - 1 )
+        self.barreDeScrollIRMCoucheZ.setMaximum( nombreImagesPlanXY() )
         self.barreDeScrollIRMCoucheZ.valueChanged.connect( self.dessinerMilleFeuilleIRM )
         
         # Défilement temporel
         self.barreDeScrollIRMTemps = QScrollBar(Qt.Horizontal)
-        self.barreDeScrollIRMTemps.setMaximum( NB_IMGS / INTERVALLE_XY - 1 )
+        self.barreDeScrollIRMTemps.setMaximum( nombreInstantsTemporels() )
         self.barreDeScrollIRMTemps.valueChanged.connect( self.dessinerMilleFeuilleIRM )
         
         # Ajout des Widgets
@@ -60,14 +60,9 @@ class TabMilleFeuilleIRM(QGridLayout) :
     Gère le dessin et les changements de l'affichage IRM
     """
     def dessinerMilleFeuilleIRM(self, value) :
-        coucheXFormate = format(self.barreDeScrollIRMCoucheX.value(), '04d') # String sur 4 digits
-        coucheYFormate = format(self.barreDeScrollIRMCoucheY.value(), '04d') # String sur 4 digits
-        coucheZFormate = format(self.barreDeScrollIRMCoucheZ.value(), '04d') # String sur 4 digits
-        tempsFormate = format(self.barreDeScrollIRMTemps.value(), '02d') # String sur 2 digits
-        
-        imageX = URL_POUR_IRM + "y_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_yz_" + coucheXFormate + ".pgm"
-        imageY = URL_POUR_IRM + "x_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_xz_" + coucheYFormate + ".pgm"
-        imageZ = URL_POUR_IRM + "x_y/" + tempsFormate + "/t_" + tempsFormate + "coupe_xy_" + coucheZFormate + ".pgm"
+        imageX = genererURLdesPGM3D( 'YZ', self.barreDeScrollIRMTemps.value(), self.barreDeScrollIRMCoucheX.value() )
+        imageY = genererURLdesPGM3D( 'XZ', self.barreDeScrollIRMTemps.value(), self.barreDeScrollIRMCoucheX.value() )
+        imageZ = genererURLdesPGM3D( 'XY', self.barreDeScrollIRMTemps.value(), self.barreDeScrollIRMCoucheX.value() )
         
         self.milleFeuilleIRM.dessinerMilleFeuilleIRM( [imageX, self.barreDeScrollIRMCoucheX.value() ],
                                                       [imageY, self.barreDeScrollIRMCoucheY.value() ], 

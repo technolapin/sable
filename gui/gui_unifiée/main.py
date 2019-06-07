@@ -43,8 +43,9 @@ def lancerOuOuvrirTraitement( lancer ) :
     if not validationFichier( fichierDemande, lancer ) : # Si la validation de ce fichier échoue
         QMessageBox.about(None, "Information", "Ce fichier est invalide !")
     else :
-        traitementImage( fichierDemande )
+        if lancer : traitementImage( fichierDemande )
         
+        # TODO : Passer en param à la GUI le fichier du traitement
         fenetre = Fenetre( grapheDeDemonstration ) # Crée un objet de type Fenetre
         fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
         fenetre.show() # Affiche la fenêtre
