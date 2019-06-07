@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QFrame, QVBoxLay
 import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
-from urlDesFichiersTraites import *
+from functions_urlDesFichiersTraites import *
 
 
 FICHIER = "../amaury/tests/test.vtk"

@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar
 
 from class_MilleFeuilleIRM import MilleFeuilleIRM
 
-from urlDesFichiersTraites import *
+from functions_urlDesFichiersTraites import *
 
 
 """
