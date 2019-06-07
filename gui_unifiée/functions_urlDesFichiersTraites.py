@@ -10,11 +10,11 @@ def genererURLdesPGM3D( plan, instantTemporel, couche ) :
     tempsFormate = format(instantTemporel, '02d') # String sur 2 digits
     
     if plan == 'YZ' :
-        fichierPGM = URL_POUR_IRM + "y_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_yz_" + coucheFormate + ".pgm"
+        fichierPGM = URL_PGM + "y_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_yz_" + coucheFormate + ".pgm"
     if plan == 'XZ' :
-        fichierPGM = URL_POUR_IRM + "x_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_xz_" + coucheFormate + ".pgm"
+        fichierPGM = URL_PGM + "x_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_xz_" + coucheFormate + ".pgm"
     if plan == 'XY' :
-        fichierPGM = URL_POUR_IRM + "x_y/" + tempsFormate + "/t_" + tempsFormate + "coupe_xy_" + coucheFormate + ".pgm"
+        fichierPGM = URL_PGM + "x_y/" + tempsFormate + "/t_" + tempsFormate + "coupe_xy_" + coucheFormate + ".pgm"
     return fichierPGM
 
 """
@@ -22,7 +22,7 @@ def genererURLdesPGM3D( plan, instantTemporel, couche ) :
 """
 def genererURLdesVTK( instantTemporel ) :
     tempsFormate = format(instantTemporel, '02d') # String sur 2 digits
-    fichierVTK = URL_POUR_VTK + tempsFormate + ".vtk"
+    fichierVTK = URL_VTK + tempsFormate + ".vtk"
     return fichierVTK
 
 
