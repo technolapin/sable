@@ -49,6 +49,8 @@ import matplotlib.cm as cm # Pour cm.hot()
 
 from random import choice # Fonction pour choisir aléatoirement un élement dans une liste
 import re # Librairie pour faire des recherches
+import functools
+
 
 
 
@@ -359,6 +361,9 @@ class Fenetre(QTabWidget) :
         self.gridLayout.addWidget(self.label,1,1)
         
         
+
+        
+        
         # Création des boutons pour passer les images
         ### Bouton 1
         self.pushButton1 = QPushButton() 
@@ -382,11 +387,19 @@ class Fenetre(QTabWidget) :
         # Ajout dans l'onglet
         self.affichage_image.setLayout(self.gridLayout)
         
-
+    def print_some(self, event, source_object=None):
+        x=event.pos().x()
+        y=event.pos().y()
+        
+        print("Clicked, from", source_object)
+        print('x=', x, '   ;    y=', y )
+        
     def getPixel(self,event):
         x=event.pos().x()
         y=event.pos().y()
-        print('x=', x, '   ;    y=', y)
+        source = event.source()
+        print('x=', x, '   ;    y=', y, '      event : ', source )
+        
         ## Mofifier pour colorer le grain et changer l'image avec grain coloré, aller récupérer le grain wlh
         
 
@@ -500,6 +513,12 @@ class Fenetre(QTabWidget) :
         self.label_image_yz.setFixedSize(240,500)
         self.label_image_zx.setFixedSize(240,500)
         
+        
+        self.label_image_xy.mousePressEvent=functools.partial(self.print_some, source_object=self.label_image_xy)
+        self.label_image_yz.mousePressEvent=functools.partial(self.print_some, source_object=self.label_image_yz)
+        self.label_image_zx.mousePressEvent=functools.partial(self.print_some, source_object=self.label_image_zx)
+
+      
 
         self.valeur_temps=QLabel("Temps : 0")
         self.valeur_X=QLabel("X : 0")
@@ -557,7 +576,7 @@ class Fenetre(QTabWidget) :
         # Ajout du contenu à l'onglet
         self.affichage_coupes.setLayout(grille)
     
-    
+
     
     def changeImages(self, value) :
         print ( "[Debug Imgs] " + str(self.barreScrollTemps.value()) + ", "
