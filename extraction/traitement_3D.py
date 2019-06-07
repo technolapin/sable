@@ -24,6 +24,44 @@ def numerote(n, l):
        s = '0' + s
    return s   
 
+#ajoute le volume a la lise des barycentres
+def add_volume(file_name, image_name):
+    f = open(file_name, "r")
+    lines = f.readlines();
+    f.close()
+    f = open(file_name, "w")
+    f.write(lines[0])
+    f.close()
+    for i in range(1, len(lines)):
+        print(lines[i])
+        command("showpoint "+image_name+" "+lines[i][:-1]+" | trucs_en_c/filtre_showpoint_3D >> " + file_name)
+
+
+#pour récupérer les éléments d'un .list
+def parse_list(file_name):
+    f = open(file_name, "r")
+    line = f.readline()
+    mode = line[0]
+    n_els = int(line[2:][:-1])
+    liste = []
+    for i in range(n_els):
+        liste.append([])
+        line = f.readline()[:-1];
+        for s in line.split(" "):
+            liste[i].append(int(s))
+    f.close()
+    return liste
+
+
+def export_list(liste, file_name):
+    os.system("rm "+file_name)
+    f = open(file_name, "w")
+    f.write("_ "+str(len(liste))+"\n")
+    for elements in liste:
+        f.write(" ".join(str(el) for el in elements)+"\n")
+    f.close()
+
+
 #gestion des repertoires
    
 os.system("rm -R images_3D")
@@ -44,6 +82,9 @@ os.system("mkdir labels_3D")
 os.system("rm -R bary_3D")
 os.system("mkdir bary_3D")
 os.system("mkdir bary_3D/liste")
+
+os.system("rm -R volumes_3D")
+os.system("mkdir volumes_3D")
 
 #copie des images de test et renommage aux standard de la fc catpgm
 for i in range(0, n_tempo*n_coupes_xy):
@@ -106,8 +147,6 @@ for t in range(0, n_tempo):
             "images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm ")
 
 
-
-
     #barycentres
     
     command("3dlabel images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm labels_3D/label_t_"+padding_temporel+".pgm")
@@ -115,8 +154,19 @@ for t in range(0, n_tempo):
     command("pgm2list bary_3D/bary_3D_t"+padding_temporel+".pgm B bary_3D/liste/bary_list_t"+padding_temporel+".list")
 
 
-
-
+    #volumes
+    command("attribute images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 0 0 0 volumes_3D/volume_3D_t_"+padding_temporel+".pgm")
+    add_volume("bary_3D/liste/bary_list_t"+padding_temporel+".list","volumes_3D/volume_3D_t_"+padding_temporel+".pgm")
+    
+#    #enleve de la liste les grains de vol<100
+#    liste= "bary_3D/liste/bary_list_t"+padding_temporel+".list"
+#    volume_min=100
+#    g=0
+#    while g< len(liste):
+#        if (liste[g][3]<volume_min):
+#            del(liste[g])
+#        g += 1
+        
 
     #extraction des coupes 2D sur les 3 plans
     
@@ -152,8 +202,5 @@ for t in range(0, n_tempo):
         
         command(debut_commande+str(u)+" yz "+ "coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+".pgm")        
         
-#        prefix_sortie = "coupes_3D_/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)
-#        image_coupe = prefix_sortie + ".pgm"
-#    
-#        command(debut_commande + str(u)+" yz "+ image_coupe)
+
        
