@@ -1,3 +1,4 @@
+import os
 import sys
 
 #from PyQt5.QtCore import *
@@ -69,21 +70,32 @@ class TabVTK(QGridLayout) :
     def dessinerVTK(self, value) :
         self.ren.RemoveActor(self.actor)
         
-        # Create source
-        # Source : https://lorensen.github.io/VTKExamples/site/Python/IO/ReadVTP/
-        reader = vtk.vtkPolyDataReader()
-        reader.SetFileName(FICHIER)
-        reader.Update()
+        tempsFormate = format(self.barreDeScrollTemps.value(), '02d') # String sur 2 digits
+        fichierVTK = URL_POUR_VTK + tempsFormate + ".vtk"
         
-        # Create a mapper
-        mapper = vtk.vtkPolyDataMapper()
-        mapper.SetInputConnection(reader.GetOutputPort())
+        if not os.path.isfile( fichierVTK ) :
+            print ( "[Erreur TabVTK] " + fichierVTK + " n'existe pas !" )
         
-        # Create an actor
-        self.actor.SetMapper(mapper)
-        self.actor.GetProperty().SetColor(self.colors.GetColor3d('Tan')) # Couleur de l'objet 3D
-        
-        self.ren.AddActor(self.actor)
+        else :
+            # Create source
+            # Source : https://lorensen.github.io/VTKExamples/site/Python/IO/ReadVTP/
+            reader = vtk.vtkPolyDataReader()
+            reader.SetFileName(fichierVTK)
+            reader.Update()
+            
+            # Create a mapper
+            mapper = vtk.vtkPolyDataMapper()
+            mapper.SetInputConnection(reader.GetOutputPort())
+            
+            # Create an actor
+            self.actor.SetMapper(mapper)
+            self.actor.GetProperty().SetColor(self.colors.GetColor3d('Tan')) # Couleur de l'objet 3D
+            
+            self.ren.AddActor(self.actor)
+            
+            self.iren.Initialize()
+            
+            print ( "[Debug TabVTK] Affichage : " + fichierVTK)
 
 
 """
