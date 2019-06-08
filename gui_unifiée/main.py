@@ -1,3 +1,4 @@
+import os
 import sys
 
 from PyQt5.QtCore import *
@@ -6,6 +7,9 @@ from PyQt5.QtWidgets import *
 
 from class_Fenetre import Fenetre
 from parametres_pour_demo import grapheDeDemonstration
+
+# Source : https://www.bnmetrics.com/blog/dynamic-import-in-python3
+from importlib import import_module
 
 
 """
@@ -28,6 +32,26 @@ def traitementImage( fichier ) :
     return
 
 
+def importerTraitement( fichier ) :
+    sauvegardeRepertoireCourant = os.path.dirname( os.path.realpath(__file__) ) # On sauvegarde le répertoire courant
+    repertoireFichier, fichierDemandé = os.path.split( os.path.abspath(fichier) ) # On prend le répertoire du fichier demandé
+    os.chdir( repertoireFichier ) # On va dans le répertoire, pour faire des import
+    
+    print( repertoireFichier + fichierDemandé )
+    
+    fichierDemandéSansExtension = os.path.splitext( fichierDemandé )[0]
+    
+    import_module( fichierDemandé )
+    """
+    try :
+        import fichierDemandéSansExtension
+    except ModuleNotFoundError :
+        print( "Fichier introuvable !" )
+    """
+    
+    os.chdir( sauvegardeRepertoireCourant )
+
+
 """
 Demande à l'utilisateur un fichier pour lancer un traitement ou ouvrir un fichier de traitement
 @param lancer : True pour lancer un traitement, False pour ouvrir un traitement
@@ -44,6 +68,8 @@ def lancerOuOuvrirTraitement( lancer ) :
         QMessageBox.about(None, "Information", "Ce fichier est invalide !")
     else :
         if lancer : traitementImage( fichierDemande )
+        
+#        importerTraitement( fichierDemande )
         
         # TODO : Passer en param à la GUI le fichier du traitement
         fenetre = Fenetre( grapheDeDemonstration ) # Crée un objet de type Fenetre
