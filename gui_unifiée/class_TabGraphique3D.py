@@ -24,9 +24,10 @@ class TabGraphique3D(QGridLayout) :
         super(TabGraphique3D, self).__init__(parent) # Appel du constructeur de QGridLayout
         
         
+        # Ajout Maylis
         vertical_layout=QVBoxLayout()
         
-        ##### Valeurs actuelles des barres de scroll
+        # Valeurs actuelles des barres de scroll
         horizontal_layout = QHBoxLayout()
         
         self.valeur_temps = QLabel("Temps : 0")
@@ -37,7 +38,7 @@ class TabGraphique3D(QGridLayout) :
         
         
         vertical_layout.addLayout(horizontal_layout)
-        #####
+        # Fin  Ajout Maylis
         
         
         # Graphe à afficher
@@ -85,11 +86,14 @@ class TabGraphique3D(QGridLayout) :
 #       Devenu inutlie puisqu'on a supprimé les menus déroulants
          self.graphique3D.dessinerGraphique3D( self.graphe, self.barreDeScrollCourbes.value(), self.barreDeScrollTemps.value() )
          
+         # Ajout Maylis
          self.valeur_temps.setText("Temps : " + str(self.barreDeScrollTemps.value()))
+         
          if (self.barreDeScrollCourbes.value()==0):
              self.valeur_courbe.setText("Courbe : Toutes les courbes")
          else :
              self.valeur_courbe.setText("Courbe : " + str(self.barreDeScrollCourbes.value()))
+         # Fin Ajout Maylis
         
          print( "[Debug TabGraphique3D] Temps : " + str( self.barreDeScrollCourbes.value() ) + ", Courbe : " + str( self.barreDeScrollTemps.value() ) + ", Valeur donnée : " + str( value ) )
 

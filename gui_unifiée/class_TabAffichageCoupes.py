@@ -60,15 +60,11 @@ class TabAffichageCoupes(QGridLayout) :
         self.barreScrollTemps.valueChanged.connect( self.changeImages )
         
         
-        
-        #####################
         # Ajout des barres de scroll 
         self.addWidget(self.barreScrollTemps, 2, 1)
         self.addWidget(self.barreScrollAxeX, 1, 2)
         self.addWidget(self.barreScrollAxeY, 1, 3)
         self.addWidget(self.barreScrollAxeZ, 1, 4)
-        #####################
-        
         
         
         """
@@ -82,16 +78,13 @@ class TabAffichageCoupes(QGridLayout) :
         self.label_image_yz = QLabel()
         self.label_image_zx = QLabel()
         
-        
-        ##############################
-        print("image xy : ", self.label_image_xy)
-        print("image yz : ", self.label_image_yz)
-        print("image zx : ", self.label_image_zx)
+        print("Image XY : ", self.label_image_xy)
+        print("Image YZ : ", self.label_image_yz)
+        print("Image ZX : ", self.label_image_zx)
         
         self.label_image_xy.mousePressEvent=functools.partial(self.get_pixel, source_object=self.label_image_xy)
         self.label_image_yz.mousePressEvent=functools.partial(self.get_pixel, source_object=self.label_image_yz)
         self.label_image_zx.mousePressEvent=functools.partial(self.get_pixel, source_object=self.label_image_zx)
-        ###############################
         
         self.label_image_xy.setFixedSize(240,240)
         self.label_image_yz.setFixedSize(240,500)
@@ -105,14 +98,11 @@ class TabAffichageCoupes(QGridLayout) :
         self.changeImages(0)
         
         
-        ##########################""
         # Ajout des images dans le contenant à images
         contenant_grille.addWidget(self.label_image_xy, 5, 2)
         contenant_grille.addWidget(self.label_image_yz, 2, 3)
         contenant_grille.addWidget(self.label_image_zx, 2, 1)
         contenant_widget.setLayout(contenant_grille)
-        ############################""
-        
         
         
         # Textes correspondant aux images
@@ -121,14 +111,9 @@ class TabAffichageCoupes(QGridLayout) :
         texte_zx = QLabel("Image (X, Z)")
         
         
-        
-        ###############################"
         contenant_grille.addWidget(texte_xy, 3, 2)
         contenant_grille.addWidget(texte_yz, 1, 3)
         contenant_grille.addWidget(texte_zx, 1, 1)
-        ################################
-        
-        
         
         
         # Image des axes
@@ -138,12 +123,6 @@ class TabAffichageCoupes(QGridLayout) :
         if not os.path.isfile( IMAGE_AXES ) : # Si le chemin d'accès à l'image n'existe pas
             print( "[Erreur TabAffichageCoupes] " + IMAGE_AXES + " n'existe pas !" )
         
-        
-        
-        #############################""
-        # Ajout du contenant d'images dans la grille globale
-        #self.addWidget(contenant_widget,2,1)
-        ##############################
         
         """
         Positions actuelles X, Y, Z et temps
@@ -160,8 +139,9 @@ class TabAffichageCoupes(QGridLayout) :
         
         self.addLayout(vertical_layout,1,1)
     
-    
-    
+    """
+    Obtenir la position du clic
+    """
     def get_pixel(self, event, source_object=None):
         if (source_object==self.label_image_xy):
             x=floor(event.pos().x()/3)
@@ -188,9 +168,7 @@ class TabAffichageCoupes(QGridLayout) :
         #self.label_image_zx.setFixedSize(240,500)
         
         print("x=",x,"   y=",y, "   z=",z,"   temps=",temps)
-        # appeler le traitement de Barbara pour sélectionner le grain en 3D
-        
-        
+        # TODO : Appeler le traitement de Barbara pour sélectionner le grain en 3D
     
     """
     Gère l'affichage et son actualisatin

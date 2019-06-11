@@ -55,8 +55,7 @@ class TabMilleFeuilleIRM(QGridLayout) :
         self.addWidget( self.barreDeScrollIRMTemps, 2, 1 )
         
         
-        
-        ##########################
+        # Ajout Maylis
         self.valeur_temps = QLabel("Temps : 0")
         self.valeur_X = QLabel("X : 0")
         self.valeur_Y = QLabel("Y : 0")
@@ -73,8 +72,7 @@ class TabMilleFeuilleIRM(QGridLayout) :
         vertical_layout.addWidget(self.milleFeuilleIRM,stretch=2)
         
         self.addLayout(vertical_layout,1,1)
-        ##########################
-        
+        # Fin Ajout Maylis
         
         
         self.dessinerMilleFeuilleIRM(0)
@@ -91,12 +89,12 @@ class TabMilleFeuilleIRM(QGridLayout) :
                                                       [imageY, self.barreDeScrollIRMCoucheY.value() ], 
                                                       [imageZ, self.barreDeScrollIRMCoucheZ.value() ] )
         
-        #################################"
+        # Ajout Maylis
         self.valeur_temps.setText("Temps : " + str(self.barreDeScrollIRMTemps.value()))
         self.valeur_X.setText("X : " + str(self.barreDeScrollIRMCoucheX.value()))
         self.valeur_Y.setText("Y : " + str(self.barreDeScrollIRMCoucheY.value()))
         self.valeur_Z.setText("Z : " + str(self.barreDeScrollIRMCoucheZ.value()))
-        ###################################
+        # Fin ajouts Maylis
         
         print( "[Debug TabMilleFeuilleIRM] X : " + str( self.barreDeScrollIRMCoucheX.value() ) + ", Y : " + str( self.barreDeScrollIRMCoucheY.value() ) + ", Z : " + str( self.barreDeScrollIRMCoucheZ.value() ) + ", Temps : " + str( self.barreDeScrollIRMTemps.value() ) )
         print( "[Debug TabMilleFeuilleIRM] Affichage : " + imageX + ", " + imageY + ", " + imageZ )

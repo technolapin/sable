@@ -50,7 +50,7 @@ class TabMilleFeuille3D(QGridLayout) :
         self.addWidget( self.barreDeScrollMFTemps, 2, 1 )
         
         
-        ##############################
+        #  Ajout Maylis
         self.valeur_temps = QLabel("Temps : 0")
         self.valeur_Z = QLabel("Z : 0")
         
@@ -63,10 +63,10 @@ class TabMilleFeuille3D(QGridLayout) :
         vertical_layout.addWidget(self.milleFeuille3D,stretch=2)
         
         self.addLayout(vertical_layout,1,1)
-        ##############################
+        # Fin Ajout Maylis
+        
         
         self.dessinerMilleFeuille3D(0)
-        
     
     """
     Gère le dessin et les changements du mille-feuilles 3D
@@ -85,10 +85,10 @@ class TabMilleFeuille3D(QGridLayout) :
         
         self.milleFeuille3D.dessinerMilleFeuille3D( listeImages )
         
-        
-        #########################
+        # Ajout Maylis
         self.valeur_temps.setText("Temps : " + str(self.barreDeScrollMFTemps.value()))
         self.valeur_Z.setText("Z : " + str(self.barreDeScrollMFCoucheMin.value()))
+        # Fin Ajout Maylis
         
         print( "[Debug TabMilleFeuille3D] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
         if ANTI_LAG : print( "[Debug TabMilleFeuille3D] Affichage : " + urlImage )
