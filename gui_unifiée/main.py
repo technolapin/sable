@@ -65,7 +65,7 @@ def importerTraitement( fichier ) :
             print( "[Erreur] Le fichier ne contient pas les variables nécéssaires !" )
             OK = False
     
-    # Sauvegarde du répertoire absolu du fichier d'exportation
+    # Sauvegarde du répertoire absolu du répertorie du fichier d'exportation
     # Sert à localiser à partir des URL relatives qu'il contient
     os.environ[ PREFIX_VAR_ENV + "REPERTOIRE" ] = os.path.dirname(os.path.abspath( fichier ))
     
