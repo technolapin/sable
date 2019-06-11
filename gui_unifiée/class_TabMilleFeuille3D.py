@@ -4,7 +4,7 @@ import sys
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QLabel, QHBoxLayout, QVBoxLayout
 
 from class_MilleFeuille3D import MilleFeuille3D
 
@@ -43,13 +43,30 @@ class TabMilleFeuille3D(QGridLayout) :
         self.barreDeScrollMFTemps.valueChanged.connect( self.dessinerMilleFeuille3D )
         
         # Ajout des Widgets
-        self.addWidget( self.milleFeuille3D, 2, 1 )
-        self.addWidget( self.barreDeScrollMFCoucheMin, 2, 2 )
+#        self.addWidget( self.milleFeuille3D, 2, 1 )
+        self.addWidget( self.barreDeScrollMFCoucheMin, 1, 2 )
         if not ANTI_LAG : self.addWidget( self.barreDeScrollMFCoucheMax, 2, 3 )
         # Ne pas l'afficher quand l'ANTI_LAG est activé, donc inutilisable, donc une seule couche affichée
-        self.addWidget( self.barreDeScrollMFTemps, 3, 1 )
+        self.addWidget( self.barreDeScrollMFTemps, 2, 1 )
+        
+        
+        ##############################
+        self.valeur_temps = QLabel("Temps : 0")
+        self.valeur_Z = QLabel("Z : 0")
+        
+        horizontal_layout = QHBoxLayout()
+        vertical_layout = QVBoxLayout()
+        
+        horizontal_layout.addWidget(self.valeur_temps)
+        horizontal_layout.addWidget(self.valeur_Z)
+        vertical_layout.addLayout(horizontal_layout)
+        vertical_layout.addWidget(self.milleFeuille3D,stretch=2)
+        
+        self.addLayout(vertical_layout,1,1)
+        ##############################
         
         self.dessinerMilleFeuille3D(0)
+        
     
     """
     Gère le dessin et les changements du mille-feuilles 3D
@@ -67,6 +84,11 @@ class TabMilleFeuille3D(QGridLayout) :
             listeImages.append( [urlImage, self.barreDeScrollMFCoucheMin.value()] )
         
         self.milleFeuille3D.dessinerMilleFeuille3D( listeImages )
+        
+        
+        #########################
+        self.valeur_temps.setText("Temps : " + str(self.barreDeScrollMFTemps.value()))
+        self.valeur_Z.setText("Z : " + str(self.barreDeScrollMFCoucheMin.value()))
         
         print( "[Debug TabMilleFeuille3D] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
         if ANTI_LAG : print( "[Debug TabMilleFeuille3D] Affichage : " + urlImage )

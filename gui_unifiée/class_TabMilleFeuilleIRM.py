@@ -4,7 +4,7 @@ import sys
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QHBoxLayout, QVBoxLayout, QLabel
 
 from class_MilleFeuilleIRM import MilleFeuilleIRM
 
@@ -48,11 +48,34 @@ class TabMilleFeuilleIRM(QGridLayout) :
         self.barreDeScrollIRMTemps.valueChanged.connect( self.dessinerMilleFeuilleIRM )
         
         # Ajout des Widgets
-        self.addWidget( self.milleFeuilleIRM, 2, 1 )
-        self.addWidget( self.barreDeScrollIRMCoucheX, 2, 2 )
-        self.addWidget( self.barreDeScrollIRMCoucheY, 2, 3 )
-        self.addWidget( self.barreDeScrollIRMCoucheZ, 2, 4 )
-        self.addWidget( self.barreDeScrollIRMTemps, 3, 1 )
+#        self.addWidget( self.milleFeuilleIRM, 2, 1 )
+        self.addWidget( self.barreDeScrollIRMCoucheX, 1, 2 )
+        self.addWidget( self.barreDeScrollIRMCoucheY, 1, 3 )
+        self.addWidget( self.barreDeScrollIRMCoucheZ, 1, 4 )
+        self.addWidget( self.barreDeScrollIRMTemps, 2, 1 )
+        
+        
+        
+        ##########################
+        self.valeur_temps = QLabel("Temps : 0")
+        self.valeur_X = QLabel("X : 0")
+        self.valeur_Y = QLabel("Y : 0")
+        self.valeur_Z = QLabel("Z : 0")
+        
+        horizontal_layout = QHBoxLayout()
+        vertical_layout = QVBoxLayout()
+        
+        horizontal_layout.addWidget(self.valeur_temps)
+        horizontal_layout.addWidget(self.valeur_X)
+        horizontal_layout.addWidget(self.valeur_Y)
+        horizontal_layout.addWidget(self.valeur_Z)
+        vertical_layout.addLayout(horizontal_layout)
+        vertical_layout.addWidget(self.milleFeuilleIRM,stretch=2)
+        
+        self.addLayout(vertical_layout,1,1)
+        ##########################
+        
+        
         
         self.dessinerMilleFeuilleIRM(0)
     
@@ -67,6 +90,13 @@ class TabMilleFeuilleIRM(QGridLayout) :
         self.milleFeuilleIRM.dessinerMilleFeuilleIRM( [imageX, self.barreDeScrollIRMCoucheX.value() ],
                                                       [imageY, self.barreDeScrollIRMCoucheY.value() ], 
                                                       [imageZ, self.barreDeScrollIRMCoucheZ.value() ] )
+        
+        #################################"
+        self.valeur_temps.setText("Temps : " + str(self.barreDeScrollIRMTemps.value()))
+        self.valeur_X.setText("X : " + str(self.barreDeScrollIRMCoucheX.value()))
+        self.valeur_Y.setText("Y : " + str(self.barreDeScrollIRMCoucheY.value()))
+        self.valeur_Z.setText("Z : " + str(self.barreDeScrollIRMCoucheZ.value()))
+        ###################################
         
         print( "[Debug TabMilleFeuilleIRM] X : " + str( self.barreDeScrollIRMCoucheX.value() ) + ", Y : " + str( self.barreDeScrollIRMCoucheY.value() ) + ", Z : " + str( self.barreDeScrollIRMCoucheZ.value() ) + ", Temps : " + str( self.barreDeScrollIRMTemps.value() ) )
         print( "[Debug TabMilleFeuilleIRM] Affichage : " + imageX + ", " + imageY + ", " + imageZ )
