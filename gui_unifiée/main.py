@@ -108,6 +108,7 @@ def lancerOuOuvrirTraitement( lancer ) :
         
         if autorisationDeLancer :
             # TODO : Passer en param à la GUI le fichier du traitement
+            # C'est fait avec les variables d'environnement, et récupéré par parametres.py
             fenetre = Fenetre( loadGraphique3D( os.environ[ PREFIX_VAR_ENV + "URL_GRAPHIQUE_3D" ] ) ) # Crée un objet de type Fenetre
             fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
             fenetre.show() # Affiche la fenêtre
