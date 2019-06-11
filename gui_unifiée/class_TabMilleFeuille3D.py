@@ -52,7 +52,7 @@ class TabMilleFeuille3D(QGridLayout) :
         
         ##############################
         self.valeur_temps = QLabel("Temps : 0")
-        self.valeur_Z = QLabel("X : 0")
+        self.valeur_Z = QLabel("Z : 0")
         
         horizontal_layout = QHBoxLayout()
         vertical_layout = QVBoxLayout()
@@ -88,7 +88,7 @@ class TabMilleFeuille3D(QGridLayout) :
         
         #########################
         self.valeur_temps.setText("Temps : " + str(self.barreDeScrollMFTemps.value()))
-        self.valeur_Z.setText("X : " + str(self.barreDeScrollMFCoucheMin.value()))
+        self.valeur_Z.setText("Z : " + str(self.barreDeScrollMFCoucheMin.value()))
         
         print( "[Debug TabMilleFeuille3D] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
         if ANTI_LAG : print( "[Debug TabMilleFeuille3D] Affichage : " + urlImage )
