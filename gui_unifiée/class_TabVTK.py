@@ -49,13 +49,13 @@ class TabVTK(QGridLayout) :
         self.vl.addWidget(self.vtkWidget)
         
         
-        #################
+        # Ajout Maylis
         vertical_layout=QVBoxLayout()
         self.valeur_temps=QLabel("Temps : 0")
         vertical_layout.addWidget(self.valeur_temps)
         vertical_layout.addWidget(self.frame, stretch=2)
         self.addLayout(vertical_layout,1,1)
-        #################
+        # Fin Ajout Maylis
         
         
         self.ren = vtk.vtkRenderer()
