@@ -64,6 +64,7 @@ def importerTraitement( fichier ) :
     OK = True
     for variable in variablesAImporter :
         try :
+            # On les met en variables d'environnement pour que parametres.py puisse les récupérer facilement lorsqu'il est appelé par les autres parties du projet
             os.environ[ PREFIX_VAR_ENV + variable ] = str( fichierExporté[ variable ] )
         except KeyError :
             print( "[Erreur] Le fichier ne contient pas les variables nécéssaires !" )
