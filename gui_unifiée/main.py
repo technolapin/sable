@@ -12,6 +12,8 @@ import shelve # Permet de sauvegarder et charger des variables
 
 from numpy import load
 
+from parametres_gui import PREFIX_VAR_ENV
+
 
 """
 Fonction de validation du fichier demandé
@@ -57,9 +59,7 @@ def importerTraitement( fichier ) :
     OK = True
     for variable in variablesAImporter :
         try :
-            temp = str( fichierExporté[ variable ] )
-            print(temp)
-            os.environ[variable] = temp
+            os.environ[ PREFIX_VAR_ENV + variable ] = str( fichierExporté[ variable ] )
         except KeyError :
             print( "[Erreur] Le fichier ne contient pas les variables nécéssaires !" )
             OK = False
@@ -98,7 +98,7 @@ def lancerOuOuvrirTraitement( lancer ) :
         
         if autorisationDeLancer :
             # TODO : Passer en param à la GUI le fichier du traitement
-            fenetre = Fenetre( loadGraphique3D( "../extraction/tracking_3D/resultats.npy" ) ) # Crée un objet de type Fenetre
+            fenetre = Fenetre( loadGraphique3D( os.environ[ PREFIX_VAR_ENV + "URL_GRAPHIQUE_3D" ] ) ) # Crée un objet de type Fenetre
             fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
             fenetre.show() # Affiche la fenêtre
             application.exec_() # Attendre que tout ce qui est en cours soit exécuté
