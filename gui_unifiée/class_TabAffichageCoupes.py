@@ -6,7 +6,7 @@ import sys
 #from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QScrollBar, QHBoxLayout, QVBoxLayout
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QScrollBar, QHBoxLayout, QVBoxLayout, QGroupBox,QRadioButton
 import functools
 from math import floor
 
@@ -62,9 +62,9 @@ class TabAffichageCoupes(QGridLayout) :
         
         # Ajout des barres de scroll 
         self.addWidget(self.barreScrollTemps, 2, 1)
-        self.addWidget(self.barreScrollAxeX, 1, 2)
-        self.addWidget(self.barreScrollAxeY, 1, 3)
-        self.addWidget(self.barreScrollAxeZ, 1, 4)
+        self.addWidget(self.barreScrollAxeX, 1, 3)
+        self.addWidget(self.barreScrollAxeY, 1, 4)
+        self.addWidget(self.barreScrollAxeZ, 1, 5)
         
         
         """
@@ -138,6 +138,49 @@ class TabAffichageCoupes(QGridLayout) :
         vertical_layout.addWidget(contenant_widget,stretch=2)
         
         self.addLayout(vertical_layout,1,1)
+        
+        
+        
+        """
+        RadioButton pour choisir le traitement à afficher
+        """
+        group_box1=QGroupBox("Images utilisées")
+
+        bouton1=QRadioButton("Images originales")
+        bouton2=QRadioButton("Images seuillées")
+        bouton3=QRadioButton("Images du Watershade")
+        
+        group_box2=QGroupBox("Contours")
+
+        bouton4=QRadioButton("Sans contours")
+        bouton5=QRadioButton("Contours en blanc")
+        bouton6=QRadioButton("Contours en couleur")
+        
+        bouton1.setChecked(True)
+        bouton5.setChecked(True)
+
+        vl_boutons1=QVBoxLayout()
+        vl_boutons1.addWidget(bouton1)
+        vl_boutons1.addWidget(bouton2)
+        vl_boutons1.addWidget(bouton3)
+        
+        vl_boutons2=QVBoxLayout()
+        vl_boutons2.addWidget(bouton4)
+        vl_boutons2.addWidget(bouton5)
+        vl_boutons2.addWidget(bouton6)
+#        self.addLayout(vl_boutons,1,2)
+ 
+        group_box1.setLayout(vl_boutons1)
+        group_box2.setLayout(vl_boutons2)
+        
+        contenant=QVBoxLayout()
+        contenant.addWidget(group_box1)
+        contenant.addWidget(group_box2)
+        
+        self.addLayout(contenant,1,2)
+        self.setColumnStretch(1,2)
+ 
+       
     
     """
     Obtenir la position du clic
