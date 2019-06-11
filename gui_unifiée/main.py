@@ -6,10 +6,11 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from class_Fenetre import Fenetre
-from parametres_pour_demo import grapheDeDemonstration
 
-# Source : https://www.bnmetrics.com/blog/dynamic-import-in-python3
-from importlib import import_module
+# Source : http://python.jpvweb.com/python/mesrecettespython/doku.php?id=sauve_recup_objets
+import shelve # Permet de sauvegarder et charger des variables
+
+from numpy import load
 
 
 """
@@ -26,30 +27,52 @@ def validationFichier( fichier, lancer ) :
 
 """
 Fonction de traitement d'image (Appel tout le travail de traitement d'image)
-@param fichier : Fichier choisi par l'utilisateur
+@param fichier : Fichier TIFF choisi par l'utilisateur
 """
 def traitementImage( fichier ) :
-    return
+    fichierExporte = "./exemple_fichier_exportation/exemple"
+    return fichierExporte
 
 
+"""
+Importer un fichier exporté par le système de traitement
+@param fichier : Fichier d'exportation du traitement
+@return False si ça a merdé
+"""
 def importerTraitement( fichier ) :
-    sauvegardeRepertoireCourant = os.path.dirname( os.path.realpath(__file__) ) # On sauvegarde le répertoire courant
-    repertoireFichier, fichierDemandé = os.path.split( os.path.abspath(fichier) ) # On prend le répertoire du fichier demandé
-    os.chdir( repertoireFichier ) # On va dans le répertoire, pour faire des import
-    
-    print( repertoireFichier + fichierDemandé )
-    
-    fichierDemandéSansExtension = os.path.splitext( fichierDemandé )[0]
-    
-    import_module( fichierDemandé )
-    """
     try :
-        import fichierDemandéSansExtension
-    except ModuleNotFoundError :
-        print( "Fichier introuvable !" )
-    """
+        fichierExporté = shelve.open( fichier[0:-4] )
+    except Exception :
+        print( "[Erreur] Fichier invalide !" )
+        return False
     
-    os.chdir( sauvegardeRepertoireCourant )
+    variablesAImporter = [ "NB_IMGS",
+                           "INTERVALLE_XY",
+                           "INTERVALLE_XZ",
+                           "INTERVALLE_YZ",
+                           "URL_PGM",
+                           "URL_VTK",
+                           "URL_GRAPHIQUE_3D" ]
+    
+    OK = True
+    for variable in variablesAImporter :
+        try :
+            temp = str( fichierExporté[ variable ] )
+            print(temp)
+            os.environ[variable] = temp
+        except KeyError :
+            print( "[Erreur] Le fichier ne contient pas les variables nécéssaires !" )
+            OK = False
+    
+    fichierExporté.close()
+    return OK
+
+
+"""
+Ouvrir fichier Numpy (.npy) pour Graphique 3D
+"""
+def loadGraphique3D( fichierNumpy ) :
+    return load( fichierNumpy )[30:50]
 
 
 """
@@ -67,15 +90,18 @@ def lancerOuOuvrirTraitement( lancer ) :
     if not validationFichier( fichierDemande, lancer ) : # Si la validation de ce fichier échoue
         QMessageBox.about(None, "Information", "Ce fichier est invalide !")
     else :
-        if lancer : traitementImage( fichierDemande )
+        if lancer :
+            fichierExporte = traitementImage( fichierDemande )
+            autorisationDeLancer = importerTraitement( fichierExporte )
+        else :
+            autorisationDeLancer = importerTraitement( fichierDemande )
         
-#        importerTraitement( fichierDemande )
-        
-        # TODO : Passer en param à la GUI le fichier du traitement
-        fenetre = Fenetre( grapheDeDemonstration ) # Crée un objet de type Fenetre
-        fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
-        fenetre.show() # Affiche la fenêtre
-        application.exec_() # Attendre que tout ce qui est en cours soit exécuté
+        if autorisationDeLancer :
+            # TODO : Passer en param à la GUI le fichier du traitement
+            fenetre = Fenetre( loadGraphique3D( "../extraction/tracking_3D/resultats.npy" ) ) # Crée un objet de type Fenetre
+            fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
+            fenetre.show() # Affiche la fenêtre
+            application.exec_() # Attendre que tout ce qui est en cours soit exécuté
 
 
 """
@@ -100,7 +126,7 @@ if __name__ == '__main__' :
     else :
         print( "[Debug] L'utilisateur ne veut pas lancer un nouveau traitement" )
         msgBox = QMessageBox()
-        msgBox.setText("Voulez-vous ouvrir un traitement déjà effectué ?")
+        msgBox.setText("Voulez-vous ouvrir un traitement déjà effectué ? (Ouvrir un fichier DAT)")
         msgBox.setWindowTitle("Information")
         msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         returnValue = msgBox.exec()
