@@ -2,7 +2,7 @@
 
 #importations
 import os
-
+import numpy as np
 #donnes
 n_tempo = 16 # nb de temps
 n_coupes_xy = 250 # dimensions des colones en nombres de coupes
@@ -96,7 +96,7 @@ for grain in formes[0]:
             if (d2 < dist_min and abs(gr_prec[0]-suivant[0]) < seuil_volume):
                 dist_min = d2
                 plus_proche = suivant
-        grains[len(grains)-1][1].append(suivant[:3])
+        grains[len(grains)-1][1].append(plus_proche[:3])
 #print(grains)
 
 
@@ -110,10 +110,14 @@ for grain in grains:
         y.append(coords[1])
         z.append(coords[2])
     resultats.append([x, y, z])
-
-
-from ../gui_unfiée/class_TabGraphique3D import TabGraphique3D
-
+    
+np.save("tracking_3D/resultats.npy", resultats)
+"""
+for meh in resultats:
+    for yolo in meh:
+        print(yolo)
+    print("\n\n\n\n")
+"""
 
 def retrouve_grain(x,y,z,t):
     

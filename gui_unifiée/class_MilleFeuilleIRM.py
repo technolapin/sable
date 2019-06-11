@@ -43,7 +43,7 @@ class MilleFeuilleIRM(FigureCanvasQTAgg) :
         self.axes.set_xlabel( 'Axe X' ) # Label sur l'axe X
         self.axes.set_ylabel( 'Axe Y' ) # Label sur l'axe Y
         self.axes.set_zlabel( 'Axe Z' ) # Label sur l'axe Z
-        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
+#        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
         
         """ Plan en YZ (Pour imageX) """
         if os.path.isfile( imageX[0] ) : # Si le chemin d'accès à l'image existe
