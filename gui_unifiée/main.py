@@ -32,7 +32,7 @@ Fonction de traitement d'image (Appel tout le travail de traitement d'image)
 @param fichier : Fichier TIFF choisi par l'utilisateur
 """
 def traitementImage( fichier ) :
-    fichierExporte = "./exemple_fichier_exportation/exemple"
+    fichierExporte = "./exemple_fichier_exportation/exemple.dat"
     return fichierExporte
 
 
@@ -42,6 +42,7 @@ Importer un fichier exporté par le système de traitement
 @return False si ça a merdé
 """
 def importerTraitement( fichier ) :
+    print( "[Info] Importation du traitement : " + fichier )
     try :
         fichierExporté = shelve.open( fichier[0:-4] )
     except Exception :
