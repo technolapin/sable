@@ -5,7 +5,7 @@ import sys
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QFrame, QVBoxLayout, QScrollBar
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QFrame, QVBoxLayout, QScrollBar, QLabel
 
 import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
@@ -48,11 +48,22 @@ class TabVTK(QGridLayout) :
         self.vtkWidget = QVTKRenderWindowInteractor(self.frame)
         self.vl.addWidget(self.vtkWidget)
         
+        
+        #################
+        vertical_layout=QVBoxLayout()
+        self.valeur_temps=QLabel("Temps : 0")
+        vertical_layout.addWidget(self.valeur_temps)
+        vertical_layout.addWidget(self.frame, stretch=2)
+        self.addLayout(vertical_layout,1,1)
+        #################
+        
+        
         self.ren = vtk.vtkRenderer()
         self.vtkWidget.GetRenderWindow().AddRenderer(self.ren)
         self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
         
         #self.actor = vtk.vtkActor()
+       
         
         self.actors = []
         for instantTemporel in range( int(nombreInstantsTemporels()) + 1 ) :
@@ -85,7 +96,7 @@ class TabVTK(QGridLayout) :
 #        self.ren.ResetCamera()
         
         self.frame.setLayout(self.vl)
-        self.addWidget(self.frame, 1, 1)
+#        self.addWidget(self.frame, 1, 1)
         
         self.iren.Initialize()
         self.iren.Start()
@@ -96,6 +107,10 @@ class TabVTK(QGridLayout) :
     def dessinerVTK(self, value) :
         instantTemporel = self.barreDeScrollTemps.value()
         print ( "[Debug TabVTK] Affichage : " + genererURLdesVTK( instantTemporel ) )
+        
+        ############
+        self.valeur_temps.setText("Temps : " + str(instantTemporel))
+        ############
         
         self.ren.RemoveActor( self.actors[self.actorPrecedent] )
         self.ren.AddActor( self.actors[instantTemporel] )
