@@ -6,7 +6,7 @@ import sys
 #from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QScrollBar, QHBoxLayout, QVBoxLayout, QGroupBox,QRadioButton
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QScrollBar, QHBoxLayout, QVBoxLayout, QGroupBox,QRadioButton, QPushButton, QProgressBar
 import functools
 from math import floor
 
@@ -115,6 +115,7 @@ class TabAffichageCoupes(QGridLayout) :
         contenant_grille.addWidget(texte_yz, 1, 3)
         contenant_grille.addWidget(texte_zx, 1, 1)
         
+        self.setColumnStretch(1,2)
         
         # Image des axes
         label_image_axes = QLabel()
@@ -122,6 +123,8 @@ class TabAffichageCoupes(QGridLayout) :
         contenant_grille.addWidget(label_image_axes,2,2)
         if not os.path.isfile( IMAGE_AXES ) : # Si le chemin d'accès à l'image n'existe pas
             print( "[Erreur TabAffichageCoupes] " + IMAGE_AXES + " n'existe pas !" )
+
+
         
         
         """
@@ -141,34 +144,34 @@ class TabAffichageCoupes(QGridLayout) :
         
         
         
+        
         """
         RadioButton pour choisir le traitement à afficher
         """
         group_box1=QGroupBox("Images utilisées")
 
-        bouton1=QRadioButton("Images originales")
-        bouton2=QRadioButton("Images seuillées")
-        bouton3=QRadioButton("Images du Watershade")
+        self.bouton1=QRadioButton("Images originales")
+        self.bouton2=QRadioButton("Images seuillées")
+        self.bouton3=QRadioButton("Images du Watershade")
         
         group_box2=QGroupBox("Contours")
 
-        bouton4=QRadioButton("Sans contours")
-        bouton5=QRadioButton("Contours en blanc")
-        bouton6=QRadioButton("Contours en couleur")
-        
-        bouton1.setChecked(True)
-        bouton5.setChecked(True)
+        self.bouton4=QRadioButton("Sans contours")
+        self.bouton5=QRadioButton("Contours en blanc")
+        self.bouton6=QRadioButton("Contours en couleur")
+            
+        self.bouton1.setChecked(True)
+        self.bouton5.setChecked(True)
 
         vl_boutons1=QVBoxLayout()
-        vl_boutons1.addWidget(bouton1)
-        vl_boutons1.addWidget(bouton2)
-        vl_boutons1.addWidget(bouton3)
+        vl_boutons1.addWidget(self.bouton1)
+        vl_boutons1.addWidget(self.bouton2)
+        vl_boutons1.addWidget(self.bouton3)
         
         vl_boutons2=QVBoxLayout()
-        vl_boutons2.addWidget(bouton4)
-        vl_boutons2.addWidget(bouton5)
-        vl_boutons2.addWidget(bouton6)
-#        self.addLayout(vl_boutons,1,2)
+        vl_boutons2.addWidget(self.bouton4)
+        vl_boutons2.addWidget(self.bouton5)
+        vl_boutons2.addWidget(self.bouton6)
  
         group_box1.setLayout(vl_boutons1)
         group_box2.setLayout(vl_boutons2)
@@ -178,9 +181,43 @@ class TabAffichageCoupes(QGridLayout) :
         contenant.addWidget(group_box2)
         
         self.addLayout(contenant,1,2)
-        self.setColumnStretch(1,2)
  
-       
+        """
+        Bouton pour charger l'image et barre de chargement
+        """
+        bouton_chargement=QPushButton("Chargement des images")
+        bouton_chargement.clicked.connect(self.charger_images)
+        #self.button.clicked.connect(self.onButtonClick)
+        ########## LANCER LE TRAITEMENT A L'AIDE D'UNE FONCTION
+        contenant.addWidget(bouton_chargement)
+        self.progress = QProgressBar()
+        self.progress.setMaximum(100)
+        
+        contenant.addWidget(self.progress)
+        
+        
+    
+    def charger_images(self):
+        #### LANCER LE CODE DE CLEMENT ET BARBARA
+        if (self.bouton1.isChecked()):
+            print("Prendre l'image originale")
+        elif (self.bouton2.isChecked()):
+            print("Prendre l'image seuillée")
+        elif (self.bouton3.isChecked()):
+            print("Prendre le rendu du Watershade")
+        
+        if (self.bouton4.isChecked()):
+            print("Ne rien faire")
+        elif (self.bouton5.isChecked()):
+            print("Faire le contour en blanc")
+        elif (self.bouton6.isChecked()):
+            print("Faire le contour en couleur")
+        
+        
+        
+        self.progress.setValue(self.progress.value()+1)
+        
+
     
     """
     Obtenir la position du clic
