@@ -76,6 +76,10 @@ os.system("mkdir coupes_3D/x_y")
 os.system("mkdir coupes_3D/x_z")
 os.system("mkdir coupes_3D/y_z")
 
+os.system("rm -R border_3D")
+os.system("mkdir border_3D")
+
+
 os.system("rm -R labels_3D")
 os.system("mkdir labels_3D")
 
@@ -146,7 +150,11 @@ for t in range(0, n_tempo):
     command("inverse images_3D/image_3D_superpose_t"+padding_temporel+".pgm "+
             "images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm ")
 
-
+    
+    #border
+    command("border images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 border_3D/border_3D_t_"+padding_temporel+".pgm")
+    command("add images_3D/image_3D_t"+padding_temporel+".pgm border_3D/border_3D_t_"+padding_temporel+".pgm border_3D/border_3D_t_"+padding_temporel+"_add.pgm")
+    
     #barycentres
     
     command("3dlabel images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm labels_3D/label_t_"+padding_temporel+".pgm")
@@ -162,10 +170,8 @@ for t in range(0, n_tempo):
 
     #extraction des coupes 2D sur les 3 plans
     
-
-     # pour moins de repetitions
-    debut_commande = "extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "
-
+    # pour moins de repetitions
+    debut_commande= "extractplane border_3D/border_3D_t_"+padding_temporel+"_add.pgm "
 
 
     #extraction des coupes sur (x,y)
@@ -174,7 +180,21 @@ for t in range(0, n_tempo):
 
     for u in range(0, n_coupes_xy):
 
-        command(debut_commande+str(u)+" xy "+ "coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+".pgm")
+        if (u==0 or u==n_coupes_xy-1):
+            
+            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(u)+" xy "+
+                    "coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_wa.pgm")
+            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(u)+" xy "+
+                    "coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_org.pgm")
+            
+            command("border coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                    "_wa.pgm 8 coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_border.pgm")
+            
+            command("add coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                    "_org.pgm  coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                    "_border.pgm coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+".pgm")
+        else:
+            command(debut_commande+str(u)+" xy "+ "coupes_3D/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+".pgm")
         
         
     #extraction des coupes sur (x,z)
@@ -183,18 +203,50 @@ for t in range(0, n_tempo):
     
     for u in range(0, n_coupes_xz):
         
-        v=n_coupes_xz-u
-    
-        command(debut_commande+str(u)+" xz "+ "coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+".pgm")
+        v=n_coupes_xz-u-1  #car extractplane ne les donnait pas dans le bon "sens"
         
-    
+        if (v==0 or v==n_coupes_xy-1):
+            
+            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(v)+" xz "+
+                    "coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_wa.pgm")
+            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(v)+" xz "+
+                    "coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_org.pgm")
+            
+            command("border coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
+                    "_wa.pgm 8 coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_border.pgm")
+            
+            command("add coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
+                    "_org.pgm  coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
+                    "_border.pgm coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+".pgm")
+        else:        
+            command(debut_commande+str(v)+" xz "+ "coupes_3D/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+".pgm")
+
+
+
+   
     #extraction des coupes sur (y,z)
     
     os.system("mkdir coupes_3D/y_z/"+padding_temporel)
     
     for u in range(0, n_coupes_yz):
         
-        command(debut_commande+str(u)+" yz "+ "coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+".pgm")        
         
+        if (u==0 or u==n_coupes_xy-1):
+            
+            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(u)+" yz "+
+                    "coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_wa.pgm")
+            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(u)+" yz "+
+                    "coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_org.pgm")
+            
+            command("border coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                    "_wa.pgm 8 coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_border.pgm")
+            
+            command("add coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                    "_org.pgm  coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                    "_border.pgm coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+".pgm")
+        
+        else:
+            command(debut_commande+str(u)+" yz "+ "coupes_3D/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+".pgm")
+    
 
        

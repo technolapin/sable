@@ -3,7 +3,7 @@ import sys
 #from PyQt5.QtCore import *
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QHBoxLayout, QVBoxLayout, QLabel
 
 from class_Graphique3D import Graphique3D
 
@@ -22,6 +22,23 @@ class TabGraphique3D(QGridLayout) :
     """
     def __init__(self, grapheDonne, parent=None) :
         super(TabGraphique3D, self).__init__(parent) # Appel du constructeur de QGridLayout
+        
+        
+        vertical_layout=QVBoxLayout()
+        
+        ##### Valeurs actuelles des barres de scroll
+        horizontal_layout = QHBoxLayout()
+        
+        self.valeur_temps = QLabel("Temps : 0")
+        self.valeur_courbe = QLabel("X : 0")
+        
+        horizontal_layout.addWidget(self.valeur_courbe)
+        horizontal_layout.addWidget(self.valeur_temps)
+        
+        
+        vertical_layout.addLayout(horizontal_layout)
+        #####
+        
         
         # Graphe à afficher
         self.graphe = grapheDonne
@@ -49,9 +66,10 @@ class TabGraphique3D(QGridLayout) :
         self.barreDeScrollTemps.valueChanged.connect( self.dessinerGraphique3D )
         
 #        self.addWidget( self.menuSelection, 1, 1 ) # Ajoute le menu déroulant en position ligne 2 colonne 1
-        self.addWidget( self.graphique3D, 2, 1 ) # Ajoute le graphique 3D en position ligne 2 colonne 1
-        self.addWidget( self.barreDeScrollCourbes, 2, 2 ) # Ajoute la barre de défilement 1 en position ligne 2 colonne 2
-        self.addWidget( self.barreDeScrollTemps, 2, 3 ) # Ajoute la barre de défilement 2 en position ligne 2 colonne 2
+        vertical_layout.addWidget( self.graphique3D , stretch=2) # Ajoute le graphique 3D en position ligne 2 colonne 1
+        self.addLayout(vertical_layout,1,1)
+        self.addWidget( self.barreDeScrollCourbes,1,2 ) # Ajoute la barre de défilement 1 en position ligne 2 colonne 2
+        self.addWidget( self.barreDeScrollTemps,1,3 ) # Ajoute la barre de défilement 2 en position ligne 2 colonne 2
             
         self.dessinerGraphique3D(0) # Afficher graphique de base
     
@@ -67,6 +85,12 @@ class TabGraphique3D(QGridLayout) :
 #       Devenu inutlie puisqu'on a supprimé les menus déroulants
          self.graphique3D.dessinerGraphique3D( self.graphe, self.barreDeScrollCourbes.value(), self.barreDeScrollTemps.value() )
          
+         self.valeur_temps.setText("Temps : " + str(self.barreDeScrollTemps.value()))
+         if (self.barreDeScrollCourbes.value()==0):
+             self.valeur_courbe.setText("Courbe : Toutes les courbes")
+         else :
+             self.valeur_courbe.setText("Courbe : " + str(self.barreDeScrollCourbes.value()))
+        
          print( "[Debug TabGraphique3D] Temps : " + str( self.barreDeScrollCourbes.value() ) + ", Courbe : " + str( self.barreDeScrollTemps.value() ) + ", Valeur donnée : " + str( value ) )
 
 
