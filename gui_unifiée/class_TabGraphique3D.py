@@ -56,8 +56,8 @@ class TabGraphique3D(QGridLayout) :
         
         # Défilement coupes
         self.barreDeScrollCourbes = QScrollBar() # C'est une barre de défilement
-        self.barreDeScrollCourbes.setMaximum( len(self.graphe[0]) ) # Défini le nombre de valeurs qu'on peut y parcourir
-        # len(self.graphe[0][0]) est le nombre de courbes
+        self.barreDeScrollCourbes.setMaximum( len(self.graphe) ) # Défini le nombre de valeurs qu'on peut y parcourir
+        # len(self.graphe) est le nombre de courbes
         self.barreDeScrollCourbes.valueChanged.connect( self.dessinerGraphique3D ) # La procédure à appeler lorsque l'utilisateur y touche
         
         # Défilement temporel
