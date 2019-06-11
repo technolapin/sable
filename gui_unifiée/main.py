@@ -24,6 +24,10 @@ Fonction de validation du fichier demandé
 def validationFichier( fichier, lancer ) :
     if fichier == "" :
         return False
+    if lancer and fichier[-4:] != ".tiff" :
+        return False
+    if not lancer and fichier[-4:] != ".dat" :
+        return False
     return True
 
 
@@ -87,13 +91,14 @@ Demande à l'utilisateur un fichier pour lancer un traitement ou ouvrir un fichi
 def lancerOuOuvrirTraitement( lancer ) :
     fileDialog = QFileDialog() # Crée un objet de type QFileDialog (Fenêtre pour choisir un fichier)
     if lancer : fileDialog.setWindowTitle("Veuillez choisir le fichier TIFF") # Définit le nom de la fenêtre
-    else : fileDialog.setWindowTitle("Veuillez choisir le fichier")
+    else : fileDialog.setWindowTitle("Veuillez choisir le fichier DAT")
     fichierDemande = fileDialog.getOpenFileName()[0] # Permet aussi d'attendre qu'il y ait un fichier demandé
     print( "[Debug] Fichier demandé : " + fichierDemande )
     fileDialog.close() # Fermer la fenêtre
     
     if not validationFichier( fichierDemande, lancer ) : # Si la validation de ce fichier échoue
-        QMessageBox.about(None, "Information", "Ce fichier est invalide !")
+        if lancer : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .TIFF !")
+        else : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .DAT !")
     else :
         if lancer :
             fichierExporte = traitementImage( fichierDemande )
@@ -107,6 +112,8 @@ def lancerOuOuvrirTraitement( lancer ) :
             fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
             fenetre.show() # Affiche la fenêtre
             application.exec_() # Attendre que tout ce qui est en cours soit exécuté
+        else :
+            QMessageBox.about(None, "Information", "Fichier .DAT inutilisable !")
 
 
 """
@@ -131,7 +138,7 @@ if __name__ == '__main__' :
     else :
         print( "[Debug] L'utilisateur ne veut pas lancer un nouveau traitement" )
         msgBox = QMessageBox()
-        msgBox.setText("Voulez-vous ouvrir un traitement déjà effectué ? (Ouvrir un fichier DAT)")
+        msgBox.setText("Voulez-vous ouvrir un traitement déjà effectué ? (Ouvrir un fichier .DAT)")
         msgBox.setWindowTitle("Information")
         msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         returnValue = msgBox.exec()
