@@ -78,7 +78,8 @@ def importerTraitement( fichier ) :
 Ouvrir fichier Numpy (.npy) pour Graphique 3D
 """
 def loadGraphique3D( fichierNumpy ) :
-    return load( fichierNumpy )[30:50]
+#    return load( fichierNumpy )[30:50]
+    return load( fichierNumpy )
 
 
 """

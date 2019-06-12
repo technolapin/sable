@@ -14,7 +14,7 @@ Code principal
 application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
 
 msgBox = QMessageBox()
-msgBox.setText("Voulez-vous lancer un nouveau traitement ?")
+msgBox.setText("Voulez-vous lancer un nouveau traitement ?\n(Ouvrir un fichier .TIFF)")
 msgBox.setWindowTitle("Information")
 msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
 returnValue = msgBox.exec()
@@ -26,7 +26,7 @@ if returnValue == QMessageBox.Yes :
 else :
     print( "[Debug] L'utilisateur ne veut pas lancer un nouveau traitement" )
     msgBox = QMessageBox()
-    msgBox.setText("Voulez-vous ouvrir un traitement déjà effectué ? (Ouvrir un fichier .DAT)")
+    msgBox.setText("Voulez-vous ouvrir un traitement déjà effectué ?\n(Ouvrir un fichier .DAT)")
     msgBox.setWindowTitle("Information")
     msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
     returnValue = msgBox.exec()

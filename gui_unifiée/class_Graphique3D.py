@@ -36,9 +36,27 @@ class Graphique3D(FigureCanvasQTAgg) :
 #        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
         if courbeAfficher != 0 :
             couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
-            self.axes.plot( liste[courbeAfficher - 1][0], liste[courbeAfficher - 1][1], liste[courbeAfficher - 1][2], couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
+            if tempsAfficher != 0 :
+                self.axes.plot( [liste[courbeAfficher - 1][0][tempsAfficher]],
+                                [liste[courbeAfficher - 1][1][tempsAfficher]],
+                                [liste[courbeAfficher - 1][2][tempsAfficher]],
+                                couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
+            else :
+                self.axes.plot( liste[courbeAfficher - 1][0],
+                                liste[courbeAfficher - 1][1],
+                                liste[courbeAfficher - 1][2],
+                                couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
         else :
             for courbe in liste :
                 couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
-                self.axes.plot( courbe[0], courbe[1], courbe[2], couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
+                if tempsAfficher != 0 :
+                    self.axes.plot( [courbe[0][tempsAfficher]],
+                                    [courbe[1][tempsAfficher]],
+                                    [courbe[2][tempsAfficher]],
+                                    couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
+                else :
+                    self.axes.plot( courbe[0],
+                                    courbe[1],
+                                    courbe[2],
+                                    couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
         self.draw() # Dessine le graphique 3D avec les axes

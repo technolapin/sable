@@ -6,7 +6,7 @@ PARAMETRES
 """
 
 PREFIX_VAR_ENV = "GUI_" # Peut être n'importe quoi
-ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
+ENABLE_ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
 DISABLE_VTK = True # Désactiver l'onglet du VTK
 
 try :
