@@ -5,7 +5,7 @@ import sys
 #from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QApplication, QMessageBox, QFileDialog
 
-from functions_Main import lancerOuOuvrirTraitement
+from functions_main import lancerOuOuvrirTraitement
 
 
 """
