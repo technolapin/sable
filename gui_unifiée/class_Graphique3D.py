@@ -37,10 +37,13 @@ class Graphique3D(FigureCanvasQTAgg) :
         if courbeAfficher != 0 :
             couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
             if tempsAfficher != 0 :
-                self.axes.plot( [liste[courbeAfficher - 1][0][tempsAfficher]],
-                                [liste[courbeAfficher - 1][1][tempsAfficher]],
-                                [liste[courbeAfficher - 1][2][tempsAfficher]],
-                                couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
+                try :
+                    self.axes.plot( [liste[courbeAfficher - 1][0][tempsAfficher]],
+                                    [liste[courbeAfficher - 1][1][tempsAfficher]],
+                                    [liste[courbeAfficher - 1][2][tempsAfficher]],
+                                    couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
+                except IndexError :
+                    print( "[Erreur] Les courbes n'ont pas la même longueur !" )
             else :
                 self.axes.plot( liste[courbeAfficher - 1][0],
                                 liste[courbeAfficher - 1][1],
@@ -50,10 +53,13 @@ class Graphique3D(FigureCanvasQTAgg) :
             for courbe in liste :
                 couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
                 if tempsAfficher != 0 :
-                    self.axes.plot( [courbe[0][tempsAfficher]],
-                                    [courbe[1][tempsAfficher]],
-                                    [courbe[2][tempsAfficher]],
-                                    couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
+                    try :
+                        self.axes.plot( [courbe[0][tempsAfficher]],
+                                        [courbe[1][tempsAfficher]],
+                                        [courbe[2][tempsAfficher]],
+                                        couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
+                    except IndexError :
+                        print( "[Erreur] Les courbes n'ont pas la même longueur !" )
                 else :
                     self.axes.plot( courbe[0],
                                     courbe[1],

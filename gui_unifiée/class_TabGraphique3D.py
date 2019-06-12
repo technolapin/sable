@@ -98,7 +98,7 @@ class TabGraphique3D(QGridLayout) :
              self.valeur_courbe.setText("Courbe : " + str(self.barreDeScrollCourbes.value()))
          # Fin Ajout Maylis
         
-         print( "[Debug TabGraphique3D] Temps : " + str( self.barreDeScrollCourbes.value() ) + ", Courbe : " + str( self.barreDeScrollTemps.value() ) + ", Valeur donnée : " + str( value ) )
+         print( "[Debug TabGraphique3D] Temps : " + str( self.barreDeScrollTemps.value() ) + ", Courbe : " + str( self.barreDeScrollCourbes.value() ) + ", Valeur donnée : " + str( value ) )
 
 
 """
