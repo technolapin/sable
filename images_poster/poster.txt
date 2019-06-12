@@ -1,0 +1,28 @@
+2D:
+250 coupes sur 16 temps sont extraites du fichier fourni.
+
+//le problème de grains collés:
+
+carte des distances
+Après seuillage des images on génère la carte des distances de chaque coupe.
+L'image obtenue permet de délimiter les contours des grains.
+
+IMAGE carte de distances
+
+watershed
+L'application d'un watershed permet de séparer les grains
+
+IMAGE grains bien sépraré
+
+
+3D:
+On produit à partir des coupes 2D une image 3D des grains pour chaque temps.
+On effectue ensuite le précédent traitement sur les images 3D.
+
+IMAGE 3D apres le watershed
+
+Tracking:
+
+Les grains sont identifiés par leur volume et leur barycentre (x,y,z). 
+fonction: retrouve_grain paranètre: x,y,z,t
+Elle retourne la position(x,y,z) du grain aux 16 temps qui est utilisée pour le graphique 3D.
