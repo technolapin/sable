@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QLab
 from class_MilleFeuille3D import MilleFeuille3D
 
 from functions_urlDesFichiersTraites import *
+from parametres import ENABLE_ANTI_LAG
 
 
 """
@@ -45,7 +46,7 @@ class TabMilleFeuille3D(QGridLayout) :
         # Ajout des Widgets
 #        self.addWidget( self.milleFeuille3D, 2, 1 )
         self.addWidget( self.barreDeScrollMFCoucheMin, 1, 2 )
-        if not ANTI_LAG : self.addWidget( self.barreDeScrollMFCoucheMax, 1, 3 )
+        if not ENABLE_ANTI_LAG : self.addWidget( self.barreDeScrollMFCoucheMax, 1, 3 )
         # Ne pas l'afficher quand l'ANTI_LAG est activé, donc inutilisable, donc une seule couche affichée
         self.addWidget( self.barreDeScrollMFTemps, 2, 1 )
         
@@ -72,14 +73,14 @@ class TabMilleFeuille3D(QGridLayout) :
     Gère le dessin et les changements du mille-feuilles 3D
     """
     def dessinerMilleFeuille3D(self, value) :
-        # Si ANTI_LAG est activé, ET/OU que barreDeScrollMFCoucheMax est à 0 (Forcément si ANTI_LAG), on ne commande qu'avec barreDeScrollMFCoucheMin
+        # Si ENABLE_ANTI_LAG est activé, ET/OU que barreDeScrollMFCoucheMax est à 0 (Forcément si ENABLE_ANTI_LAG), on ne commande qu'avec barreDeScrollMFCoucheMin
         listeImages = [] # Liste des images que on veut afficher dans le mille-feuilles
         if self.barreDeScrollMFCoucheMax.value() != 0 : # Commander le défilement avec les deux barres
             for i in range(self.barreDeScrollMFCoucheMin.value(), self.barreDeScrollMFCoucheMax.value(), 1) :
                 urlImage = genererURLdesPGM3D( 'XY', self.barreDeScrollMFTemps.value(), i ) # Chemin de l'image
                 hauteurImage = self.barreDeScrollMFCoucheMin.value() + i # Hauteur de l'image dans le mille-feuille
                 listeImages.append( [urlImage, hauteurImage] )
-        else : # Permet de ne commander qu'avec le défilement de la valeur minimum, forcément si ANTI_LAG activé
+        else : # Permet de ne commander qu'avec le défilement de la valeur minimum, forcément si ENABLE_ANTI_LAG activé
             urlImage = genererURLdesPGM3D( 'XY', self.barreDeScrollMFTemps.value(), self.barreDeScrollMFCoucheMin.value() )
             listeImages.append( [urlImage, self.barreDeScrollMFCoucheMin.value()] )
         
@@ -91,7 +92,7 @@ class TabMilleFeuille3D(QGridLayout) :
         # Fin Ajout Maylis
         
         print( "[Debug TabMilleFeuille3D] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
-        if ANTI_LAG : print( "[Debug TabMilleFeuille3D] Affichage : " + urlImage )
+        if ENABLE_ANTI_LAG : print( "[Debug TabMilleFeuille3D] Affichage : " + urlImage )
 
 
 """
