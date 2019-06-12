@@ -62,7 +62,7 @@ class TabGraphique3D(QGridLayout) :
         
         # Défilement temporel
         self.barreDeScrollTemps = QScrollBar()
-        self.barreDeScrollTemps.setMaximum( len(self.graphe[0][0]) + 1 ) # Temps à 0 signifie tous les temps
+        self.barreDeScrollTemps.setMaximum( len(self.graphe[0][0]) ) # Temps à 0 signifie tous les temps
         # len(self.graphe[0][0]) est le nombre d'échantillons temporels dont on dispose
         self.barreDeScrollTemps.valueChanged.connect( self.dessinerGraphique3D )
         
@@ -95,7 +95,7 @@ class TabGraphique3D(QGridLayout) :
          if self.barreDeScrollCourbes.value() == 0 :
              self.valeur_courbe.setText("Courbe : Toutes les courbes")
          else :
-             self.valeur_courbe.setText("Courbe : " + str(self.barreDeScrollCourbes.value()))
+             self.valeur_courbe.setText("Courbe : " + str(self.barreDeScrollCourbes.value() - 1))
          # Fin Ajout Maylis
         
          print( "[Debug TabGraphique3D] Temps : " + str( self.barreDeScrollTemps.value() ) + ", Courbe : " + str( self.barreDeScrollCourbes.value() ) + ", Valeur donnée : " + str( value ) )

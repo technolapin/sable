@@ -38,9 +38,9 @@ class Graphique3D(FigureCanvasQTAgg) :
             couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
             if tempsAfficher != 0 :
                 try :
-                    self.axes.plot( [liste[courbeAfficher - 1][0][tempsAfficher]],
-                                    [liste[courbeAfficher - 1][1][tempsAfficher]],
-                                    [liste[courbeAfficher - 1][2][tempsAfficher]],
+                    self.axes.plot( [liste[courbeAfficher - 1][0][tempsAfficher - 1]],
+                                    [liste[courbeAfficher - 1][1][tempsAfficher - 1]],
+                                    [liste[courbeAfficher - 1][2][tempsAfficher - 1]],
                                     couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
                 except IndexError :
                     print( "[Erreur] Les courbes n'ont pas la même longueur !" )
@@ -54,9 +54,9 @@ class Graphique3D(FigureCanvasQTAgg) :
                 couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
                 if tempsAfficher != 0 :
                     try :
-                        self.axes.plot( [courbe[0][tempsAfficher]],
-                                        [courbe[1][tempsAfficher]],
-                                        [courbe[2][tempsAfficher]],
+                        self.axes.plot( [courbe[0][tempsAfficher - 1]],
+                                        [courbe[1][tempsAfficher - 1]],
+                                        [courbe[2][tempsAfficher - 1]],
                                         couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
                     except IndexError :
                         print( "[Erreur] Les courbes n'ont pas la même longueur !" )
