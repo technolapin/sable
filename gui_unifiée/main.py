@@ -36,4 +36,5 @@ else :
         lancerOuOuvrirTraitement( False, application )
     
     else :
+        print( "[Debug] L'utilisateur ne veut pas ouvrir un traitement déjà effectué." )
         QMessageBox.about(None, "Information", "Au revoir !")
