@@ -19,6 +19,8 @@ class Graphique3D(FigureCanvasQTAgg) :
         self.figure.subplots_adjust(bottom=0, top=1, left=0, right=1) # Supprime les marges
         FigureCanvasQTAgg.__init__( self, self.figure ) # Objet de type FigureCanvas
         self.axes = self.figure.gca( projection = '3d' ) # On lui dit qu'on veut des axes 3D, et on les stockes dans un attribut
+        
+        self.aEteInit = False
     
     """
     Dessine ou actualise avec un nouveau graphique
@@ -29,7 +31,22 @@ class Graphique3D(FigureCanvasQTAgg) :
     @param "tempsAfficher" : L'instant à afficher dans "liste" + 1, 0 si il faut afficher tous les instants
     """
     def dessinerGraphique3D(self, liste, courbeAfficher, tempsAfficher) : # Procédure qui dessine le graphique
+        if self.aEteInit :
+            # Sauvegarde taille des axes
+            saveXLim = self.axes.get_xlim()
+            saveYLim = self.axes.get_ylim()
+            saveZLim = self.axes.get_zlim()
+        
         self.axes.clear() # Nettoie les axes et leur contenu
+        
+        if self.aEteInit :
+            # Remet la sauvegarde
+            self.axes.set_xlim(saveXLim)
+            self.axes.set_ylim(saveYLim)
+            self.axes.set_zlim(saveZLim)
+        
+        self.aEteInit = True
+        
         self.axes.set_xlabel( 'Axe X' ) # Label sur l'axe X
         self.axes.set_ylabel( 'Axe Y' ) # Label sur l'axe Y
         self.axes.set_zlabel( 'Axe Z' ) # Label sur l'axe Z
