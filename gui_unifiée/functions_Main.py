@@ -85,7 +85,7 @@ def loadGraphique3D( fichierNumpy ) :
 Demande à l'utilisateur un fichier pour lancer un traitement ou ouvrir un fichier de traitement
 @param lancer : True pour lancer un traitement, False pour ouvrir un traitement
 """
-def lancerOuOuvrirTraitement( lancer ) :
+def lancerOuOuvrirTraitement( lancer, application ) :
     fileDialog = QFileDialog() # Crée un objet de type QFileDialog (Fenêtre pour choisir un fichier)
     if lancer : fileDialog.setWindowTitle("Veuillez choisir le fichier TIFF") # Définit le nom de la fenêtre
     else : fileDialog.setWindowTitle("Veuillez choisir le fichier DAT")

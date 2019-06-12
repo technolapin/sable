@@ -14,6 +14,7 @@ from class_TabVTK import TabVTK
 from class_TabAide import TabAide
 
 from parametres_pour_demo import grapheDeDemonstration
+from parametres import DISABLE_VTK
     
 
 """
@@ -35,7 +36,7 @@ class Fenetre(QTabWidget) :
         self.onglet2 = QWidget()
         self.onglet3 = QWidget()
         self.onglet4 = QWidget()
-        self.onglet5 = QWidget()
+        if not DISABLE_VTK : self.onglet5 = QWidget()
         self.onglet6 = QWidget() 
         
         # Ajout des onglets à la fenêtre
@@ -43,7 +44,7 @@ class Fenetre(QTabWidget) :
         self.addTab( self.onglet2, "Mille-feuilles" )
         self.addTab( self.onglet3, "Vision IRM" )
         self.addTab( self.onglet4, "Coupes" )
-        self.addTab( self.onglet5, "VTK" )
+        if not DISABLE_VTK : self.addTab( self.onglet5, "VTK" )
         self.addTab( self.onglet6, "Aide" )
         
         # Remplissage des onglets en créant les grilles
@@ -51,7 +52,7 @@ class Fenetre(QTabWidget) :
         self.onglet2.setLayout( TabMilleFeuille3D() )
         self.onglet3.setLayout( TabMilleFeuilleIRM() )
         self.onglet4.setLayout( TabAffichageCoupes() )
-        self.onglet5.setLayout( TabVTK() )
+        if not DISABLE_VTK : self.onglet5.setLayout( TabVTK() )
         self.onglet6.setLayout( TabAide() )
 
 

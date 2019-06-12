@@ -33,7 +33,7 @@ else :
     
     if returnValue == QMessageBox.Yes :
         print( "[Debug] L'utilisateur veut ouvrir un traitement déjà effectué." )
-        lancerOuOuvrirTraitement( False )
+        lancerOuOuvrirTraitement( False, application )
     
     else :
         QMessageBox.about(None, "Information", "Au revoir !")

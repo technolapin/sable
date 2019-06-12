@@ -7,6 +7,7 @@ PARAMETRES
 
 PREFIX_VAR_ENV = "GUI_" # Peut être n'importe quoi
 ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
+DISABLE_VTK = True # Désactiver l'onglet du VTK
 
 try :
     NB_IMGS = int( os.environ[ PREFIX_VAR_ENV + "NB_IMGS" ] )
