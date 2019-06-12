@@ -45,7 +45,7 @@ class TabMilleFeuille3D(QGridLayout) :
         # Ajout des Widgets
 #        self.addWidget( self.milleFeuille3D, 2, 1 )
         self.addWidget( self.barreDeScrollMFCoucheMin, 1, 2 )
-        if not ANTI_LAG : self.addWidget( self.barreDeScrollMFCoucheMax, 2, 3 )
+        if not ANTI_LAG : self.addWidget( self.barreDeScrollMFCoucheMax, 1, 3 )
         # Ne pas l'afficher quand l'ANTI_LAG est activé, donc inutilisable, donc une seule couche affichée
         self.addWidget( self.barreDeScrollMFTemps, 2, 1 )
         
