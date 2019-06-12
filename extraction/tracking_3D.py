@@ -11,6 +11,10 @@ n_coupes_yz = 80
 
 seuil = 170 #pour les images en noir et blanc
 
+
+
+
+
 #appel de fc de pink
 def command(cmd):
     os.system("../pink/linux/bin/"+cmd)
@@ -49,7 +53,11 @@ def numerote(n, l):
     
 formes=[]
 
-#traitement pour chaque temps
+
+
+
+
+#Enleve les formes qui ne sont pas des grains de la liste des barry
 
 for t in range(0, n_tempo):
     
@@ -78,6 +86,8 @@ grain1 [vol, [[x0, y0, z0], [x1, y1, z1]]]
 
 def dist2(g1, g2):
     return pow(g1[0]-g2[0], 2) + pow(g1[1]-g2[1], 2) + pow(g1[2]-g2[2], 2)
+
+
 
 seuil_volume = 1000
 
@@ -121,6 +131,40 @@ for meh in resultats:
 
 def retrouve_grain(x,y,z,t):
     
-    os.system("mkdir area")
-    command ("selectcomp images_3D/image_3D_superpose_inv_t"+numerote(t,2)+".pgm 26 "+str(x)+" "+str(y)+" "+str(z)+" tracking_3D/track_t_"+str(t)+"_"+str(x)+"_"+str(y)+"_"+str(z)+".pgm")    
-   
+    padding_temporel = numerote(t, 2)
+    
+    #retrouve le grain et sa coupe
+    command ("selectcomp images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 "+str(x)+" "+str(y)+" "+str(z)+
+             " tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+".pgm")    
+    
+    #barycentre
+    command("3dlabel tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+
+            ".pgm labels_3D/label_t_"+padding_temporel+"_"+str(x)+str(y)+str(z)+".pgm")
+    
+    command("barycentrelab labels_3D/label_t_"+padding_temporel+"_"+str(x)+str(y)+str(z)+
+            ".pgm bary_3D/bary_3D_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".pgm")
+    
+    command("pgm2list bary_3D/bary_3D_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+
+            ".pgm B bary_3D/liste/bary_list_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".list")
+    
+    bary= parse_list("bary_3D/liste/bary_list_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".list")
+    print(bary)
+    xb=bary[0][0]
+    yb=bary[0][1]
+    zb=bary[0][2]
+    for grain in range(len(resultats)):
+        if(resultats[grain][0][t]==xb and resultats[grain][1][t]==yb and resultats[grain][2][t]==zb):
+            return resultats[grain]
+#    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
