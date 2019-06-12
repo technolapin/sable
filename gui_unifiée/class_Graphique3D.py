@@ -66,6 +66,11 @@ class Graphique3D(FigureCanvasQTAgg) :
                                 liste[courbeAfficher - 1][1],
                                 liste[courbeAfficher - 1][2],
                                 couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
+                self.axes.plot( [liste[courbeAfficher - 1][0][0]],
+                                [liste[courbeAfficher - 1][1][0]],
+                                [liste[courbeAfficher - 1][2][0]],
+                                'ko-' ) # Affiche le début de la courbe en noir
+
         else :
             for courbe in liste :
                 couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
