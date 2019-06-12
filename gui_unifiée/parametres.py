@@ -1,12 +1,11 @@
 import os
 
-from parametres_gui import PREFIX_VAR_ENV
-
 
 """
 PARAMETRES
 """
 
+PREFIX_VAR_ENV = "GUI_" # Peut être n'importe quoi
 ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
 
 try :
