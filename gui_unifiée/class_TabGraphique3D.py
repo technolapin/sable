@@ -49,7 +49,11 @@ class TabGraphique3D(QGridLayout) :
         # Graphe à afficher
         if __name__ != '__main__' : # Si on n'est pas le script principal
             print( "[Debug TabGraphique3D] Fichier NPY utilisé : " + self.objParams.genererURLGraph3D() )
-            self.graphe = load( self.objParams.genererURLGraph3D() )
+            try :
+                self.graphe = load( self.objParams.genererURLGraph3D() )
+            except FileNotFoundError :
+                print( "[Debug TabGraphique3D] " + self.objParams.genererURLGraph3D() + " n'existe pas !" )
+                self.graphe = [[[],[],[]]]
         else :
             self.graphe = grapheDeDemonstration
         
@@ -101,11 +105,13 @@ class TabGraphique3D(QGridLayout) :
     """
     Modifier position barres de scrolls
     """
-    def setScrollBarsValues( self, courbe = None, temps = None ):
+    def setScrollBarsValues( self, courbe = None, temps = None ) :
         if courbe != None :
             self.barreDeScrollTemps.setValue(courbe)
+            print( "[Debug TabGraphique3D] Valeurs forcées : Courbe = " + courbe )
         if temps != None :
             self.barreDeScrollTemps.setValue(temps)
+            print( "[Debug TabGraphique3D] Valeur forcée : Temps = " + temps )
 
 
 """
