@@ -14,7 +14,6 @@ from class_TabVTK import TabVTK
 from class_TabAide import TabAide
 
 from parametres_graph3D_pour_demo import grapheDeDemonstration # Ne sert que si est exécuté séparemment
-from parametres import DISABLE_VTK
     
 
 """

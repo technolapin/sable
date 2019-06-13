@@ -42,7 +42,7 @@ Importer un fichier exporté par le système de traitement
 @return False si ça a merdé
 """
 def importerTraitement( fichier ) :
-    print( "[Info] Importation du traitement : " + fichier )
+    print( "[Info Main] Importation du traitement : " + fichier )
     try :
         fichierExporté = shelve.open( fichier[0:-4], flag='c' ) # 'c' pour lecture seule
     except Exception :
