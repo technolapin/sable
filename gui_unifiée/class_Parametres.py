@@ -10,7 +10,7 @@ class Parametres() :
         """
         Valeurs par défaut
         """
-        self.contientDesVariablesImportees = False
+        self.contientVariablesImportees = False
         
         self.NB_IMGS = parametres.NB_IMGS # Nombre d'images au format PGM
         self.INTERVALLE_XY = parametres.INTERVALLE_XY # Intervalle temporel dans cette liste d'images, c'est à dire le pas dans le plan XY

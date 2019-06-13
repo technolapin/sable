@@ -60,6 +60,8 @@ def importerTraitement( fichier, objParams ) :
         print( "[Erreur] Le fichier ne contient pas les variables nécéssaires !" )
         return False
     
+    objParams.contientVariablesImportees = True
+    
     # Sauvegarde du répertoire absolu du répertorie du fichier d'exportation
     # Sert à localiser à partir des URL relatives qu'il contient
     objParams.CHEMIN_ABSOLU_FICHIER_IMPORTE = os.path.dirname(os.path.abspath( fichier ))
