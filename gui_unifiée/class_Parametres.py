@@ -48,8 +48,11 @@ class Parametres() :
         if plan == 'XY' :
             fichierPGM = self.URL_PGM + "x_y/" + tempsFormate + "/t_" + tempsFormate + "coupe_xy_" + coucheFormate + ".pgm"
         
-        # Les URL doivent être relatives au fichier d'importation
-        return join(self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), fichierPGM.replace("\\", "/"))
+        if self.contientVariablesImportees :
+            # Les URL doivent être relatives au fichier d'importation
+            return join(self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), fichierPGM.replace("\\", "/"))
+        else :
+            return fichierPGM
     
     """
     @param instantTemporel : L'instant temporel du VTK
@@ -58,15 +61,21 @@ class Parametres() :
         tempsFormate = format(instantTemporel, '02d') # String sur 2 digits
         fichierVTK = self.URL_VTK + tempsFormate + ".vtk"
         
-        # Les URL doivent être relatives au fichier d'importation
-        return join(self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), fichierVTK.replace("\\", "/"))
+        if self.contientVariablesImportees :
+            # Les URL doivent être relatives au fichier d'importation
+            return join(self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), fichierVTK.replace("\\", "/"))
+        else :
+            return fichierVTK
     
     """
     @return URL du fichier NPY à utiliser
     """
     def genererURLGraph3D(self) :
-        # Les URL doivent être relatives au fichier d'importation
-        return join(self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), self.URL_GRAPHIQUE_3D.replace("\\", "/"))
+        if self.contientVariablesImportees :
+            # Les URL doivent être relatives au fichier d'importation
+            return join(self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), self.URL_GRAPHIQUE_3D.replace("\\", "/"))
+        else :
+            return self.URL_GRAPHIQUE_3D
     
     
     """
