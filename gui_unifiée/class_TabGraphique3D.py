@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QHBo
 
 from class_Graphique3D import Graphique3D
 
-from functions_urlDesFichiersTraites import *
+from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 from parametres_graph3D_pour_demo import grapheDeDemonstration # Ne sert que si est exécuté séparemment
 
 from numpy import load
@@ -23,8 +23,10 @@ class TabGraphique3D(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
-    def __init__(self, parent=None) :
+    def __init__(self, objParams, parent=None) :
         super(TabGraphique3D, self).__init__(parent) # Appel du constructeur de QGridLayout
+        
+        self.objParams = objParams
         
         
         # Ajout Maylis
@@ -46,8 +48,8 @@ class TabGraphique3D(QGridLayout) :
         
         # Graphe à afficher
         if __name__ != '__main__' : # Si on n'est pas le script principal
-            print( "[Debug TabGraphique3D] Fichier NPY utilisé : " + genererURLGraph3D() )
-            self.graphe = load( genererURLGraph3D() )
+            print( "[Debug TabGraphique3D] Fichier NPY utilisé : " + self.objParams.genererURLGraph3D() )
+            self.graphe = load( self.objParams.genererURLGraph3D() )
         else :
             self.graphe = grapheDeDemonstration
         
@@ -107,6 +109,6 @@ if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
     fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
-    fenetre.setLayout( TabGraphique3D() )
+    fenetre.setLayout( TabGraphique3D( Parametres() ) )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

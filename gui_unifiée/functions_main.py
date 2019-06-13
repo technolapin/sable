@@ -5,10 +5,9 @@ from PyQt5.QtWidgets import QMessageBox, QFileDialog
 # Source : http://python.jpvweb.com/python/mesrecettespython/doku.php?id=sauve_recup_objets
 import shelve # Permet de sauvegarder et charger des variables
 
-from numpy import load
+from class_Parametres import Parametres
 
 from class_Fenetre import Fenetre
-from parametres import PREFIX_VAR_ENV
 
 
 """
@@ -41,7 +40,7 @@ Importer un fichier exporté par le système de traitement
 @param fichier : Fichier d'exportation du traitement
 @return False si ça a merdé
 """
-def importerTraitement( fichier ) :
+def importerTraitement( fichier, objParams ) :
     print( "[Info Main] Importation du traitement : " + fichier )
     try :
         fichierExporté = shelve.open( fichier[0:-4], flag='c' ) # 'c' pour lecture seule
@@ -49,29 +48,24 @@ def importerTraitement( fichier ) :
         print( "[Erreur] Fichier invalide !" )
         return False
     
-    variablesAImporter = [ "NB_IMGS",
-                           "INTERVALLE_XY",
-                           "INTERVALLE_XZ",
-                           "INTERVALLE_YZ",
-                           "URL_PGM",
-                           "URL_VTK",
-                           "URL_GRAPHIQUE_3D" ]
-    
-    OK = True
-    for variable in variablesAImporter :
-        try :
-            # On les met en variables d'environnement pour que parametres.py puisse les récupérer facilement lorsqu'il est appelé par les autres parties du projet
-            os.environ[ PREFIX_VAR_ENV + variable ] = str( fichierExporté[ variable ] )
-        except KeyError :
-            print( "[Erreur] Le fichier ne contient pas les variables nécéssaires !" )
-            OK = False
+    try :
+        objParams.setNB_IMGS( fichierExporté[ "NB_IMGS" ] )
+        objParams.setINTERVALLE_XY( fichierExporté[ "INTERVALLE_XY" ] )
+        objParams.setINTERVALLE_XZ( fichierExporté[ "INTERVALLE_XZ" ] )
+        objParams.setINTERVALLE_YZ( fichierExporté[ "INTERVALLE_YZ" ] )
+        objParams.setURL_PGM( fichierExporté[ "URL_PGM" ] )
+        objParams.setURL_VTK( fichierExporté[ "URL_VTK" ] )
+        objParams.setURL_GRAPHIQUE_3D( fichierExporté[ "URL_GRAPHIQUE_3D" ] )
+    except KeyError :
+        print( "[Erreur] Le fichier ne contient pas les variables nécéssaires !" )
+        return False
     
     # Sauvegarde du répertoire absolu du répertorie du fichier d'exportation
     # Sert à localiser à partir des URL relatives qu'il contient
-    os.environ[ PREFIX_VAR_ENV + "REPERTOIRE" ] = os.path.dirname(os.path.abspath( fichier ))
+    objParams.setCHEMIN_ABSOLU_FICHIER_IMPORTE( os.path.dirname(os.path.abspath( fichier )) )
     
     fichierExporté.close()
-    return OK
+    return True
 
 
 """
@@ -90,16 +84,17 @@ def lancerOuOuvrirTraitement( lancer, application ) :
         if lancer : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .TIFF !")
         else : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .DAT !")
     else :
+        creationObjParams = Parametres()
         if lancer :
             fichierExporte = traitementImage( fichierDemande )
-            autorisationDeLancer = importerTraitement( fichierExporte )
+            autorisationDeLancer = importerTraitement( fichierExporte, creationObjParams )
         else :
-            autorisationDeLancer = importerTraitement( fichierDemande )
+            autorisationDeLancer = importerTraitement( fichierDemande, creationObjParams )
         
         if autorisationDeLancer :
             # TODO : Passer en param à la GUI le fichier du traitement
             # C'est fait avec les variables d'environnement, et récupéré par parametres.py
-            fenetre = Fenetre() # Crée un objet de type Fenetre
+            fenetre = Fenetre( objParams = creationObjParams ) # Crée un objet de type Fenetre
             fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
             fenetre.show() # Affiche la fenêtre
             application.exec_() # Attendre que tout ce qui est en cours soit exécuté

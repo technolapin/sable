@@ -10,8 +10,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QLabel, QScrollB
 import functools
 from math import floor
 
-
-from functions_urlDesFichiersTraites import *
+from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 
 
 """
@@ -30,8 +29,10 @@ class TabAffichageCoupes(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
-    def __init__(self, parent=None) :
+    def __init__(self, objParams, parent=None) :
         super(TabAffichageCoupes, self).__init__(parent) # Appel du constructeur de QGridLayout
+        
+        self.objParams = objParams
         
         
         vertical_layout=QVBoxLayout()
@@ -41,22 +42,22 @@ class TabAffichageCoupes(QGridLayout) :
         """
         # Défilement de la couche X
         self.barreScrollAxeX = QScrollBar()
-        self.barreScrollAxeX.setMaximum( nombreImagesPlanYZ() )
+        self.barreScrollAxeX.setMaximum( self.objParams.nombreImagesPlanYZ() )
         self.barreScrollAxeX.valueChanged.connect( self.changeImages )
         
         # Défilement de la couche Y
         self.barreScrollAxeY = QScrollBar()
-        self.barreScrollAxeY.setMaximum( nombreImagesPlanXZ() )
+        self.barreScrollAxeY.setMaximum( self.objParams.nombreImagesPlanXZ() )
         self.barreScrollAxeY.valueChanged.connect( self.changeImages )
         
         # Défilement de la couche Z
         self.barreScrollAxeZ = QScrollBar()
-        self.barreScrollAxeZ.setMaximum( nombreImagesPlanXY() )
+        self.barreScrollAxeZ.setMaximum( self.objParams.nombreImagesPlanXY() )
         self.barreScrollAxeZ.valueChanged.connect( self.changeImages )
         
         # Défilement temporel
         self.barreScrollTemps = QScrollBar(Qt.Horizontal)
-        self.barreScrollTemps.setMaximum( nombreInstantsTemporels() )
+        self.barreScrollTemps.setMaximum( self.objParams.nombreInstantsTemporels() )
         self.barreScrollTemps.valueChanged.connect( self.changeImages )
         
         
@@ -260,7 +261,7 @@ class TabAffichageCoupes(QGridLayout) :
                                              ", Z : " + str(self.barreScrollAxeZ.value()) )
         
         # Image plan (X, Y)
-        image_xy = genererURLdesPGM3D( 'XY', self.barreScrollTemps.value(), self.barreScrollAxeZ.value() )
+        image_xy = self.objParams.genererURLdesPGM3D( 'XY', self.barreScrollTemps.value(), self.barreScrollAxeZ.value() )
         if os.path.isfile( image_xy ) : # Si le chemin d'accès à l'image existe
             width=self.label_image_xy.width()
             height=self.label_image_xy.height()
@@ -269,7 +270,7 @@ class TabAffichageCoupes(QGridLayout) :
             print( "[Erreur TabAffichageCoupes] " + image_xy + " n'existe pas !" )
 
         # Image plan (Y, Z)
-        image_yz = genererURLdesPGM3D( 'YZ', self.barreScrollTemps.value(), self.barreScrollAxeX.value() )
+        image_yz = self.objParams.genererURLdesPGM3D( 'YZ', self.barreScrollTemps.value(), self.barreScrollAxeX.value() )
         if os.path.isfile( image_yz ) : # Si le chemin d'accès à l'image existe
             width=self.label_image_yz.width()
             height=self.label_image_yz.height()
@@ -278,7 +279,7 @@ class TabAffichageCoupes(QGridLayout) :
             print( "[Erreur TabAffichageCoupes] " + image_yz + " n'existe pas !" )
         
         # Image plan (X, Z)
-        image_zx = genererURLdesPGM3D( 'XZ', self.barreScrollTemps.value(), self.barreScrollAxeY.value() )
+        image_zx = self.objParams.genererURLdesPGM3D( 'XZ', self.barreScrollTemps.value(), self.barreScrollAxeY.value() )
         if os.path.isfile( image_zx ) : # Si le chemin d'accès à l'image existe
             width=self.label_image_zx.width()
             height=self.label_image_zx.height()
@@ -302,6 +303,6 @@ if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
     fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
-    fenetre.setLayout( TabAffichageCoupes() )
+    fenetre.setLayout( TabAffichageCoupes( Parametres() ) )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

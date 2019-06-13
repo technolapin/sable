@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QLab
 
 from class_MilleFeuille3D import MilleFeuille3D
 
-from functions_urlDesFichiersTraites import *
+from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 from parametres import ENABLE_ANTI_LAG
 
 
@@ -22,25 +22,27 @@ class TabMilleFeuille3D(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
-    def __init__(self, parent=None) :
+    def __init__(self, objParams, parent=None) :
         super(TabMilleFeuille3D, self).__init__(parent) # Appel du constructeur de QGridLayout
+        
+        self.objParams = objParams
         
         # Graphe à afficher
         self.milleFeuille3D = MilleFeuille3D()
         
         # Défilement de couches inférieures (Valeur de la couche minimum à afficher)
         self.barreDeScrollMFCoucheMin = QScrollBar()
-        self.barreDeScrollMFCoucheMin.setMaximum( nombreImagesPlanXY() )
+        self.barreDeScrollMFCoucheMin.setMaximum( self.objParams.nombreImagesPlanXY() )
         self.barreDeScrollMFCoucheMin.valueChanged.connect( self.dessinerMilleFeuille3D )
         
         # Défilement de couches supérieures (Valeur de la couche maximum à afficher)
         self.barreDeScrollMFCoucheMax = QScrollBar()
-        self.barreDeScrollMFCoucheMax.setMaximum( nombreImagesPlanXY() )
+        self.barreDeScrollMFCoucheMax.setMaximum( self.objParams.nombreImagesPlanXY() )
         self.barreDeScrollMFCoucheMax.valueChanged.connect( self.dessinerMilleFeuille3D )
         
         # Défilement temporel
         self.barreDeScrollMFTemps = QScrollBar(Qt.Horizontal)
-        self.barreDeScrollMFTemps.setMaximum( nombreInstantsTemporels() )
+        self.barreDeScrollMFTemps.setMaximum( self.objParams.nombreInstantsTemporels() )
         self.barreDeScrollMFTemps.valueChanged.connect( self.dessinerMilleFeuille3D )
         
         # Ajout des Widgets
@@ -77,11 +79,11 @@ class TabMilleFeuille3D(QGridLayout) :
         listeImages = [] # Liste des images que on veut afficher dans le mille-feuilles
         if self.barreDeScrollMFCoucheMax.value() != 0 : # Commander le défilement avec les deux barres
             for i in range(self.barreDeScrollMFCoucheMin.value(), self.barreDeScrollMFCoucheMax.value(), 1) :
-                urlImage = genererURLdesPGM3D( 'XY', self.barreDeScrollMFTemps.value(), i ) # Chemin de l'image
+                urlImage = self.objParams.genererURLdesPGM3D( 'XY', self.barreDeScrollMFTemps.value(), i ) # Chemin de l'image
                 hauteurImage = self.barreDeScrollMFCoucheMin.value() + i # Hauteur de l'image dans le mille-feuille
                 listeImages.append( [urlImage, hauteurImage] )
         else : # Permet de ne commander qu'avec le défilement de la valeur minimum, forcément si ENABLE_ANTI_LAG activé
-            urlImage = genererURLdesPGM3D( 'XY', self.barreDeScrollMFTemps.value(), self.barreDeScrollMFCoucheMin.value() )
+            urlImage = self.objParams.genererURLdesPGM3D( 'XY', self.barreDeScrollMFTemps.value(), self.barreDeScrollMFCoucheMin.value() )
             listeImages.append( [urlImage, self.barreDeScrollMFCoucheMin.value()] )
         
         self.milleFeuille3D.dessinerMilleFeuille3D( listeImages )
@@ -105,6 +107,6 @@ if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
     fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
-    fenetre.setLayout( TabMilleFeuille3D() )
+    fenetre.setLayout( TabMilleFeuille3D( Parametres() ) )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

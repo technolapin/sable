@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QFrame, QVBoxLay
 import vtk
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
-from functions_urlDesFichiersTraites import *
+from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 
 
 FICHIER = "../amaury/tests/test.vtk"
@@ -26,15 +26,17 @@ class TabVTK(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
-    def __init__(self, parent=None) :
+    def __init__(self, objParams, parent=None) :
         super(TabVTK, self).__init__(parent) # Appel du constructeur de QGridLayout
+        
+        self.objParams = objParams
         
         """
         Divers
         """
         # Défilement temporel
         self.barreDeScrollTemps = QScrollBar(Qt.Horizontal)
-        self.barreDeScrollTemps.setMaximum( nombreInstantsTemporels() )
+        self.barreDeScrollTemps.setMaximum( self.objParams.nombreInstantsTemporels() )
         self.barreDeScrollTemps.valueChanged.connect( self.dessinerVTK )
         self.addWidget( self.barreDeScrollTemps, 2, 1 )
         
@@ -66,8 +68,8 @@ class TabVTK(QGridLayout) :
        
         
         self.actors = []
-        for instantTemporel in range( int(nombreInstantsTemporels()) + 1 ) :
-            fichierVTK = genererURLdesVTK( instantTemporel )
+        for instantTemporel in range( int(self.objParams.nombreInstantsTemporels()) + 1 ) :
+            fichierVTK = self.objParams.genererURLdesVTK( instantTemporel )
             
             if not os.path.isfile( fichierVTK ) :
                 print ( "[Erreur TabVTK] " + fichierVTK + " n'existe pas !" )
@@ -106,7 +108,7 @@ class TabVTK(QGridLayout) :
     """
     def dessinerVTK(self, value) :
         instantTemporel = self.barreDeScrollTemps.value()
-        print ( "[Debug TabVTK] Affichage : " + genererURLdesVTK( instantTemporel ) )
+        print ( "[Debug TabVTK] Affichage : " + self.objParams.genererURLdesVTK( instantTemporel ) )
         
         # Ajout Maylis
         self.valeur_temps.setText("Temps : " + str(instantTemporel))
@@ -128,6 +130,6 @@ if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
     fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
-    fenetre.setLayout( TabVTK() )
+    fenetre.setLayout( TabVTK( Parametres() ) )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

@@ -13,8 +13,9 @@ from class_TabAffichageCoupes import TabAffichageCoupes
 from class_TabVTK import TabVTK
 from class_TabAide import TabAide
 
+from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 from parametres_graph3D_pour_demo import grapheDeDemonstration # Ne sert que si est exécuté séparemment
-    
+
 
 """
 Classe Fenetre, hérite de la classe QTabWidget (Et plus QWidget vu qu'on veut faire des onglets)
@@ -24,8 +25,10 @@ class Fenetre(QTabWidget) :
     """
     Constructeur
     """
-    def __init__(self, parent=None) :
+    def __init__(self, objParams, parent=None) :
         super(Fenetre, self).__init__(parent) # Appel du constructeur de QTabWidget
+        
+        self.objParams = objParams
         
         # Taille minimale de la fenêtre, en pixels
         self.setMinimumSize( QSize(400, 400) )
@@ -53,12 +56,12 @@ class Fenetre(QTabWidget) :
         self.addTab( self.onglet6, "Aide" )
         
         # Remplissage des onglets en créant les grilles
-        self.onglet1.setLayout( TabGraphique3D() )
-        self.onglet2.setLayout( TabMilleFeuille3D() )
-        self.onglet3.setLayout( TabMilleFeuilleIRM() )
-        self.onglet4.setLayout( TabAffichageCoupes() )
-        if returnValue == QMessageBox.Yes : self.onglet5.setLayout( TabVTK() )
-        self.onglet6.setLayout( TabAide() )
+        self.onglet1.setLayout( TabGraphique3D( objParams = self.objParams ) )
+        self.onglet2.setLayout( TabMilleFeuille3D( objParams = self.objParams ) )
+        self.onglet3.setLayout( TabMilleFeuilleIRM( objParams = self.objParams ) )
+        self.onglet4.setLayout( TabAffichageCoupes( objParams = self.objParams ) )
+        if returnValue == QMessageBox.Yes : self.onglet5.setLayout( TabVTK( objParams = self.objParams ) )
+        self.onglet6.setLayout( TabAide( objParams = self.objParams ) )
 
 
 """
@@ -69,7 +72,7 @@ Code principal pour démonstration
 # Source : https://stackoverflow.com/questions/419163/what-does-if-name-main-do
 if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
-    fenetre = Fenetre() # Crée un objet de type Fenetre
+    fenetre = Fenetre( Parametres() ) # Crée un objet de type Fenetre
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QHBo
 
 from class_MilleFeuilleIRM import MilleFeuilleIRM
 
-from functions_urlDesFichiersTraites import *
+from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 
 
 """
@@ -21,30 +21,32 @@ class TabMilleFeuilleIRM(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
-    def __init__(self, parent=None) :
+    def __init__(self, objParams, parent=None) :
         super(TabMilleFeuilleIRM, self).__init__(parent) # Appel du constructeur de QGridLayout
+        
+        self.objParams = objParams
         
         # Graphe à afficher
         self.milleFeuilleIRM = MilleFeuilleIRM()
         
         # Défilement de la couche X
         self.barreDeScrollIRMCoucheX = QScrollBar()
-        self.barreDeScrollIRMCoucheX.setMaximum( nombreImagesPlanYZ() )
+        self.barreDeScrollIRMCoucheX.setMaximum( self.objParams.nombreImagesPlanYZ() )
         self.barreDeScrollIRMCoucheX.valueChanged.connect( self.dessinerMilleFeuilleIRM )
         
         # Défilement de la couche Y
         self.barreDeScrollIRMCoucheY = QScrollBar()
-        self.barreDeScrollIRMCoucheY.setMaximum( nombreImagesPlanXZ() )
+        self.barreDeScrollIRMCoucheY.setMaximum( self.objParams.nombreImagesPlanXZ() )
         self.barreDeScrollIRMCoucheY.valueChanged.connect( self.dessinerMilleFeuilleIRM )
         
         # Défilement de la couche Z
         self.barreDeScrollIRMCoucheZ = QScrollBar()
-        self.barreDeScrollIRMCoucheZ.setMaximum( nombreImagesPlanXY() )
+        self.barreDeScrollIRMCoucheZ.setMaximum( self.objParams.nombreImagesPlanXY() )
         self.barreDeScrollIRMCoucheZ.valueChanged.connect( self.dessinerMilleFeuilleIRM )
         
         # Défilement temporel
         self.barreDeScrollIRMTemps = QScrollBar(Qt.Horizontal)
-        self.barreDeScrollIRMTemps.setMaximum( nombreInstantsTemporels() )
+        self.barreDeScrollIRMTemps.setMaximum( self.objParams.nombreInstantsTemporels() )
         self.barreDeScrollIRMTemps.valueChanged.connect( self.dessinerMilleFeuilleIRM )
         
         # Ajout des Widgets
@@ -81,9 +83,9 @@ class TabMilleFeuilleIRM(QGridLayout) :
     Gère le dessin et les changements de l'affichage IRM
     """
     def dessinerMilleFeuilleIRM(self, value) :
-        imageX = genererURLdesPGM3D( 'YZ', self.barreDeScrollIRMTemps.value(), self.barreDeScrollIRMCoucheX.value() )
-        imageY = genererURLdesPGM3D( 'XZ', self.barreDeScrollIRMTemps.value(), self.barreDeScrollIRMCoucheX.value() )
-        imageZ = genererURLdesPGM3D( 'XY', self.barreDeScrollIRMTemps.value(), self.barreDeScrollIRMCoucheX.value() )
+        imageX = self.objParams.genererURLdesPGM3D( 'YZ', self.barreDeScrollIRMTemps.value(), self.barreDeScrollIRMCoucheX.value() )
+        imageY = self.objParams.genererURLdesPGM3D( 'XZ', self.barreDeScrollIRMTemps.value(), self.barreDeScrollIRMCoucheX.value() )
+        imageZ = self.objParams.genererURLdesPGM3D( 'XY', self.barreDeScrollIRMTemps.value(), self.barreDeScrollIRMCoucheX.value() )
         
         self.milleFeuilleIRM.dessinerMilleFeuilleIRM( [imageX, self.barreDeScrollIRMCoucheX.value() ],
                                                       [imageY, self.barreDeScrollIRMCoucheY.value() ], 
@@ -110,6 +112,6 @@ if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
     fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
-    fenetre.setLayout( TabMilleFeuilleIRM() )
+    fenetre.setLayout( TabMilleFeuilleIRM( Parametres() ) )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

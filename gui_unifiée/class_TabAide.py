@@ -7,6 +7,8 @@ import sys
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QTabWidget, QHBoxLayout, QScrollArea, QLabel, QSizePolicy
 
+from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
+
 
 """
 PARAMETRES
@@ -24,9 +26,11 @@ class TabAide(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
-    def __init__(self, parent=None) :
+    def __init__(self, objParams, parent=None) :
         super(TabAide, self).__init__(parent) # Appel du constructeur de QGridLayout
-
+        
+        self.objParams = objParams # Ne sert à rien pour le moment
+        
         # Création d'onglets dans la page d'aide
         onglets = QTabWidget()
         onglets.setTabPosition(2)
@@ -100,6 +104,6 @@ if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
     fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
-    fenetre.setLayout( TabAide() )
+    fenetre.setLayout( TabAide( Parametres() ) )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté
