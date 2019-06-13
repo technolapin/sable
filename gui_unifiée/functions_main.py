@@ -17,11 +17,12 @@ Fonction de validation du fichier demandé
 """
 # TODO : A améliorer !
 def validationFichier( fichier, lancer ) :
+    extension = os.path.splitext(fichier)[1]
     if fichier == "" :
         return False
-    if lancer and fichier[-4:] != ".tiff" :
+    if lancer and extension != ".tiff" and extension != ".tif" :
         return False
-    if not lancer and fichier[-4:] != ".dat" :
+    if not lancer and extension != ".dat" and extension != ".db"  :
         return False
     return True
 
@@ -78,15 +79,15 @@ Demande à l'utilisateur un fichier pour lancer un traitement ou ouvrir un fichi
 """
 def lancerOuOuvrirTraitement( lancer, application ) :
     fileDialog = QFileDialog() # Crée un objet de type QFileDialog (Fenêtre pour choisir un fichier)
-    if lancer : fileDialog.setWindowTitle("Veuillez choisir le fichier TIFF") # Définit le nom de la fenêtre
-    else : fileDialog.setWindowTitle("Veuillez choisir le fichier DAT")
+    if lancer : fileDialog.setWindowTitle("Veuillez choisir le fichier .TIF") # Définit le nom de la fenêtre
+    else : fileDialog.setWindowTitle("Veuillez choisir le fichier .DAT ou .DB")
     fichierDemande = fileDialog.getOpenFileName()[0] # Permet aussi d'attendre qu'il y ait un fichier demandé
     print( "[Debug] Fichier demandé : " + fichierDemande )
     fileDialog.close() # Fermer la fenêtre
     
     if not validationFichier( fichierDemande, lancer ) : # Si la validation de ce fichier échoue
-        if lancer : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .TIFF !")
-        else : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .DAT !")
+        if lancer : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .TIF !")
+        else : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .DAT ou .DB !")
     else :
         creationObjParams = Parametres()
         if lancer :
@@ -103,4 +104,4 @@ def lancerOuOuvrirTraitement( lancer, application ) :
             fenetre.show() # Affiche la fenêtre
             application.exec_() # Attendre que tout ce qui est en cours soit exécuté
         else :
-            QMessageBox.about(None, "Information", "Fichier .DAT inutilisable !")
+            QMessageBox.about(None, "Information", "Fichier .DAT ou .DB inutilisable !")
