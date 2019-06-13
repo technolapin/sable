@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QHBo
 
 from class_Graphique3D import Graphique3D
 
-from parametres_pour_demo import grapheDeDemonstration
+from parametres_graph3D_pour_demo import grapheDeDemonstration # Ne sert que si est exécuté séparemment
 
 
 """
