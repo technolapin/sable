@@ -85,9 +85,9 @@ class TabAffichageCoupes(QGridLayout) :
         self.label_image_yz = QLabel()
         self.label_image_zx = QLabel()
         
-        print("[Debug TabAffichageCoupes] Image XY : ", self.label_image_xy)
-        print("[Debug TabAffichageCoupes] Image YZ : ", self.label_image_yz)
-        print("[Debug TabAffichageCoupes] Image ZX : ", self.label_image_zx)
+       # print("[Debug TabAffichageCoupes] Image XY : ", self.label_image_xy)
+        #print("[Debug TabAffichageCoupes] Image YZ : ", self.label_image_yz)
+        #print("[Debug TabAffichageCoupes] Image ZX : ", self.label_image_zx)
         
         self.label_image_xy.mousePressEvent=functools.partial(self.get_pixel, source_object=self.label_image_xy)
         self.label_image_yz.mousePressEvent=functools.partial(self.get_pixel, source_object=self.label_image_yz)
@@ -157,42 +157,32 @@ class TabAffichageCoupes(QGridLayout) :
         """
         group_box1=QGroupBox("Images utilisées")
         
-        self.bouton1=QRadioButton("Images originales")
-        self.bouton2=QRadioButton("Images seuillées")
-        self.bouton3=QRadioButton("Images carte de distance")
+        self.bouton1=QRadioButton("Originales sans contours")
+        self.bouton2=QRadioButton("Originales contours blancs")
+        self.bouton3=QRadioButton("Originales contours colorés")
+        self.bouton4=QRadioButton("Seuillées")
+        self.bouton5=QRadioButton("Carte de distance")
         
-        group_box2=QGroupBox("Contours")
-
-        self.bouton4=QRadioButton("Sans contours")
-        self.bouton5=QRadioButton("Contours en blanc")
-        self.bouton6=QRadioButton("Contours en couleur")
-            
-        self.bouton1.setChecked(True)
-        self.bouton5.setChecked(True)
-
+        self.bouton2.setChecked(True)
+        
         vl_boutons1=QVBoxLayout()
         vl_boutons1.addWidget(self.bouton1)
         vl_boutons1.addWidget(self.bouton2)
         vl_boutons1.addWidget(self.bouton3)
+        vl_boutons1.addWidget(self.bouton4)
+        vl_boutons1.addWidget(self.bouton5)
         
-        vl_boutons2=QVBoxLayout()
-        vl_boutons2.addWidget(self.bouton4)
-        vl_boutons2.addWidget(self.bouton5)
-        vl_boutons2.addWidget(self.bouton6)
- 
         group_box1.setLayout(vl_boutons1)
-        group_box2.setLayout(vl_boutons2)
         
         contenant=QVBoxLayout()
         contenant.addWidget(group_box1)
-        contenant.addWidget(group_box2)
         
         self.addLayout(contenant,1,5)
  
         """
         Bouton pour charger l'image et barre de chargement
         """
-        bouton_chargement=QPushButton("Chargement des images")
+        bouton_chargement=QPushButton("Modification des images")
         bouton_chargement.clicked.connect(self.charger_images)
         ########## LANCER LE TRAITEMENT A L'AIDE D'UNE FONCTION
         contenant.addWidget(bouton_chargement)
@@ -249,22 +239,20 @@ class TabAffichageCoupes(QGridLayout) :
     def charger_images(self):
         #### LANCER LE CODE DE CLEMENT ET BARBARA
         if (self.bouton1.isChecked()):
-            print("Prendre l'image originale")
+            print("Prendre l'image originale sans contours")
         elif (self.bouton2.isChecked()):
-            print("Prendre l'image seuillée")
+            print("Prendre l'image originale avec contours blancs")
         elif (self.bouton3.isChecked()):
-            print("Prendre le rendu du Watershade")
-        
-        if (self.bouton4.isChecked()):
-            print("Ne rien faire")
+            print("Prendre l'image originale avec contours colorés")
+        elif (self.bouton4.isChecked()):
+            print("Prendre l'image seuillée")
         elif (self.bouton5.isChecked()):
-            print("Faire le contour en blanc")
-        elif (self.bouton6.isChecked()):
-            print("Faire le contour en couleur")
+            print("Prendre l'image de carte de distance")
         
         
         
-        self.progress.setValue(self.progress.value()+1)
+        
+       # self.progress.setValue(self.progress.value()+1)
         
         # Lancer les traitements qu'on demande 
         # Faire avancer la barre de progression en fonction de l'avancement
