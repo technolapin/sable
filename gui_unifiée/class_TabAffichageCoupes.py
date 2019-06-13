@@ -11,6 +11,7 @@ import functools
 from math import floor
 
 from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
+from class_TabGraphique3D import Graphique3D
 
 
 #### Problème parceque dans un autre dossier donc il veut pas ouvrir, depuis
@@ -41,10 +42,8 @@ class TabAffichageCoupes(QGridLayout) :
         self.objParams = objParams
         
         
-        vertical_layout=QVBoxLayout()
-        
         """
-        Barres de Scroll
+        Création des barres de Scroll
         """
         # Défilement de la couche X
         self.barreScrollAxeX = QScrollBar()
@@ -74,36 +73,29 @@ class TabAffichageCoupes(QGridLayout) :
         self.addWidget(self.barreScrollAxeZ, 1, 4)
         
         
+        
+        
         """
-        Images
+        Création de toute la partie images
         """
         # Création d'un contenant pour les images 
         contenant_widget = QWidget()
         contenant_grille = QGridLayout()
         
+        # Création des labels allant contenir les images
         self.label_image_xy = QLabel()
         self.label_image_yz = QLabel()
         self.label_image_zx = QLabel()
         
-       # print("[Debug TabAffichageCoupes] Image XY : ", self.label_image_xy)
-        #print("[Debug TabAffichageCoupes] Image YZ : ", self.label_image_yz)
-        #print("[Debug TabAffichageCoupes] Image ZX : ", self.label_image_zx)
-        
+        # Rendre les labels cliquables pour retrouver le grain
         self.label_image_xy.mousePressEvent=functools.partial(self.get_pixel, source_object=self.label_image_xy)
         self.label_image_yz.mousePressEvent=functools.partial(self.get_pixel, source_object=self.label_image_yz)
         self.label_image_zx.mousePressEvent=functools.partial(self.get_pixel, source_object=self.label_image_zx)
         
+        # Epêcher le redimentionnement des images
         self.label_image_xy.setFixedSize(240,240)
         self.label_image_yz.setFixedSize(240,500)
         self.label_image_zx.setFixedSize(240,500)
-
-        self.valeur_temps = QLabel("Temps : 0")
-        self.valeur_X = QLabel("X : 0")
-        self.valeur_Y = QLabel("Y : 0")
-        self.valeur_Z = QLabel("Z : 0")
-        
-        self.changeImages(0)
-        
         
         # Ajout des images dans le contenant à images
         contenant_grille.addWidget(self.label_image_xy, 5, 2)
@@ -111,20 +103,20 @@ class TabAffichageCoupes(QGridLayout) :
         contenant_grille.addWidget(self.label_image_zx, 2, 1)
         contenant_widget.setLayout(contenant_grille)
         
-        
-        # Textes correspondant aux images
+        # Création des textes correspondant aux images (au dessus)
         texte_xy = QLabel("Image (X, Y)")
         texte_yz = QLabel("Image (Y, Z)")
         texte_zx = QLabel("Image (X, Z)")
         
-        
+        # Ajout dans la grille des textes au dessus des images
         contenant_grille.addWidget(texte_xy, 3, 2)
         contenant_grille.addWidget(texte_yz, 1, 3)
         contenant_grille.addWidget(texte_zx, 1, 1)
         
+        # Rendre le layout avec les images plus gros que les autres
         self.setColumnStretch(1,2)
         
-        # Image des axes
+        # Image centrale avec les axes
         label_image_axes = QLabel()
         label_image_axes.setPixmap(QPixmap(IMAGE_AXES))
         contenant_grille.addWidget(label_image_axes,2,2)
@@ -132,67 +124,65 @@ class TabAffichageCoupes(QGridLayout) :
             print( "[Erreur TabAffichageCoupes] " + IMAGE_AXES + " n'existe pas !" )
 
 
-        
-        
+
+                
         """
-        Positions actuelles X, Y, Z et temps
+        Positions courantes de X, Y, Z et du temps
         """
+        # Création d'un contenant pour les valeurs courantes
         horizontal_layout = QHBoxLayout()
         
+        # Création des labels qui affichent les valeurs courantes
+        self.valeur_temps = QLabel("Temps : 0")
+        self.valeur_X = QLabel("X : 0")
+        self.valeur_Y = QLabel("Y : 0")
+        self.valeur_Z = QLabel("Z : 0")
+        
+        # Ajout des labels dans le contenant        
         horizontal_layout.addWidget(self.valeur_temps)
         horizontal_layout.addWidget(self.valeur_X)
         horizontal_layout.addWidget(self.valeur_Y)
         horizontal_layout.addWidget(self.valeur_Z)
 
+        # Ajout dans un layout vertical contenant les images et les positions courantes
+        vertical_layout=QVBoxLayout()
         vertical_layout.addLayout(horizontal_layout)
         vertical_layout.addWidget(contenant_widget,stretch=2)
         
+        # Ajout dans l'onglet
         self.addLayout(vertical_layout,1,1)
         
         
         
         
         """
-        RadioButton pour choisir le traitement à afficher
+        Création d'un RadioButton pour choisir le traitement à afficher
         """
+        # Création d'un groupe de RadioButton et d'un layout
         group_box1=QGroupBox("Images utilisées")
+        vl_boutons1=QVBoxLayout()
+        group_box1.setLayout(vl_boutons1)
         
+        # Création des différentes options à choisir
         self.bouton1=QRadioButton("Originales sans contours")
         self.bouton2=QRadioButton("Originales contours blancs")
         self.bouton3=QRadioButton("Originales contours colorés")
         self.bouton4=QRadioButton("Seuillées")
         self.bouton5=QRadioButton("Carte de distance")
         
+        # Initialisation du bouton correspondant à l'image initiale
         self.bouton2.setChecked(True)
         
-        vl_boutons1=QVBoxLayout()
+        # Ajout des boutons au layout
         vl_boutons1.addWidget(self.bouton1)
         vl_boutons1.addWidget(self.bouton2)
         vl_boutons1.addWidget(self.bouton3)
         vl_boutons1.addWidget(self.bouton4)
         vl_boutons1.addWidget(self.bouton5)
         
-        group_box1.setLayout(vl_boutons1)
-        
-        contenant=QVBoxLayout()
-        contenant.addWidget(group_box1)
-        
-        self.addLayout(contenant,1,5)
- 
-        """
-        Bouton pour charger l'image et barre de chargement
-        """
+        # Création d'un bouton pour modifier les images selon les RadioButtons
         bouton_chargement=QPushButton("Modification des images")
         bouton_chargement.clicked.connect(self.charger_images)
-        ########## LANCER LE TRAITEMENT A L'AIDE D'UNE FONCTION
-        contenant.addWidget(bouton_chargement)
-        contenant.addSpacing(50)
-
-
-#        self.progress = QProgressBar()
-#        self.progress.setMaximum(100)
-#        
-#        contenant.addWidget(self.progress)
         
         
         
@@ -200,44 +190,69 @@ class TabAffichageCoupes(QGridLayout) :
         """
         Informations sur le grain cliqué et renvoi vers la fenêtre de trajectoire
         """
-        ## Création du layout vertical
-        ## Création du bouton pour passer à la fenêtre suivante
-        bouton_fen_traj = QPushButton("Afficher trajectoire")
         
-        ## Création du cadre qui contient les informatins du grain cliqué        
+        ## Création d'un groupe contenant les informatins du grain cliqué et d'un layout        
         group_infos=QGroupBox("Informations sur le grain cliqué")
         vl_grain=QVBoxLayout()
-        
+        group_infos.setLayout(vl_grain)
+                
+        # Création de labels qui affichent les valeurs du grain cliqué      
         self.label_grain_X=QLabel("X : ")
         self.label_grain_Y=QLabel("Y : ")
         self.label_grain_Z=QLabel("Z : ")
         self.label_grain_Temps=QLabel("Temps : ")
-        self.label_grain_Ref=QLabel("Référence : ")
+################ self.label_grain_volume = QLabel("Volume : ")
         
+        # Ajout des labels dans le layout
         vl_grain.addWidget(self.label_grain_X)
         vl_grain.addWidget(self.label_grain_Y)
         vl_grain.addWidget(self.label_grain_Z)
         vl_grain.addWidget(self.label_grain_Temps)
-        vl_grain.addWidget(self.label_grain_Ref)
+################ vl_grain.addWidget(self.label_grain_volume)        
         
-        group_infos.setLayout(vl_grain)
         
-        ## Ajout dans le layout vertical
+        # Création d'un contenant pour les Radiobutton, la modification des 
+        # images et les informations du grain cliqué ; Ajout dans l'onglet
+        contenant=QVBoxLayout()
+        self.addLayout(contenant,1,5)
+        
+        # Ajout des widgets dans le contenant
+        contenant.addWidget(group_box1)
+        contenant.addWidget(bouton_chargement)
+        contenant.addSpacing(50)
         contenant.addWidget(group_infos)
-        contenant.addWidget(bouton_fen_traj)
         
+
+
         
+        """
+        Création d'une fenêtre qu'on affiche en cliquant sur un grain
+        """
+        # Création de la fenêtre et d'un layout
+        self.fenetre_graph = QWidget() 
+        self.fenetre_graph.setWindowTitle("Trajectoire du grain cliqué")
+        self.layout_traj_sepa=QGridLayout()
+        self.fenetre_graph.setLayout(self.layout_traj_sepa)
         
+        # Création de la figure 3D et insertion dans le Layout
+        self.graphique3D = Graphique3D()
+        self.layout_traj_sepa.addWidget(self.graphique3D)
         
-        # Ajouter un bouton qui envoie la référence du grain à la fenêtre 
-        # d'Amaury pour la trajectoire.
-        # Ajouter les labels pour afficher la coordonnée et la référence du 
-        # grain qu'on a cliqué.
+       
         
+        """
+        Appel de la fonction qui gère les barres de scroll
+        """
+        self.changeImages(0)
     
+
+
+          
     
+    """
+    Fonction permettant d'afficher les coupes correspondant aux RadioButtons
+    """
     def charger_images(self):
-        #### LANCER LE CODE DE CLEMENT ET BARBARA
         if (self.bouton1.isChecked()):
             print("Prendre l'image originale sans contours")
         elif (self.bouton2.isChecked()):
@@ -249,15 +264,12 @@ class TabAffichageCoupes(QGridLayout) :
         elif (self.bouton5.isChecked()):
             print("Prendre l'image de carte de distance")
         
+######## Afficher les images sélectionnées (changer d'URL d'affichage selon le choix)
+######## Demander à Amaury comment modifier ça, parce que j'appelle son truc qui
+######## génère le lien pour moi, mais là j'en veux pas...
         
-        
-        
-       # self.progress.setValue(self.progress.value()+1)
-        
-        # Lancer les traitements qu'on demande 
-        # Faire avancer la barre de progression en fonction de l'avancement
-        # Récupérer les URL des résultats créés
-        # Changer l'affichage des coupes depuis le lien
+######## Dire à Barbara que les dernières images sur (Y,Z) et (X,Z) sont pas contourées        
+    
     
     
     
@@ -265,6 +277,13 @@ class TabAffichageCoupes(QGridLayout) :
     Obtenir la position du clic
     """
     def get_pixel(self, event, source_object=None):
+        
+        # rapports : x=80   y=80    z=250
+        #    image xy :   240 x 240      Diviser par 3  ; Diviser par 3
+        #    image yz :   240 x 500      Diviser par 3  ; Diviser par 2
+        #    image xz :   240 x 500      Diviser par 3  ; Diviser par 2   
+        
+        # Récupère les coordonnées du point cliqué
         if (source_object==self.label_image_xy):
             x=floor(event.pos().x()/3)
             y=floor(event.pos().y()/3)
@@ -277,41 +296,43 @@ class TabAffichageCoupes(QGridLayout) :
             x=floor(event.pos().x()/3)
             z=floor(event.pos().y()/2)
             y=self.barreScrollAxeY.value()
-            
         temps=self.barreScrollTemps.value()
-        
-        
-        ####### Appeler retrouver grain de Barbara
-  #      if (traitement_barbara==null):
-   #         reference="Cliquez sur un grain !"
-    #    else
-        reference="référence coucou" ## Traitement de Barbara
-        
-        
-        
+
+        # Change l'affichage des coordonnées du point cliqué
         self.label_grain_X.setText("X : " + str(x))
         self.label_grain_Y.setText("Y : " + str(y))
         self.label_grain_Z.setText("Z : " + str(z))
         self.label_grain_Temps.setText("Temps : " + str(temps))
-        self.label_grain_Ref.setText("Référence : " + str(reference))
-        
-        # rapports : x=80   y=80    z=250
-        #    image xy :   240 x 240      Diviser par 3  ; Diviser par 3
-        #    image yz :   240 x 500      Diviser par 3  ; Diviser par 2
-        #    image xz :   240 x 500      Diviser par 3  ; Diviser par 2   
-        
-        
-        #print("x=",x,"   y=",y, "   z=",z,"   temps=",temps)
-        # TODO : Appeler le traitement de Barbara pour sélectionner le grain en 3D
+    
+    
+######## Appeler ce que Barbara a fait pour obtenir la liste de je sais pas quoi
+######## dont on a besoin pour afficher la trajectoire
+######## retour[0] = volume du grain
+######## retour[1] = liste dont on a besoin
+################ volume_grain = retour[0]
+################ self.label_grain_volume.setText("Volume : "+str(volume_grain))
+
+
+######## Prendre le retour de ce Barbara et créer un nouvel objet Graphique3D
+######## qu'on utilise pour remplacer éventuellement (if il y a déjà un obj)
+######## le graphique dans la fenêtre
+################ self.fenetre_graph.show()
+################ if (resultat[1]==None):
+################    self.graphique3D.dessinerGraphique3D( [[[],[],[]]], 0, 0 ) # Affiche un graphe vide
+################ else :
+################    self.graphique3D.dessinerGraphique3D( resultat[1], 0, 0 ) # Affiche la trajectoire du grain sélectionné
+
+######## A SUPPRIMER (pour le test)
+        self.fenetre_graph.show() # Affiche la fenêtre
+        self.graphique3D.dessinerGraphique3D( [[[],[],[]]], 0, 0 )
+
+    
+    
     
     """
-    Gère l'affichage et son actualisatin
+    Gère l'affichage et son actualisation par les barres de scroll
     """    
     def changeImages(self, value) :
-        #print ( "[Debug TabAffichageCoupes] Temps : " + str(self.barreScrollTemps.value()) +
-         #                                    ", X : " + str(self.barreScrollAxeX.value()) +
-          #                                   ", Y : " + str(self.barreScrollAxeY.value()) +
-           #                                  ", Z : " + str(self.barreScrollAxeZ.value()) )
         
         # Image plan (X, Y)
         image_xy = self.objParams.genererURLdesPGM3D( 'XY', self.barreScrollTemps.value(), self.barreScrollAxeZ.value() )
@@ -344,6 +365,8 @@ class TabAffichageCoupes(QGridLayout) :
         self.valeur_X.setText("X : " + str(self.barreScrollAxeX.value()))
         self.valeur_Y.setText("Y : " + str(self.barreScrollAxeY.value()))
         self.valeur_Z.setText("Z : " + str(self.barreScrollAxeZ.value()))
+
+
 
 
 """
