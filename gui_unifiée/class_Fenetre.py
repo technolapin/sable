@@ -13,7 +13,7 @@ from class_TabAffichageCoupes import TabAffichageCoupes
 from class_TabVTK import TabVTK
 from class_TabAide import TabAide
 
-from parametres_pour_demo import grapheDeDemonstration
+from parametres_graph3D_pour_demo import grapheDeDemonstration # Ne sert que si est exécuté séparemment
 from parametres import DISABLE_VTK
     
 

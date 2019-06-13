@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QHBo
 
 from class_Graphique3D import Graphique3D
 
-from parametres_pour_demo import grapheDeDemonstration
+from parametres_graph3D_pour_demo import grapheDeDemonstration # Ne sert que si est exécuté séparemment
 
 
 """
@@ -38,15 +38,11 @@ class TabGraphique3D(QGridLayout) :
         
         
         vertical_layout.addLayout(horizontal_layout)
-        # Fin  Ajout Maylis
+        # Fin Ajout Maylis
         
         
         # Graphe à afficher
         self.graphe = grapheDonne
-        
-#        self.menuSelection = QComboBox() # C'est un menu déroulant
-#        self.menuSelection.addItems(['Graph1', 'Graph2']) # Ajoute les indexes de ce menu
-#        self.menuSelection.currentIndexChanged.connect(self.changementGraphique3D) # La procédure à appeler lors du changement
         
         self.graphique3D = Graphique3D()
 #        self.graphique3D.setMinimumSize(QSize(400, 400)) # Définit la taille minimum en pixels de ce Widget
@@ -78,12 +74,6 @@ class TabGraphique3D(QGridLayout) :
     Gère le dessin et les changements par l'utilisateur dans les barres de défilement
     """
     def dessinerGraphique3D(self, value) :
-#        graphiqueDemande = str(self.menuSelection.currentText())
-#        if graphiqueDemande == "Graph1" :
-#            self.graph1()
-#        if graphiqueDemande == "Graph2" :
-#            self.graph2()
-#       Devenu inutlie puisqu'on a supprimé les menus déroulants
          self.graphique3D.dessinerGraphique3D( self.graphe, self.barreDeScrollCourbes.value(), self.barreDeScrollTemps.value() )
          
          # Ajout Maylis
@@ -98,7 +88,7 @@ class TabGraphique3D(QGridLayout) :
              self.valeur_courbe.setText("Courbe : " + str(self.barreDeScrollCourbes.value() - 1))
          # Fin Ajout Maylis
         
-         print( "[Debug TabGraphique3D] Temps : " + str( self.barreDeScrollTemps.value() ) + ", Courbe : " + str( self.barreDeScrollCourbes.value() ) + ", Valeur donnée : " + str( value ) )
+         print( "[Debug TabGraphique3D] Temps : " + str( self.barreDeScrollTemps.value() ) + ", Courbe : " + str( self.barreDeScrollCourbes.value() ) )
 
 
 """
