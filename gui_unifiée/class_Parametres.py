@@ -1,3 +1,5 @@
+from os.path import join
+
 import parametres
 
 
@@ -45,7 +47,9 @@ class Parametres() :
             fichierPGM = self.URL_PGM + "x_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_xz_" + coucheFormate + ".pgm"
         if plan == 'XY' :
             fichierPGM = self.URL_PGM + "x_y/" + tempsFormate + "/t_" + tempsFormate + "coupe_xy_" + coucheFormate + ".pgm"
-        return fichierPGM
+        
+        # Les URL doivent être relatives au fichier d'importation
+        return join(self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), fichierPGM.replace("\\", "/"))
     
     """
     @param instantTemporel : L'instant temporel du VTK
@@ -53,13 +57,16 @@ class Parametres() :
     def genererURLdesVTK( self, instantTemporel ) :
         tempsFormate = format(instantTemporel, '02d') # String sur 2 digits
         fichierVTK = self.URL_VTK + tempsFormate + ".vtk"
-        return fichierVTK
+        
+        # Les URL doivent être relatives au fichier d'importation
+        return join(self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), fichierVTK.replace("\\", "/"))
     
     """
     @return URL du fichier NPY à utiliser
     """
     def genererURLGraph3D(self) :
-        return self.URL_GRAPHIQUE_3D
+        # Les URL doivent être relatives au fichier d'importation
+        return join(self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), self.URL_GRAPHIQUE_3D.replace("\\", "/"))
     
     
     """

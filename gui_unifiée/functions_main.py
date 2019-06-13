@@ -36,21 +36,46 @@ def importerTraitement( fichier, objParams ) :
     
     try :
         objParams.NB_IMGS = fichierExporté[ "NB_IMGS" ]
+    except KeyError :
+        print( "[Erreur] Le fichier ne contient pas la variables NB_IMGS !" )
+        return False
+    try :
         objParams.INTERVALLE_XY = fichierExporté[ "INTERVALLE_XY" ]
+    except KeyError :
+        print( "[Erreur] Le fichier ne contient pas la variables INTERVALLE_XY !" )
+        return False
+    try :
         objParams.INTERVALLE_XZ = fichierExporté[ "INTERVALLE_XZ" ]
+    except KeyError :
+        print( "[Erreur] Le fichier ne contient pas la variables INTERVALLE_XZ !" )
+        return False
+    try :
         objParams.INTERVALLE_YZ = fichierExporté[ "INTERVALLE_YZ" ]
+    except KeyError :
+        print( "[Erreur] Le fichier ne contient pas la variables INTERVALLE_YZ !" )
+        return False
+    try :
         objParams.URL_PGM = fichierExporté[ "URL_PGM" ]
+    except KeyError :
+        print( "[Erreur] Le fichier ne contient pas la variables URL_PGM !" )
+        return False
+    try :
         objParams.URL_VTK = fichierExporté[ "URL_VTK" ]
+    except KeyError :
+        print( "[Erreur] Le fichier ne contient pas la variables URL_VTK !" )
+        return False
+    try :
         objParams.URL_GRAPHIQUE_3D = fichierExporté[ "URL_GRAPHIQUE_3D" ]
     except KeyError :
-        print( "[Erreur] Le fichier ne contient pas les variables nécéssaires !" )
+        print( "[Erreur] Le fichier ne contient pas la variables URL_GRAPHIQUE_3D !" )
         return False
+    
     
     objParams.contientVariablesImportees = True
     
     # Sauvegarde du répertoire absolu du répertorie du fichier d'exportation
     # Sert à localiser à partir des URL relatives qu'il contient
-    objParams.CHEMIN_ABSOLU_FICHIER_IMPORTE = os.path.dirname(os.path.abspath( fichier ))
+    objParams.CHEMIN_ABSOLU_FICHIER_IMPORTE = os.path.dirname(fichier)
     
     fichierExporté.close()
     
