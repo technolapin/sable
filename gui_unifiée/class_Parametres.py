@@ -17,6 +17,8 @@ class Parametres() :
         self.URL_VTK = parametres.URL_VTK # URL vers les fichiers VTK
         self.URL_GRAPHIQUE_3D = parametres.URL_GRAPHIQUE_3D # URL vers le fichier NPY
         self.CHEMIN_ABSOLU_FICHIER_IMPORTE = None # Chemin absolu du fichier contenant les params importés
+        
+        self.TabGraphique3D = None # Objet TabGraphique3D
     
     def setNB_IMGS( self, param ) :
         self.NB_IMGS = param
@@ -34,6 +36,11 @@ class Parametres() :
         self.URL_GRAPHIQUE_3D = param
     def setCHEMIN_ABSOLU_FICHIER_IMPORTE( self, param ) :
         self.CHEMIN_ABSOLU_FICHIER_IMPORTE = param
+    
+    def setTabGraphique3D( self, param ) :
+        self.TabGraphique3D = param
+    def getTabGraphique3D( self ):
+        return self.TabGraphique3D
     
     """
     @return True si il y a une logique, False sinon

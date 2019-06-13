@@ -97,6 +97,15 @@ class TabGraphique3D(QGridLayout) :
          # Fin Ajout Maylis
         
          print( "[Debug TabGraphique3D] Temps : " + str( self.barreDeScrollTemps.value() ) + ", Courbe : " + str( self.barreDeScrollCourbes.value() ) )
+         
+    """
+    Modifier position barres de scrolls
+    """
+    def setScrollBarsValues( self, courbe = None, temps = None ):
+        if courbe != None :
+            self.barreDeScrollTemps.setValue(courbe)
+        if temps != None :
+            self.barreDeScrollTemps.setValue(temps)
 
 
 """
