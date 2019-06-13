@@ -13,6 +13,12 @@ from math import floor
 from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 
 
+#### Problème parceque dans un autre dossier donc il veut pas ouvrir, depuis
+#### le dossier courant, les choses qu'on veut ouvrir sont pas là
+#sys.path.append("../extraction")
+#from tracking_3D import *
+
+
 """
 PARAMETRES
 """
@@ -63,9 +69,9 @@ class TabAffichageCoupes(QGridLayout) :
         
         # Ajout des barres de scroll 
         self.addWidget(self.barreScrollTemps, 2, 1)
-        self.addWidget(self.barreScrollAxeX, 1, 3)
-        self.addWidget(self.barreScrollAxeY, 1, 4)
-        self.addWidget(self.barreScrollAxeZ, 1, 5)
+        self.addWidget(self.barreScrollAxeX, 1, 2)
+        self.addWidget(self.barreScrollAxeY, 1, 3)
+        self.addWidget(self.barreScrollAxeZ, 1, 4)
         
         
         """
@@ -150,7 +156,7 @@ class TabAffichageCoupes(QGridLayout) :
         RadioButton pour choisir le traitement à afficher
         """
         group_box1=QGroupBox("Images utilisées")
-
+        
         self.bouton1=QRadioButton("Images originales")
         self.bouton2=QRadioButton("Images seuillées")
         self.bouton3=QRadioButton("Images du Watershade")
@@ -181,22 +187,64 @@ class TabAffichageCoupes(QGridLayout) :
         contenant.addWidget(group_box1)
         contenant.addWidget(group_box2)
         
-        self.addLayout(contenant,1,2)
+        self.addLayout(contenant,1,5)
  
         """
         Bouton pour charger l'image et barre de chargement
         """
         bouton_chargement=QPushButton("Chargement des images")
         bouton_chargement.clicked.connect(self.charger_images)
-        #self.button.clicked.connect(self.onButtonClick)
         ########## LANCER LE TRAITEMENT A L'AIDE D'UNE FONCTION
         contenant.addWidget(bouton_chargement)
-        self.progress = QProgressBar()
-        self.progress.setMaximum(100)
+        contenant.addSpacing(50)
+
+
+#        self.progress = QProgressBar()
+#        self.progress.setMaximum(100)
+#        
+#        contenant.addWidget(self.progress)
         
-        contenant.addWidget(self.progress)
         
         
+        
+        """
+        Informations sur le grain cliqué et renvoi vers la fenêtre de trajectoire
+        """
+        ## Création du layout vertical
+        ## Création du bouton pour passer à la fenêtre suivante
+        bouton_fen_traj = QPushButton("Afficher trajectoire")
+        
+        ## Création du cadre qui contient les informatins du grain cliqué        
+        group_infos=QGroupBox("Informations sur le grain cliqué")
+        vl_grain=QVBoxLayout()
+        
+        self.label_grain_X=QLabel("X : ")
+        self.label_grain_Y=QLabel("Y : ")
+        self.label_grain_Z=QLabel("Z : ")
+        self.label_grain_Temps=QLabel("Temps : ")
+        self.label_grain_Ref=QLabel("Référence : ")
+        
+        vl_grain.addWidget(self.label_grain_X)
+        vl_grain.addWidget(self.label_grain_Y)
+        vl_grain.addWidget(self.label_grain_Z)
+        vl_grain.addWidget(self.label_grain_Temps)
+        vl_grain.addWidget(self.label_grain_Ref)
+        
+        group_infos.setLayout(vl_grain)
+        
+        ## Ajout dans le layout vertical
+        contenant.addWidget(group_infos)
+        contenant.addWidget(bouton_fen_traj)
+        
+        
+        
+        
+        # Ajouter un bouton qui envoie la référence du grain à la fenêtre 
+        # d'Amaury pour la trajectoire.
+        # Ajouter les labels pour afficher la coordonnée et la référence du 
+        # grain qu'on a cliqué.
+        
+    
     
     def charger_images(self):
         #### LANCER LE CODE DE CLEMENT ET BARBARA
@@ -218,7 +266,12 @@ class TabAffichageCoupes(QGridLayout) :
         
         self.progress.setValue(self.progress.value()+1)
         
-
+        # Lancer les traitements qu'on demande 
+        # Faire avancer la barre de progression en fonction de l'avancement
+        # Récupérer les URL des résultats créés
+        # Changer l'affichage des coupes depuis le lien
+    
+    
     
     """
     Obtenir la position du clic
@@ -239,26 +292,38 @@ class TabAffichageCoupes(QGridLayout) :
             
         temps=self.barreScrollTemps.value()
         
+        
+        ####### Appeler retrouver grain de Barbara
+  #      if (traitement_barbara==null):
+   #         reference="Cliquez sur un grain !"
+    #    else
+        reference="référence coucou" ## Traitement de Barbara
+        
+        
+        
+        self.label_grain_X.setText("X : " + str(x))
+        self.label_grain_Y.setText("Y : " + str(y))
+        self.label_grain_Z.setText("Z : " + str(z))
+        self.label_grain_Temps.setText("Temps : " + str(temps))
+        self.label_grain_Ref.setText("Référence : " + str(reference))
+        
         # rapports : x=80   y=80    z=250
         #    image xy :   240 x 240      Diviser par 3  ; Diviser par 3
         #    image yz :   240 x 500      Diviser par 3  ; Diviser par 2
         #    image xz :   240 x 500      Diviser par 3  ; Diviser par 2   
         
-        #self.label_image_xy.setFixedSize(240,240)
-        #self.label_image_yz.setFixedSize(240,500)
-        #self.label_image_zx.setFixedSize(240,500)
         
-        print("x=",x,"   y=",y, "   z=",z,"   temps=",temps)
+        #print("x=",x,"   y=",y, "   z=",z,"   temps=",temps)
         # TODO : Appeler le traitement de Barbara pour sélectionner le grain en 3D
     
     """
     Gère l'affichage et son actualisatin
     """    
     def changeImages(self, value) :
-        print ( "[Debug TabAffichageCoupes] Temps : " + str(self.barreScrollTemps.value()) +
-                                             ", X : " + str(self.barreScrollAxeX.value()) +
-                                             ", Y : " + str(self.barreScrollAxeY.value()) +
-                                             ", Z : " + str(self.barreScrollAxeZ.value()) )
+        #print ( "[Debug TabAffichageCoupes] Temps : " + str(self.barreScrollTemps.value()) +
+         #                                    ", X : " + str(self.barreScrollAxeX.value()) +
+          #                                   ", Y : " + str(self.barreScrollAxeY.value()) +
+           #                                  ", Z : " + str(self.barreScrollAxeZ.value()) )
         
         # Image plan (X, Y)
         image_xy = self.objParams.genererURLdesPGM3D( 'XY', self.barreScrollTemps.value(), self.barreScrollAxeZ.value() )
