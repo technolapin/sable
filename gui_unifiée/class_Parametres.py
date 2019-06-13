@@ -1,4 +1,5 @@
 from os.path import join
+from os.path import abspath
 
 import parametres
 
@@ -50,7 +51,9 @@ class Parametres() :
         
         if self.contientVariablesImportees :
             # Les URL doivent être relatives au fichier d'importation
-            return join(self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), fichierPGM.replace("\\", "/"))
+            return abspath( join( self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"),
+                                  fichierPGM.replace("\\", "/")
+                                 ).replace("\\","/") )
         else :
             return fichierPGM
     
@@ -63,7 +66,9 @@ class Parametres() :
         
         if self.contientVariablesImportees :
             # Les URL doivent être relatives au fichier d'importation
-            return join(self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), fichierVTK.replace("\\", "/"))
+            return abspath(join( self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), 
+                                 fichierVTK.replace("\\", "/")
+                                ).replace("\\","/"))
         else :
             return fichierVTK
     
@@ -73,7 +78,9 @@ class Parametres() :
     def genererURLGraph3D(self) :
         if self.contientVariablesImportees :
             # Les URL doivent être relatives au fichier d'importation
-            return join(self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"), self.URL_GRAPHIQUE_3D.replace("\\", "/"))
+            return abspath( join( self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"),
+                                  self.URL_GRAPHIQUE_3D.replace("\\", "/")
+                                 ).replace("\\","/") )
         else :
             return self.URL_GRAPHIQUE_3D
     

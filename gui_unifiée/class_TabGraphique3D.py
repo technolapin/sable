@@ -107,11 +107,11 @@ class TabGraphique3D(QGridLayout) :
     """
     def setScrollBarsValues( self, courbe = None, temps = None ) :
         if courbe != None :
-            self.barreDeScrollTemps.setValue(courbe)
             print( "[Debug TabGraphique3D] Valeurs forcées : Courbe = " + str(courbe) )
+            self.barreDeScrollTemps.setValue(courbe)
         if temps != None :
-            self.barreDeScrollTemps.setValue(temps)
             print( "[Debug TabGraphique3D] Valeur forcée : Temps = " + str(temps) )
+            self.barreDeScrollTemps.setValue(temps)
 
 
 """

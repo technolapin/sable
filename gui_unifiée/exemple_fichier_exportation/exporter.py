@@ -1,5 +1,6 @@
-# Source : http://python.jpvweb.com/python/mesrecettespython/doku.php?id=sauve_recup_objets
-import shelve # Permet de sauvegarder et charger des variables
+# Source : https://www.geeksforgeeks.org/understanding-python-pickling-example/
+import pickle # Permet de sauvegarder et charger des variables
+# On n'utilise plus shelve, car il n'est pas cross-platform
 
 """
 FICHIER D'EXPORTATION DU TRAITEMENT
@@ -53,14 +54,19 @@ URL_GRAPHIQUE_3D = "../../extraction/tracking_3D/resultats.npy"
 """
 EXPORTATION
 """
-fichierExportation = shelve.open( 'exemple' )
+# Bade de Données
+bdd = {} 
+bdd["NB_IMGS"] = NB_IMGS
+bdd["INTERVALLE_XY"] = INTERVALLE_XY
+bdd["INTERVALLE_XZ"] = INTERVALLE_XZ
+bdd["INTERVALLE_YZ"] = INTERVALLE_YZ
+bdd["URL_PGM"] = URL_PGM
+bdd["URL_VTK"] = URL_VTK
+bdd["URL_GRAPHIQUE_3D" ] = URL_GRAPHIQUE_3D
 
-fichierExportation["NB_IMGS"] = NB_IMGS
-fichierExportation["INTERVALLE_XY"] = INTERVALLE_XY
-fichierExportation["INTERVALLE_XZ"] = INTERVALLE_XZ
-fichierExportation["INTERVALLE_YZ"] = INTERVALLE_YZ
-fichierExportation["URL_PGM"] = URL_PGM
-fichierExportation["URL_VTK"] = URL_VTK
-fichierExportation["URL_GRAPHIQUE_3D" ] = URL_GRAPHIQUE_3D
+# Its important to use binary mode
+fichierBdd = open('exemple', 'ab')
 
-fichierExportation.close()
+# source, destination
+pickle.dump(bdd, fichierBdd)                 
+fichierBdd.close()

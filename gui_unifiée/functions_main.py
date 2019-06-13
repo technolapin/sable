@@ -2,8 +2,9 @@ import os
 
 from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
-# Source : http://python.jpvweb.com/python/mesrecettespython/doku.php?id=sauve_recup_objets
-import shelve # Permet de sauvegarder et charger des variables
+# Source : https://www.geeksforgeeks.org/understanding-python-pickling-example/
+import pickle # Permet de sauvegarder et charger des variables
+# On n'utilise plus shelve, car il n'est pas cross-platform
 
 from class_Parametres import Parametres
 
@@ -29,43 +30,46 @@ def importerTraitement( fichier, objParams ) :
     print( "[Info Main] Importation du traitement : " + fichier )
     try :
         cheminSansExtension = os.path.splitext(fichier)[0]
-        fichierExporté = shelve.open( cheminSansExtension, flag='c' ) # 'c' pour lecture seule
+        # For reading also binary mode is important 
+        fichierExporté = open(cheminSansExtension, 'rb')
     except Exception :
         print( "[Erreur] Fichier invalide !" )
         return False
     
+    bdd = pickle.load(fichierExporté)
+    
     try :
-        objParams.NB_IMGS = fichierExporté[ "NB_IMGS" ]
+        objParams.NB_IMGS = bdd[ "NB_IMGS" ]
     except KeyError :
         print( "[Erreur] Le fichier ne contient pas la variables NB_IMGS !" )
         return False
     try :
-        objParams.INTERVALLE_XY = fichierExporté[ "INTERVALLE_XY" ]
+        objParams.INTERVALLE_XY = bdd[ "INTERVALLE_XY" ]
     except KeyError :
         print( "[Erreur] Le fichier ne contient pas la variables INTERVALLE_XY !" )
         return False
     try :
-        objParams.INTERVALLE_XZ = fichierExporté[ "INTERVALLE_XZ" ]
+        objParams.INTERVALLE_XZ = bdd[ "INTERVALLE_XZ" ]
     except KeyError :
         print( "[Erreur] Le fichier ne contient pas la variables INTERVALLE_XZ !" )
         return False
     try :
-        objParams.INTERVALLE_YZ = fichierExporté[ "INTERVALLE_YZ" ]
+        objParams.INTERVALLE_YZ = bdd[ "INTERVALLE_YZ" ]
     except KeyError :
         print( "[Erreur] Le fichier ne contient pas la variables INTERVALLE_YZ !" )
         return False
     try :
-        objParams.URL_PGM = fichierExporté[ "URL_PGM" ]
+        objParams.URL_PGM = bdd[ "URL_PGM" ]
     except KeyError :
         print( "[Erreur] Le fichier ne contient pas la variables URL_PGM !" )
         return False
     try :
-        objParams.URL_VTK = fichierExporté[ "URL_VTK" ]
+        objParams.URL_VTK = bdd[ "URL_VTK" ]
     except KeyError :
         print( "[Erreur] Le fichier ne contient pas la variables URL_VTK !" )
         return False
     try :
-        objParams.URL_GRAPHIQUE_3D = fichierExporté[ "URL_GRAPHIQUE_3D" ]
+        objParams.URL_GRAPHIQUE_3D = bdd[ "URL_GRAPHIQUE_3D" ]
     except KeyError :
         print( "[Erreur] Le fichier ne contient pas la variables URL_GRAPHIQUE_3D !" )
         return False
@@ -75,7 +79,7 @@ def importerTraitement( fichier, objParams ) :
     
     # Sauvegarde du répertoire absolu du répertorie du fichier d'exportation
     # Sert à localiser à partir des URL relatives qu'il contient
-    objParams.CHEMIN_ABSOLU_FICHIER_IMPORTE = os.path.dirname(fichier)
+    objParams.CHEMIN_ABSOLU_FICHIER_IMPORTE = os.path.dirname(os.path.abspath(fichier))
     
     fichierExporté.close()
     
