@@ -49,14 +49,15 @@ command("colorize"+input_file+lut_2+input_color)
 
 
 
-
 input_border = " ../extraction/border_3D/border_3D_t_00.pgm "
+input_dist = " ../extraction/images_3D/image_3D_dist_t00.pgm "
 input_3D = " ../extraction/images_3D/image_3D_t00.pgm "
 input_water = " ../extraction/images_3D/image_3D_wat_t00.pgm "
 os.system("mkdir borderland")
 command("seuil "+input_3D+" 170 "+seuil)
-for i in range(190, 200):
-
+for i in range(0, 250):
+    dist = " borderland/dist_"+numerote(i, 3)+" "
+    dist_col = " borderland/col_dist_"+numerote(i, 3)+" "
     brut = " borderland/brut_"+numerote(i, 3)+" "
     bord = " borderland/bord_"+numerote(i, 3)+" "
     wat = " borderland/wat_"+numerote(i, 3)+" "
@@ -67,12 +68,14 @@ for i in range(190, 200):
     sl = " borderland/sl_"+numerote(i, 3)+" "
     sl_col = " borderland/col_sl_"+numerote(i, 3)+" "
     waterseuil = " borderland/waterseuil_"+numerote(i, 3)+" "
+    command("extractplane "+input_dist+str(i)+" xy"+dist)
     command("extractplane "+input_border+str(i)+" xy"+bord)
     command("extractplane "+input_3D+str(i)+" xy"+brut)
     command("extractplane "+input_water+str(i)+" xy"+wat)
     command("extractplane "+seuil+str(i)+" xy"+sl)
 #    command("sub"+brut+bord+brut)
     command("colorize"+bord+lut_bord+bord_col)
+    command("colorize"+dist+lut+dist_col)
     command("colorize"+wat+lut_wat+wat_col)
     command("pgm2ppm"+sl+sl+sl+sl_col)
     command("pgm2ppm"+brut+brut+brut+brut_col)

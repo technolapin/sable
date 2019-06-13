@@ -117,6 +117,21 @@ for t in range(0, n_tempo):
     command("seuil images_3D/image_3D_t"+padding_temporel+".pgm "+
             str(seuil)+" "+
             "images_3D/image_3D_s_t"+padding_temporel+".pgm")
+
+    file_to_clean = " images_3D/image_3D_s_t"+padding_temporel+".pgm "
+
+    minimum_noir = "300"
+    minimum_blanc = "30"
+
+    command("attribute"+file_to_clean+"6 "+minimum_noir+" 1 0 attributes")
+    command("long2byte attributes attributes")
+    command("attribute attributes 6 "+minimum_blanc+" 1 0 attributes")
+    command("long2byte attributes attributes")
+    command("seuil attributes 1 "+file_to_clean)
+    
+
+
+
     
     command("inverse images_3D/image_3D_s_t"+padding_temporel+".pgm "+
             "images_3D/image_3D_s_inv_t"+padding_temporel+".pgm")
