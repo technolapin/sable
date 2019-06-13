@@ -1,6 +1,7 @@
 #suivi de grains
 
 #importations
+import shelve
 import os
 import numpy as np
 #donnes
@@ -167,4 +168,24 @@ def retrouve_grain(x,y,z,t):
     
     
     
-    
+NB_IMGS = 4000
+INTERVALLE_XY = 250
+INTERVALLE_XZ = 80
+INTERVALLE_YZ = 80
+URL_PGM = "images_3D/"
+URL_VTK = "vtks/"
+URL_GRAPHIQUE_3D = "tracking_3D/resultats.npy"
+"""
+EXPORTATION
+"""
+fichierExportation = shelve.open( 'woopwoop.dat' )
+
+fichierExportation["NB_IMGS"] = NB_IMGS
+fichierExportation["INTERVALLE_XY"] = INTERVALLE_XY
+fichierExportation["INTERVALLE_XZ"] = INTERVALLE_XZ
+fichierExportation["INTERVALLE_YZ"] = INTERVALLE_YZ
+fichierExportation["URL_PGM"] = URL_PGM
+fichierExportation["URL_VTK"] = URL_VTK
+fichierExportation["URL_GRAPHIQUE_3D" ] = URL_GRAPHIQUE_3D
+
+fichierExportation.close()
