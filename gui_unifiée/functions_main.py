@@ -38,7 +38,7 @@ def traitementImage( fichier ) :
 """
 Importer un fichier exporté par le système de traitement
 @param fichier : Fichier d'exportation du traitement
-@return False si ça a merdé
+@return False si ça a merdé, ou si les données ont des incohérences
 """
 def importerTraitement( fichier, objParams ) :
     print( "[Info Main] Importation du traitement : " + fichier )
@@ -65,7 +65,8 @@ def importerTraitement( fichier, objParams ) :
     objParams.setCHEMIN_ABSOLU_FICHIER_IMPORTE( os.path.dirname(os.path.abspath( fichier )) )
     
     fichierExporté.close()
-    return True
+    
+    return objParams.verifierParams()
 
 
 """

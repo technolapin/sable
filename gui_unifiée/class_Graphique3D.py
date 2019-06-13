@@ -2,8 +2,6 @@ from matplotlib.pyplot import figure as Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from mpl_toolkits.mplot3d import Axes3D
 
-from random import choice
-
 
 """
 Classe Graphique3D, hérite de FigureCanvasQTAgg

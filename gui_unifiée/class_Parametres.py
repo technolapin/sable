@@ -1,5 +1,6 @@
 import parametres
 
+
 """
 Objet de centralisation des paramètres
 """
@@ -41,6 +42,7 @@ class Parametres() :
         if self.NB_IMGS % self.INTERVALLE_XY != 0 :
                 return False
         return True
+    
     
     """
     @param plan : Le plan de la caméra, 'YZ', 'XZ' ou 'XY'
