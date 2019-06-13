@@ -10,22 +10,6 @@ from class_Parametres import Parametres
 from class_Fenetre import Fenetre
 
 
-"""
-Fonction de validation du fichier demandé
-@param fichier : Fichier choisi par l'utilisateur
-@param lancer : True pour lancer un traitement, False pour ouvrir un traitement
-"""
-# TODO : A améliorer !
-def validationFichier( fichier, lancer ) :
-    extension = os.path.splitext(fichier)[1]
-    if fichier == "" :
-        return False
-    if lancer and extension != ".tiff" and extension != ".tif" :
-        return False
-    if not lancer and extension != ".dat" and extension != ".db"  :
-        return False
-    return True
-
 
 """
 Fonction de traitement d'image (Appel tout le travail de traitement d'image)
@@ -79,29 +63,25 @@ Demande à l'utilisateur un fichier pour lancer un traitement ou ouvrir un fichi
 """
 def lancerOuOuvrirTraitement( lancer, application ) :
     fileDialog = QFileDialog() # Crée un objet de type QFileDialog (Fenêtre pour choisir un fichier)
-    if lancer : fileDialog.setWindowTitle("Veuillez choisir le fichier .TIF") # Définit le nom de la fenêtre
-    else : fileDialog.setWindowTitle("Veuillez choisir le fichier .DAT ou .DB")
+    if lancer : fileDialog.setWindowTitle("Veuillez choisir le fichier à traiter") # Définit le nom de la fenêtre
+    else : fileDialog.setWindowTitle("Veuillez choisir le fichier à importer")
     fichierDemande = fileDialog.getOpenFileName()[0] # Permet aussi d'attendre qu'il y ait un fichier demandé
     print( "[Debug] Fichier demandé : " + fichierDemande )
     fileDialog.close() # Fermer la fenêtre
     
-    if not validationFichier( fichierDemande, lancer ) : # Si la validation de ce fichier échoue
-        if lancer : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .TIF !")
-        else : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .DAT ou .DB !")
+    creationObjParams = Parametres()
+    if lancer :
+        fichierExporte = traitementImage( fichierDemande )
+        autorisationDeLancer = importerTraitement( fichierExporte, creationObjParams )
     else :
-        creationObjParams = Parametres()
-        if lancer :
-            fichierExporte = traitementImage( fichierDemande )
-            autorisationDeLancer = importerTraitement( fichierExporte, creationObjParams )
-        else :
-            autorisationDeLancer = importerTraitement( fichierDemande, creationObjParams )
-        
-        if autorisationDeLancer :
-            # TODO : Passer en param à la GUI le fichier du traitement
-            # C'est fait avec les variables d'environnement, et récupéré par parametres.py
-            fenetre = Fenetre( objParams = creationObjParams ) # Crée un objet de type Fenetre
-            fenetre.setWindowTitle("Graphique 3D") # Définit le nom de la fenêtre
-            fenetre.show() # Affiche la fenêtre
-            application.exec_() # Attendre que tout ce qui est en cours soit exécuté
-        else :
-            QMessageBox.about(None, "Information", "Fichier .DAT ou .DB inutilisable !")
+        autorisationDeLancer = importerTraitement( fichierDemande, creationObjParams )
+    
+    if autorisationDeLancer :
+        # TODO : Passer en param à la GUI le fichier du traitement
+        # C'est fait avec les variables d'environnement, et récupéré par parametres.py
+        fenetre = Fenetre( objParams = creationObjParams ) # Crée un objet de type Fenetre
+        fenetre.setWindowTitle("Graphique 3D") # Définit le nom de la fenêtre
+        fenetre.show() # Affiche la fenêtre
+        application.exec_() # Attendre que tout ce qui est en cours soit exécuté
+    else :
+        QMessageBox.about(None, "Information", "Fichier inutilisable !")
