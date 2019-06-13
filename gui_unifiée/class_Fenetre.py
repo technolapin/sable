@@ -25,7 +25,7 @@ class Fenetre(QTabWidget) :
     """
     Constructeur
     """
-    def __init__(self, grapheDonne, parent=None) :
+    def __init__(self, parent=None) :
         super(Fenetre, self).__init__(parent) # Appel du constructeur de QTabWidget
         
         # Taille minimale de la fenêtre, en pixels
@@ -48,7 +48,7 @@ class Fenetre(QTabWidget) :
         self.addTab( self.onglet6, "Aide" )
         
         # Remplissage des onglets en créant les grilles
-        self.onglet1.setLayout( TabGraphique3D(grapheDonne) )
+        self.onglet1.setLayout( TabGraphique3D() )
         self.onglet2.setLayout( TabMilleFeuille3D() )
         self.onglet3.setLayout( TabMilleFeuilleIRM() )
         self.onglet4.setLayout( TabAffichageCoupes() )

@@ -75,14 +75,6 @@ def importerTraitement( fichier ) :
 
 
 """
-Ouvrir fichier Numpy (.npy) pour Graphique 3D
-"""
-def loadGraphique3D( fichierNumpy ) :
-#    return load( fichierNumpy )[30:50]
-    return load( fichierNumpy )
-
-
-"""
 Demande à l'utilisateur un fichier pour lancer un traitement ou ouvrir un fichier de traitement
 @param lancer : True pour lancer un traitement, False pour ouvrir un traitement
 """
@@ -107,7 +99,7 @@ def lancerOuOuvrirTraitement( lancer, application ) :
         if autorisationDeLancer :
             # TODO : Passer en param à la GUI le fichier du traitement
             # C'est fait avec les variables d'environnement, et récupéré par parametres.py
-            fenetre = Fenetre( loadGraphique3D( os.environ[ PREFIX_VAR_ENV + "URL_GRAPHIQUE_3D" ] ) ) # Crée un objet de type Fenetre
+            fenetre = Fenetre() # Crée un objet de type Fenetre
             fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
             fenetre.show() # Affiche la fenêtre
             application.exec_() # Attendre que tout ce qui est en cours soit exécuté

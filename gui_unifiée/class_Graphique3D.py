@@ -76,7 +76,7 @@ class Graphique3D(FigureCanvasQTAgg) :
 
         else :
             for numeroCourbe in range(len(liste)) :
-                couleur = couleurs[(numeroCourbe - 1) % len(couleurs)] # Couleurs périodiques
+                couleur = couleurs[numeroCourbe % len(couleurs)] # Couleurs périodiques
                 if tempsAfficher != 0 :
                     try :
                         self.axes.plot( [liste[numeroCourbe][0][tempsAfficher - 1]],

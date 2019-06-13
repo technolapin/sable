@@ -35,9 +35,14 @@ except KeyError  :
     INTERVALLE_YZ = 80
 
 try :
-    URL_VTK = "../extraction/vtks/"
+    URL_VTK = os.environ[ PREFIX_VAR_ENV + "URL_VTK" ]
 except KeyError  :
     URL_VTK = 80
+
+try :
+    URL_GRAPHIQUE_3D = os.environ[ PREFIX_VAR_ENV + "URL_GRAPHIQUE_3D" ]
+except KeyError  :
+    URL_GRAPHIQUE_3D = "../extraction/tracking_3D/resultats.npy"
 
 
 """

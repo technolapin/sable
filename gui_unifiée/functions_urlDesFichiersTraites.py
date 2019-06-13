@@ -25,6 +25,12 @@ def genererURLdesVTK( instantTemporel ) :
     fichierVTK = URL_VTK + tempsFormate + ".vtk"
     return fichierVTK
 
+"""
+@return URL du fichier NPY à utiliser
+"""
+def genererURLGraph3D() :
+    return URL_GRAPHIQUE_3D
+
 
 """
 @return Nombre d'images dans le plan de la caméra YZ, moins 1
