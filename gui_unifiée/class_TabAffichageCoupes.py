@@ -79,9 +79,9 @@ class TabAffichageCoupes(QGridLayout) :
         self.label_image_yz = QLabel()
         self.label_image_zx = QLabel()
         
-        print("Image XY : ", self.label_image_xy)
-        print("Image YZ : ", self.label_image_yz)
-        print("Image ZX : ", self.label_image_zx)
+        print("[Debug TabAffichageCoupes] Image XY : ", self.label_image_xy)
+        print("[Debug TabAffichageCoupes] Image YZ : ", self.label_image_yz)
+        print("[Debug TabAffichageCoupes] Image ZX : ", self.label_image_zx)
         
         self.label_image_xy.mousePressEvent=functools.partial(self.get_pixel, source_object=self.label_image_xy)
         self.label_image_yz.mousePressEvent=functools.partial(self.get_pixel, source_object=self.label_image_yz)
