@@ -4,7 +4,7 @@ import sys
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
 from PyQt5.QtCore import QSize
-from PyQt5.QtWidgets import QApplication, QTabWidget, QWidget
+from PyQt5.QtWidgets import QApplication, QTabWidget, QWidget, QMessageBox
 
 from class_TabGraphique3D import TabGraphique3D
 from class_TabMilleFeuille3D import TabMilleFeuille3D
@@ -31,12 +31,18 @@ class Fenetre(QTabWidget) :
         # Taille minimale de la fenêtre, en pixels
         self.setMinimumSize( QSize(400, 400) )
         
+        msgBox = QMessageBox()
+        msgBox.setText("Voulez-vous activer l'affichage des VTKs ?\n(Il y aura alors un temps de chargement plus long)")
+        msgBox.setWindowTitle("Information")
+        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        returnValue = msgBox.exec()
+        
         # Création des onglets de la fenêtre
         self.onglet1 = QWidget()
         self.onglet2 = QWidget()
         self.onglet3 = QWidget()
         self.onglet4 = QWidget()
-        if not DISABLE_VTK : self.onglet5 = QWidget()
+        if returnValue == QMessageBox.Yes : self.onglet5 = QWidget()
         self.onglet6 = QWidget() 
         
         # Ajout des onglets à la fenêtre
@@ -44,7 +50,7 @@ class Fenetre(QTabWidget) :
         self.addTab( self.onglet2, "Mille-feuilles" )
         self.addTab( self.onglet3, "Vision IRM" )
         self.addTab( self.onglet4, "Coupes" )
-        if not DISABLE_VTK : self.addTab( self.onglet5, "VTK" )
+        if returnValue == QMessageBox.Yes : self.addTab( self.onglet5, "VTK" )
         self.addTab( self.onglet6, "Aide" )
         
         # Remplissage des onglets en créant les grilles
@@ -52,7 +58,7 @@ class Fenetre(QTabWidget) :
         self.onglet2.setLayout( TabMilleFeuille3D() )
         self.onglet3.setLayout( TabMilleFeuilleIRM() )
         self.onglet4.setLayout( TabAffichageCoupes() )
-        if not DISABLE_VTK : self.onglet5.setLayout( TabVTK() )
+        if returnValue == QMessageBox.Yes : self.onglet5.setLayout( TabVTK() )
         self.onglet6.setLayout( TabAide() )
 
 
@@ -64,7 +70,7 @@ Code principal pour démonstration
 # Source : https://stackoverflow.com/questions/419163/what-does-if-name-main-do
 if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
-    fenetre = Fenetre( grapheDeDemonstration ) # Crée un objet de type Fenetre
+    fenetre = Fenetre() # Crée un objet de type Fenetre
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

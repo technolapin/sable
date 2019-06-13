@@ -7,7 +7,6 @@ PARAMETRES
 
 PREFIX_VAR_ENV = "GUI_" # Peut être n'importe quoi
 ENABLE_ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
-DISABLE_VTK = True # Désactiver l'onglet du VTK
 
 try :
     NB_IMGS = int( os.environ[ PREFIX_VAR_ENV + "NB_IMGS" ] )
@@ -37,7 +36,7 @@ except KeyError  :
 try :
     URL_VTK = os.environ[ PREFIX_VAR_ENV + "URL_VTK" ]
 except KeyError  :
-    URL_VTK = 80
+    URL_VTK = "../extraction/vtks/"
 
 try :
     URL_GRAPHIQUE_3D = os.environ[ PREFIX_VAR_ENV + "URL_GRAPHIQUE_3D" ]
