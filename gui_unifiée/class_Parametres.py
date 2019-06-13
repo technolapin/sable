@@ -4,11 +4,14 @@ import parametres
 """
 Objet de centralisation des paramètres
 """
+# Note : Les getters et les setters, en Python, ça sert à rien, tout est public
 class Parametres() :
     def __init__(self) :
         """
         Valeurs par défaut
         """
+        self.contientVariablesImportees = False
+        
         self.NB_IMGS = parametres.NB_IMGS # Nombre d'images au format PGM
         self.INTERVALLE_XY = parametres.INTERVALLE_XY # Intervalle temporel dans cette liste d'images, c'est à dire le pas dans le plan XY
         self.INTERVALLE_XZ = parametres.INTERVALLE_XZ # Pas dans le plan XZ
@@ -17,23 +20,8 @@ class Parametres() :
         self.URL_VTK = parametres.URL_VTK # URL vers les fichiers VTK
         self.URL_GRAPHIQUE_3D = parametres.URL_GRAPHIQUE_3D # URL vers le fichier NPY
         self.CHEMIN_ABSOLU_FICHIER_IMPORTE = None # Chemin absolu du fichier contenant les params importés
-    
-    def setNB_IMGS( self, param ) :
-        self.NB_IMGS = param
-    def setINTERVALLE_XY( self, param ) :
-        self.INTERVALLE_XY = param
-    def setINTERVALLE_XZ( self, param ) :
-        self.INTERVALLE_XZ = param
-    def setINTERVALLE_YZ( self, param ) :
-        self.INTERVALLE_YZ = param
-    def setURL_PGM( self, param ) :
-        self.URL_PGM = param
-    def setURL_VTK( self, param ) :
-        self.URL_VTK = param
-    def setURL_GRAPHIQUE_3D( self, param ) :
-        self.URL_GRAPHIQUE_3D = param
-    def setCHEMIN_ABSOLU_FICHIER_IMPORTE( self, param ) :
-        self.CHEMIN_ABSOLU_FICHIER_IMPORTE = param
+        
+        self.TabGraphique3D = None # Objet TabGraphique3D
     
     """
     @return True si il y a une logique, False sinon

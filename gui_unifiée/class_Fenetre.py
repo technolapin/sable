@@ -55,8 +55,12 @@ class Fenetre(QTabWidget) :
         if returnValue == QMessageBox.Yes : self.addTab( self.onglet5, "VTK" )
         self.addTab( self.onglet6, "Aide" )
         
+        # Création et enregistrement de l'objet de l'onglet du graphique 3D
+        # (Permet de l'appeler depuis n'importe où via l'objet Parametres)
+        self.objParams.TabGraphique3D = TabGraphique3D( objParams = self.objParams )
+        
         # Remplissage des onglets en créant les grilles
-        self.onglet1.setLayout( TabGraphique3D( objParams = self.objParams ) )
+        self.onglet1.setLayout( self.objParams.TabGraphique3D )
         self.onglet2.setLayout( TabMilleFeuille3D( objParams = self.objParams ) )
         self.onglet3.setLayout( TabMilleFeuilleIRM( objParams = self.objParams ) )
         self.onglet4.setLayout( TabAffichageCoupes( objParams = self.objParams ) )
