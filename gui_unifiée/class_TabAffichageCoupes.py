@@ -159,7 +159,7 @@ class TabAffichageCoupes(QGridLayout) :
         
         self.bouton1=QRadioButton("Images originales")
         self.bouton2=QRadioButton("Images seuillées")
-        self.bouton3=QRadioButton("Images du Watershade")
+        self.bouton3=QRadioButton("Images carte de distance")
         
         group_box2=QGroupBox("Contours")
 
