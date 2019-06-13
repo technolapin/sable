@@ -7,9 +7,7 @@ Objet de centralisation des paramètres
 # Note : Les getters et les setters, en Python, ça sert à rien, tout est public
 class Parametres() :
     def __init__(self) :
-        """
-        Valeurs par défaut
-        """
+        """ Valeurs par défaut """
         self.contientVariablesImportees = False
         
         self.NB_IMGS = parametres.NB_IMGS # Nombre d'images au format PGM

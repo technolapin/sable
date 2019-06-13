@@ -31,18 +31,14 @@ class TabVTK(QGridLayout) :
         
         self.objParams = objParams
         
-        """
-        Divers
-        """
+        """ Divers """
         # Défilement temporel
         self.barreDeScrollTemps = QScrollBar(Qt.Horizontal)
         self.barreDeScrollTemps.setMaximum( self.objParams.nombreInstantsTemporels() )
         self.barreDeScrollTemps.valueChanged.connect( self.dessinerVTK )
         self.addWidget( self.barreDeScrollTemps, 2, 1 )
         
-        """
-        VTK
-        """
+        """ VTK """
         self.colors = vtk.vtkNamedColors() # Pour pouvoir mettre des couleurs
         
         self.frame = QFrame()
