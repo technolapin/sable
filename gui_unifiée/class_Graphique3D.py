@@ -2,8 +2,6 @@ from matplotlib.pyplot import figure as Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from mpl_toolkits.mplot3d import Axes3D
 
-from random import choice
-
 
 """
 Classe Graphique3D, hérite de FigureCanvasQTAgg
@@ -76,7 +74,7 @@ class Graphique3D(FigureCanvasQTAgg) :
 
         else :
             for numeroCourbe in range(len(liste)) :
-                couleur = couleurs[(numeroCourbe - 1) % len(couleurs)] # Couleurs périodiques
+                couleur = couleurs[numeroCourbe % len(couleurs)] # Couleurs périodiques
                 if tempsAfficher != 0 :
                     try :
                         self.axes.plot( [liste[numeroCourbe][0][tempsAfficher - 1]],

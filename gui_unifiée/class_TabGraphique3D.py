@@ -7,7 +7,10 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QHBo
 
 from class_Graphique3D import Graphique3D
 
+from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 from parametres_graph3D_pour_demo import grapheDeDemonstration # Ne sert que si est exécuté séparemment
+
+from numpy import load
 
 
 """
@@ -20,8 +23,10 @@ class TabGraphique3D(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
-    def __init__(self, grapheDonne, parent=None) :
+    def __init__(self, objParams, parent=None) :
         super(TabGraphique3D, self).__init__(parent) # Appel du constructeur de QGridLayout
+        
+        self.objParams = objParams
         
         
         # Ajout Maylis
@@ -42,7 +47,11 @@ class TabGraphique3D(QGridLayout) :
         
         
         # Graphe à afficher
-        self.graphe = grapheDonne
+        if __name__ != '__main__' : # Si on n'est pas le script principal
+            print( "[Debug TabGraphique3D] Fichier NPY utilisé : " + self.objParams.genererURLGraph3D() )
+            self.graphe = load( self.objParams.genererURLGraph3D() )
+        else :
+            self.graphe = grapheDeDemonstration
         
         self.graphique3D = Graphique3D()
 #        self.graphique3D.setMinimumSize(QSize(400, 400)) # Définit la taille minimum en pixels de ce Widget
@@ -62,7 +71,6 @@ class TabGraphique3D(QGridLayout) :
         # len(self.graphe[0][0]) est le nombre d'échantillons temporels dont on dispose
         self.barreDeScrollTemps.valueChanged.connect( self.dessinerGraphique3D )
         
-#        self.addWidget( self.menuSelection, 1, 1 ) # Ajoute le menu déroulant en position ligne 2 colonne 1
         vertical_layout.addWidget( self.graphique3D , stretch=2) # Ajoute le graphique 3D en position ligne 2 colonne 1
         self.addLayout(vertical_layout,1,1)
         self.addWidget( self.barreDeScrollCourbes,1,2 ) # Ajoute la barre de défilement 1 en position ligne 2 colonne 2
@@ -89,6 +97,15 @@ class TabGraphique3D(QGridLayout) :
          # Fin Ajout Maylis
         
          print( "[Debug TabGraphique3D] Temps : " + str( self.barreDeScrollTemps.value() ) + ", Courbe : " + str( self.barreDeScrollCourbes.value() ) )
+         
+    """
+    Modifier position barres de scrolls
+    """
+    def setScrollBarsValues( self, courbe = None, temps = None ):
+        if courbe != None :
+            self.barreDeScrollTemps.setValue(courbe)
+        if temps != None :
+            self.barreDeScrollTemps.setValue(temps)
 
 
 """
@@ -101,6 +118,6 @@ if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
     fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
-    fenetre.setLayout( TabGraphique3D(grapheDeDemonstration) )
+    fenetre.setLayout( TabGraphique3D( Parametres() ) )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

@@ -5,10 +5,9 @@ from PyQt5.QtWidgets import QMessageBox, QFileDialog
 # Source : http://python.jpvweb.com/python/mesrecettespython/doku.php?id=sauve_recup_objets
 import shelve # Permet de sauvegarder et charger des variables
 
-from numpy import load
+from class_Parametres import Parametres
 
 from class_Fenetre import Fenetre
-from parametres import PREFIX_VAR_ENV
 
 
 """
@@ -18,11 +17,12 @@ Fonction de validation du fichier demandé
 """
 # TODO : A améliorer !
 def validationFichier( fichier, lancer ) :
+    extension = os.path.splitext(fichier)[1]
     if fichier == "" :
         return False
-    if lancer and fichier[-4:] != ".tiff" :
+    if lancer and extension != ".tiff" and extension != ".tif" :
         return False
-    if not lancer and fichier[-4:] != ".dat" :
+    if not lancer and extension != ".dat" and extension != ".db"  :
         return False
     return True
 
@@ -39,47 +39,38 @@ def traitementImage( fichier ) :
 """
 Importer un fichier exporté par le système de traitement
 @param fichier : Fichier d'exportation du traitement
-@return False si ça a merdé
+@return False si ça a merdé, ou si les données ont des incohérences
 """
-def importerTraitement( fichier ) :
-    print( "[Info] Importation du traitement : " + fichier )
+def importerTraitement( fichier, objParams ) :
+    print( "[Info Main] Importation du traitement : " + fichier )
     try :
-        fichierExporté = shelve.open( fichier[0:-4], flag='c' ) # 'c' pour lecture seule
+        cheminSansExtension = os.path.splitext(fichier)[0]
+        fichierExporté = shelve.open( cheminSansExtension, flag='c' ) # 'c' pour lecture seule
     except Exception :
         print( "[Erreur] Fichier invalide !" )
         return False
     
-    variablesAImporter = [ "NB_IMGS",
-                           "INTERVALLE_XY",
-                           "INTERVALLE_XZ",
-                           "INTERVALLE_YZ",
-                           "URL_PGM",
-                           "URL_VTK",
-                           "URL_GRAPHIQUE_3D" ]
+    try :
+        objParams.NB_IMGS = fichierExporté[ "NB_IMGS" ]
+        objParams.INTERVALLE_XY = fichierExporté[ "INTERVALLE_XY" ]
+        objParams.INTERVALLE_XZ = fichierExporté[ "INTERVALLE_XZ" ]
+        objParams.INTERVALLE_YZ = fichierExporté[ "INTERVALLE_YZ" ]
+        objParams.URL_PGM = fichierExporté[ "URL_PGM" ]
+        objParams.URL_VTK = fichierExporté[ "URL_VTK" ]
+        objParams.URL_GRAPHIQUE_3D = fichierExporté[ "URL_GRAPHIQUE_3D" ]
+    except KeyError :
+        print( "[Erreur] Le fichier ne contient pas les variables nécéssaires !" )
+        return False
     
-    OK = True
-    for variable in variablesAImporter :
-        try :
-            # On les met en variables d'environnement pour que parametres.py puisse les récupérer facilement lorsqu'il est appelé par les autres parties du projet
-            os.environ[ PREFIX_VAR_ENV + variable ] = str( fichierExporté[ variable ] )
-        except KeyError :
-            print( "[Erreur] Le fichier ne contient pas les variables nécéssaires !" )
-            OK = False
+    objParams.contientVariablesImportees = True
     
     # Sauvegarde du répertoire absolu du répertorie du fichier d'exportation
     # Sert à localiser à partir des URL relatives qu'il contient
-    os.environ[ PREFIX_VAR_ENV + "REPERTOIRE" ] = os.path.dirname(os.path.abspath( fichier ))
+    objParams.CHEMIN_ABSOLU_FICHIER_IMPORTE = os.path.dirname(os.path.abspath( fichier ))
     
     fichierExporté.close()
-    return OK
-
-
-"""
-Ouvrir fichier Numpy (.npy) pour Graphique 3D
-"""
-def loadGraphique3D( fichierNumpy ) :
-#    return load( fichierNumpy )[30:50]
-    return load( fichierNumpy )
+    
+    return objParams.verifierParams()
 
 
 """
@@ -88,28 +79,29 @@ Demande à l'utilisateur un fichier pour lancer un traitement ou ouvrir un fichi
 """
 def lancerOuOuvrirTraitement( lancer, application ) :
     fileDialog = QFileDialog() # Crée un objet de type QFileDialog (Fenêtre pour choisir un fichier)
-    if lancer : fileDialog.setWindowTitle("Veuillez choisir le fichier TIFF") # Définit le nom de la fenêtre
-    else : fileDialog.setWindowTitle("Veuillez choisir le fichier DAT")
+    if lancer : fileDialog.setWindowTitle("Veuillez choisir le fichier .TIF") # Définit le nom de la fenêtre
+    else : fileDialog.setWindowTitle("Veuillez choisir le fichier .DAT ou .DB")
     fichierDemande = fileDialog.getOpenFileName()[0] # Permet aussi d'attendre qu'il y ait un fichier demandé
     print( "[Debug] Fichier demandé : " + fichierDemande )
     fileDialog.close() # Fermer la fenêtre
     
     if not validationFichier( fichierDemande, lancer ) : # Si la validation de ce fichier échoue
-        if lancer : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .TIFF !")
-        else : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .DAT !")
+        if lancer : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .TIF !")
+        else : QMessageBox.about(None, "Information", "Ce fichier est invalide ! Il nous faut un .DAT ou .DB !")
     else :
+        creationObjParams = Parametres()
         if lancer :
             fichierExporte = traitementImage( fichierDemande )
-            autorisationDeLancer = importerTraitement( fichierExporte )
+            autorisationDeLancer = importerTraitement( fichierExporte, creationObjParams )
         else :
-            autorisationDeLancer = importerTraitement( fichierDemande )
+            autorisationDeLancer = importerTraitement( fichierDemande, creationObjParams )
         
         if autorisationDeLancer :
             # TODO : Passer en param à la GUI le fichier du traitement
             # C'est fait avec les variables d'environnement, et récupéré par parametres.py
-            fenetre = Fenetre( loadGraphique3D( os.environ[ PREFIX_VAR_ENV + "URL_GRAPHIQUE_3D" ] ) ) # Crée un objet de type Fenetre
-            fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
+            fenetre = Fenetre( objParams = creationObjParams ) # Crée un objet de type Fenetre
+            fenetre.setWindowTitle("Graphique 3D") # Définit le nom de la fenêtre
             fenetre.show() # Affiche la fenêtre
             application.exec_() # Attendre que tout ce qui est en cours soit exécuté
         else :
-            QMessageBox.about(None, "Information", "Fichier .DAT inutilisable !")
+            QMessageBox.about(None, "Information", "Fichier .DAT ou .DB inutilisable !")
