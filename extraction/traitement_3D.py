@@ -150,6 +150,8 @@ for t in range(0, n_tempo):
     command("inverse images_3D/image_3D_superpose_t"+padding_temporel+".pgm "+
             "images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm ")
 
+    lissage = 10
+    command("mcube images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 0 "+str(lissage)+" 0 VTK vtks/"+padding_temporel+".vtk")
     
     #border
     command("border images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 border_3D/border_3D_t_"+padding_temporel+".pgm")
