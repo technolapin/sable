@@ -43,7 +43,8 @@ Importer un fichier exporté par le système de traitement
 def importerTraitement( fichier, objParams ) :
     print( "[Info Main] Importation du traitement : " + fichier )
     try :
-        fichierExporté = shelve.open( fichier[0:-4], flag='c' ) # 'c' pour lecture seule
+        cheminSansExtension = os.path.splitext(fichier)[0]
+        fichierExporté = shelve.open( cheminSansExtension, flag='c' ) # 'c' pour lecture seule
     except Exception :
         print( "[Erreur] Fichier invalide !" )
         return False
