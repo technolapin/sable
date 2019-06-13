@@ -1,7 +1,7 @@
 #suivi de grains
 
 #importations
-import shelve
+import pickle
 import os
 import numpy as np
 #donnes
@@ -178,14 +178,19 @@ URL_GRAPHIQUE_3D = "tracking_3D/resultats.npy"
 """
 EXPORTATION
 """
-fichierExportation = shelve.open( 'woopwoop.dat' )
+# Bade de Données
+bdd = {} 
+bdd["NB_IMGS"] = NB_IMGS
+bdd["INTERVALLE_XY"] = INTERVALLE_XY
+bdd["INTERVALLE_XZ"] = INTERVALLE_XZ
+bdd["INTERVALLE_YZ"] = INTERVALLE_YZ
+bdd["URL_PGM"] = URL_PGM
+bdd["URL_VTK"] = URL_VTK
+bdd["URL_GRAPHIQUE_3D" ] = URL_GRAPHIQUE_3D
 
-fichierExportation["NB_IMGS"] = NB_IMGS
-fichierExportation["INTERVALLE_XY"] = INTERVALLE_XY
-fichierExportation["INTERVALLE_XZ"] = INTERVALLE_XZ
-fichierExportation["INTERVALLE_YZ"] = INTERVALLE_YZ
-fichierExportation["URL_PGM"] = URL_PGM
-fichierExportation["URL_VTK"] = URL_VTK
-fichierExportation["URL_GRAPHIQUE_3D" ] = URL_GRAPHIQUE_3D
+# Its important to use binary mode
+fichierBdd = open('woopwoop', 'ab')
 
-fichierExportation.close()
+# source, destination
+pickle.dump(bdd, fichierBdd)                 
+fichierBdd.close()
