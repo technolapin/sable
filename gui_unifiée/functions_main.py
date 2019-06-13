@@ -49,20 +49,20 @@ def importerTraitement( fichier, objParams ) :
         return False
     
     try :
-        objParams.setNB_IMGS( fichierExporté[ "NB_IMGS" ] )
-        objParams.setINTERVALLE_XY( fichierExporté[ "INTERVALLE_XY" ] )
-        objParams.setINTERVALLE_XZ( fichierExporté[ "INTERVALLE_XZ" ] )
-        objParams.setINTERVALLE_YZ( fichierExporté[ "INTERVALLE_YZ" ] )
-        objParams.setURL_PGM( fichierExporté[ "URL_PGM" ] )
-        objParams.setURL_VTK( fichierExporté[ "URL_VTK" ] )
-        objParams.setURL_GRAPHIQUE_3D( fichierExporté[ "URL_GRAPHIQUE_3D" ] )
+        objParams.NB_IMGS = fichierExporté[ "NB_IMGS" ]
+        objParams.INTERVALLE_XY = fichierExporté[ "INTERVALLE_XY" ]
+        objParams.INTERVALLE_XZ = fichierExporté[ "INTERVALLE_XZ" ]
+        objParams.INTERVALLE_YZ = fichierExporté[ "INTERVALLE_YZ" ]
+        objParams.URL_PGM = fichierExporté[ "URL_PGM" ]
+        objParams.URL_VTK = fichierExporté[ "URL_VTK" ]
+        objParams.URL_GRAPHIQUE_3D = fichierExporté[ "URL_GRAPHIQUE_3D" ]
     except KeyError :
         print( "[Erreur] Le fichier ne contient pas les variables nécéssaires !" )
         return False
     
     # Sauvegarde du répertoire absolu du répertorie du fichier d'exportation
     # Sert à localiser à partir des URL relatives qu'il contient
-    objParams.setCHEMIN_ABSOLU_FICHIER_IMPORTE( os.path.dirname(os.path.abspath( fichier )) )
+    objParams.CHEMIN_ABSOLU_FICHIER_IMPORTE = os.path.dirname(os.path.abspath( fichier ))
     
     fichierExporté.close()
     
@@ -96,7 +96,7 @@ def lancerOuOuvrirTraitement( lancer, application ) :
             # TODO : Passer en param à la GUI le fichier du traitement
             # C'est fait avec les variables d'environnement, et récupéré par parametres.py
             fenetre = Fenetre( objParams = creationObjParams ) # Crée un objet de type Fenetre
-            fenetre.setWindowTitle("Graphique 3D (DÉMONSTRATION)") # Définit le nom de la fenêtre
+            fenetre.setWindowTitle("Graphique 3D") # Définit le nom de la fenêtre
             fenetre.show() # Affiche la fenêtre
             application.exec_() # Attendre que tout ce qui est en cours soit exécuté
         else :

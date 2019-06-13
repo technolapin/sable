@@ -4,6 +4,7 @@ import parametres
 """
 Objet de centralisation des paramètres
 """
+# Note : Les getters et les setters, en Python, ça sert à rien, tout est public
 class Parametres() :
     def __init__(self) :
         """
@@ -21,39 +22,6 @@ class Parametres() :
         self.CHEMIN_ABSOLU_FICHIER_IMPORTE = None # Chemin absolu du fichier contenant les params importés
         
         self.TabGraphique3D = None # Objet TabGraphique3D
-    
-    def setNB_IMGS( self, param ) :
-        self.NB_IMGS = param
-        self.contientDesVariablesImportees = True
-    def setINTERVALLE_XY( self, param ) :
-        self.INTERVALLE_XY = param
-        self.contientDesVariablesImportees = True
-    def setINTERVALLE_XZ( self, param ) :
-        self.INTERVALLE_XZ = param
-        self.contientDesVariablesImportees = True
-    def setINTERVALLE_YZ( self, param ) :
-        self.INTERVALLE_YZ = param
-        self.contientDesVariablesImportees = True
-    def setURL_PGM( self, param ) :
-        self.URL_PGM = param
-        self.contientDesVariablesImportees = True
-    def setURL_VTK( self, param ) :
-        self.URL_VTK = param
-        self.contientDesVariablesImportees = True
-    def setURL_GRAPHIQUE_3D( self, param ) :
-        self.URL_GRAPHIQUE_3D = param
-        self.contientDesVariablesImportees = True
-    def setCHEMIN_ABSOLU_FICHIER_IMPORTE( self, param ) :
-        self.CHEMIN_ABSOLU_FICHIER_IMPORTE = param
-        self.contientDesVariablesImportees = True
-    
-    def setTabGraphique3D( self, param ) :
-        self.TabGraphique3D = param
-    def getTabGraphique3D(self):
-        return self.TabGraphique3D
-    
-    def contientDesVariablesImportees(self) :
-        return self.contientDesVariablesImportees
     
     """
     @return True si il y a une logique, False sinon
