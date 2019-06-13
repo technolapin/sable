@@ -9,6 +9,8 @@ class Parametres() :
         """
         Valeurs par défaut
         """
+        self.contientDesVariablesImportees = False
+        
         self.NB_IMGS = parametres.NB_IMGS # Nombre d'images au format PGM
         self.INTERVALLE_XY = parametres.INTERVALLE_XY # Intervalle temporel dans cette liste d'images, c'est à dire le pas dans le plan XY
         self.INTERVALLE_XZ = parametres.INTERVALLE_XZ # Pas dans le plan XZ
@@ -22,25 +24,36 @@ class Parametres() :
     
     def setNB_IMGS( self, param ) :
         self.NB_IMGS = param
+        self.contientDesVariablesImportees = True
     def setINTERVALLE_XY( self, param ) :
         self.INTERVALLE_XY = param
+        self.contientDesVariablesImportees = True
     def setINTERVALLE_XZ( self, param ) :
         self.INTERVALLE_XZ = param
+        self.contientDesVariablesImportees = True
     def setINTERVALLE_YZ( self, param ) :
         self.INTERVALLE_YZ = param
+        self.contientDesVariablesImportees = True
     def setURL_PGM( self, param ) :
         self.URL_PGM = param
+        self.contientDesVariablesImportees = True
     def setURL_VTK( self, param ) :
         self.URL_VTK = param
+        self.contientDesVariablesImportees = True
     def setURL_GRAPHIQUE_3D( self, param ) :
         self.URL_GRAPHIQUE_3D = param
+        self.contientDesVariablesImportees = True
     def setCHEMIN_ABSOLU_FICHIER_IMPORTE( self, param ) :
         self.CHEMIN_ABSOLU_FICHIER_IMPORTE = param
+        self.contientDesVariablesImportees = True
     
     def setTabGraphique3D( self, param ) :
         self.TabGraphique3D = param
-    def getTabGraphique3D( self ):
+    def getTabGraphique3D(self):
         return self.TabGraphique3D
+    
+    def contientDesVariablesImportees(self) :
+        return self.contientDesVariablesImportees
     
     """
     @return True si il y a une logique, False sinon
