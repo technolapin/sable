@@ -51,8 +51,11 @@ class Graphique3D(FigureCanvasQTAgg) :
         self.axes.set_ylabel( 'Axe Y' ) # Label sur l'axe Y
         self.axes.set_zlabel( 'Axe Z' ) # Label sur l'axe Z
 #        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
+        
+        couleurs = ["b", "g", "r", "c", "m", "y"] # Liste des couleurs de base de Matplotlib
+        
         if courbeAfficher != 0 :
-            couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
+            couleur = couleurs[(courbeAfficher - 1) % len(couleurs)] # Couleurs périodiques
             if tempsAfficher != 0 :
                 try :
                     self.axes.plot( [liste[courbeAfficher - 1][0][tempsAfficher - 1]],
@@ -72,19 +75,19 @@ class Graphique3D(FigureCanvasQTAgg) :
                                 'ko-' ) # Affiche le début de la courbe en noir
 
         else :
-            for courbe in liste :
-                couleur = choice( ["b", "g", "r", "c", "m", "y"] ) # Choisi aléatoirement dans la liste des couleurs de base de Matplotlib
+            for numeroCourbe in range(len(liste)) :
+                couleur = couleurs[(numeroCourbe - 1) % len(couleurs)] # Couleurs périodiques
                 if tempsAfficher != 0 :
                     try :
-                        self.axes.plot( [courbe[0][tempsAfficher - 1]],
-                                        [courbe[1][tempsAfficher - 1]],
-                                        [courbe[2][tempsAfficher - 1]],
+                        self.axes.plot( [liste[numeroCourbe][0][tempsAfficher - 1]],
+                                        [liste[numeroCourbe][1][tempsAfficher - 1]],
+                                        [liste[numeroCourbe][2][tempsAfficher - 1]],
                                         couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
                     except IndexError :
                         print( "[Erreur] Les courbes n'ont pas la même longueur !" )
                 else :
-                    self.axes.plot( courbe[0],
-                                    courbe[1],
-                                    courbe[2],
+                    self.axes.plot( liste[numeroCourbe][0],
+                                    liste[numeroCourbe][1],
+                                    liste[numeroCourbe][2],
                                     couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
         self.draw() # Dessine le graphique 3D avec les axes
