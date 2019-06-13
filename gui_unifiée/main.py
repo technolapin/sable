@@ -26,7 +26,7 @@ if returnValue == QMessageBox.Yes :
     if platform.system() != "Linux" :
         QMessageBox.about(None, "Information", "Vous devez exécuter ce logiciel sur un système Linux pour pouvoir réaliser un traitement !\nEn effet, notre système de traitement est compilé uniquement pour cette plateforme.")
     else :
-        lancerOuOuvrirTraitement( True )
+        lancerOuOuvrirTraitement( True, application )
     
 else :
     print( "[Debug] L'utilisateur ne veut pas lancer un nouveau traitement" )
