@@ -172,7 +172,7 @@ NB_IMGS = 4000
 INTERVALLE_XY = 250
 INTERVALLE_XZ = 80
 INTERVALLE_YZ = 80
-URL_PGM = "images_3D/"
+URL_PGM = "coupes_3D/"
 URL_VTK = "vtks/"
 URL_GRAPHIQUE_3D = "tracking_3D/resultats.npy"
 """
