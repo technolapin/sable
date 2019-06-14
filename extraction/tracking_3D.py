@@ -65,7 +65,7 @@ for t in range(0, n_tempo):
     padding_temporel = numerote(t, 2) # pour pas trop recalculer
 
     #enleve de la liste les grains de vol<100
-    liste= parse_list("bary_3D/liste/bary_list_t"+padding_temporel+".list")
+    liste= parse_list("../extraction/bary_3D/liste/bary_list_t"+padding_temporel+".list")
     volume_min=100
     g=0
     while g< len(liste):
@@ -90,7 +90,7 @@ def dist2(g1, g2):
 
 
 
-seuil_volume = 1000
+seuil_volume = 100
 
 for grain in formes[0]:
     grains.append(
@@ -122,7 +122,7 @@ for grain in grains:
         z.append(coords[2])
     resultats.append([x, y, z])
     
-np.save("tracking_3D/resultats.npy", resultats)
+np.save("../extraction/tracking_3D/resultats.npy", resultats)
 """
 for meh in resultats:
     for yolo in meh:
@@ -135,20 +135,20 @@ def retrouve_grain(x,y,z,t):
     padding_temporel = numerote(t, 2)
     
     #retrouve le grain et sa coupe
-    command ("selectcomp images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 "+str(x)+" "+str(y)+" "+str(z)+
-             " tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+".pgm")    
+    command ("selectcomp ../extraction/images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 "+str(x)+" "+str(y)+" "+str(z)+
+             " ../extraction/tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+".pgm")    
     
     #barycentre
-    command("3dlabel tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+
-            ".pgm labels_3D/label_t_"+padding_temporel+"_"+str(x)+str(y)+str(z)+".pgm")
+    command("3dlabel ../extraction/tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+
+            ".pgm ../extraction/labels_3D/label_t_"+padding_temporel+"_"+str(x)+str(y)+str(z)+".pgm")
     
-    command("barycentrelab labels_3D/label_t_"+padding_temporel+"_"+str(x)+str(y)+str(z)+
-            ".pgm bary_3D/bary_3D_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".pgm")
+    command("barycentrelab ../extraction/labels_3D/label_t_"+padding_temporel+"_"+str(x)+str(y)+str(z)+
+            ".pgm ../extraction/bary_3D/bary_3D_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".pgm")
     
-    command("pgm2list bary_3D/bary_3D_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+
-            ".pgm B bary_3D/liste/bary_list_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".list")
+    command("pgm2list ../extraction/bary_3D/bary_3D_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+
+            ".pgm B ../extraction/bary_3D/liste/bary_list_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".list")
     
-    bary= parse_list("bary_3D/liste/bary_list_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".list")
+    bary= parse_list("../extraction/bary_3D/liste/bary_list_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".list")
     print(bary)
     xb=bary[0][0]
     yb=bary[0][1]
@@ -172,9 +172,9 @@ NB_IMGS = 4000
 INTERVALLE_XY = 250
 INTERVALLE_XZ = 80
 INTERVALLE_YZ = 80
-URL_PGM = "images_3D/"
-URL_VTK = "vtks/"
-URL_GRAPHIQUE_3D = "tracking_3D/resultats.npy"
+URL_PGM = "../extraction/images_3D/"
+URL_VTK = "../extraction/vtks/"
+URL_GRAPHIQUE_3D = "../extraction/tracking_3D/resultats.npy"
 """
 EXPORTATION
 """
