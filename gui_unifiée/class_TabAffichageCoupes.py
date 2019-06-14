@@ -14,10 +14,10 @@ from class_Parametres import Parametres # Ne sert que si est exécuté séparemm
 from class_TabGraphique3D import Graphique3D
 
 
-#### Problème parceque dans un autre dossier donc il veut pas ouvrir, depuis
-#### le dossier courant, les choses qu'on veut ouvrir sont pas là
-#sys.path.append("../extraction")
-#from tracking_3D import *
+######## Il faut que je modifie le code dans tracking 3D pour faire
+######## ../extraction pout pouvoir le lancer depuis mon code
+################ sys.path.append("../extraction")
+################ from tracking_3D import *
 
 
 """
