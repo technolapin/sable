@@ -202,14 +202,16 @@ class TabAffichageCoupes(QGridLayout) :
         self.label_grain_Y=QLabel("Y : ")
         self.label_grain_Z=QLabel("Z : ")
         self.label_grain_Temps=QLabel("Temps : ")
-################ self.label_grain_volume = QLabel("Volume : ")
+################ 
+        self.label_grain_volume = QLabel("Volume : ")
         
         # Ajout des labels dans le layout
         vl_grain.addWidget(self.label_grain_X)
         vl_grain.addWidget(self.label_grain_Y)
         vl_grain.addWidget(self.label_grain_Z)
         vl_grain.addWidget(self.label_grain_Temps)
-################ vl_grain.addWidget(self.label_grain_volume)        
+################ 
+        vl_grain.addWidget(self.label_grain_volume)        
         
         # Création d'un contenant pour les Radiobutton, la modification des 
         # images et les informations du grain cliqué ; Ajout dans l'onglet
@@ -304,27 +306,40 @@ class TabAffichageCoupes(QGridLayout) :
         self.label_grain_Z.setText("Z : " + str(z))
         self.label_grain_Temps.setText("Temps : " + str(temps))
     
-    
+        
 ######## Appeler ce que Barbara a fait pour obtenir la liste de je sais pas quoi
 ######## dont on a besoin pour afficher la trajectoire
 ######## retour[0] = volume du grain
 ######## retour[1] = liste dont on a besoin
-################ volume_grain = retour[0]
-################ self.label_grain_volume.setText("Volume : "+str(volume_grain))
+################ 
+
+        retour = retrouve_grain(x,y,z,temps)
+        
 
 
 ######## Prendre le retour de ce Barbara et créer un nouvel objet Graphique3D
 ######## qu'on utilise pour remplacer éventuellement (if il y a déjà un obj)
 ######## le graphique dans la fenêtre
-################ self.fenetre_graph.show()
-################ if (resultat[1]==None):
-################    self.graphique3D.dessinerGraphique3D( [[[],[],[]]], 0, 0 ) # Affiche un graphe vide
-################ else :
-################    self.graphique3D.dessinerGraphique3D( resultat[1], 0, 0 ) # Affiche la trajectoire du grain sélectionné
+################ 
+        self.fenetre_graph.show()
+################ 
+        if (retour[1]==None):
+################    
+            volume_grain = 0
+            self.graphique3D.dessinerGraphique3D( [[[],[],[]]], 0, 0 ) # Affiche un graphe vide
+################ 
+        else :
+################    
+            volume_grain = retour[0]
+            self.graphique3D.dessinerGraphique3D( resultat[1], 0, 0 ) # Affiche la trajectoire du grain sélectionné
+
+
+
+        self.label_grain_volume.setText("Volume : "+str(volume_grain))
 
 ######## A SUPPRIMER (pour le test)
-        self.fenetre_graph.show() # Affiche la fenêtre
-        self.graphique3D.dessinerGraphique3D( [[[],[],[]]], 0, 0 )
+#        self.fenetre_graph.show() # Affiche la fenêtre
+#        self.graphique3D.dessinerGraphique3D( [[[],[],[]]], 0, 0 )
 
     
     
