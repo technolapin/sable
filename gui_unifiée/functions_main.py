@@ -11,7 +11,6 @@ from class_Parametres import Parametres
 from class_Fenetre import Fenetre
 
 
-
 """
 Fonction de traitement d'image (Appel tout le travail de traitement d'image)
 @param fichier : Fichier TIFF choisi par l'utilisateur
@@ -33,7 +32,7 @@ def importerTraitement( fichier, objParams ) :
         # For reading also binary mode is important 
         fichierExporté = open(cheminSansExtension, 'rb')
     except Exception :
-        print( "[Erreur] Fichier invalide !" )
+        print( "[Erreur Main] Fichier invalide !" )
         return False
     
     bdd = pickle.load(fichierExporté)
@@ -41,37 +40,37 @@ def importerTraitement( fichier, objParams ) :
     try :
         objParams.NB_IMGS = bdd[ "NB_IMGS" ]
     except KeyError :
-        print( "[Erreur] Le fichier ne contient pas la variables NB_IMGS !" )
+        print( "[Erreur Main] Le fichier ne contient pas la variables NB_IMGS !" )
         return False
     try :
         objParams.INTERVALLE_XY = bdd[ "INTERVALLE_XY" ]
     except KeyError :
-        print( "[Erreur] Le fichier ne contient pas la variables INTERVALLE_XY !" )
+        print( "[Erreur Main] Le fichier ne contient pas la variables INTERVALLE_XY !" )
         return False
     try :
         objParams.INTERVALLE_XZ = bdd[ "INTERVALLE_XZ" ]
     except KeyError :
-        print( "[Erreur] Le fichier ne contient pas la variables INTERVALLE_XZ !" )
+        print( "[Erreur Main] Le fichier ne contient pas la variables INTERVALLE_XZ !" )
         return False
     try :
         objParams.INTERVALLE_YZ = bdd[ "INTERVALLE_YZ" ]
     except KeyError :
-        print( "[Erreur] Le fichier ne contient pas la variables INTERVALLE_YZ !" )
+        print( "[Erreur Main] Le fichier ne contient pas la variables INTERVALLE_YZ !" )
         return False
     try :
         objParams.URL_PGM = bdd[ "URL_PGM" ]
     except KeyError :
-        print( "[Erreur] Le fichier ne contient pas la variables URL_PGM !" )
+        print( "[Erreur Main] Le fichier ne contient pas la variables URL_PGM !" )
         return False
     try :
         objParams.URL_VTK = bdd[ "URL_VTK" ]
     except KeyError :
-        print( "[Erreur] Le fichier ne contient pas la variables URL_VTK !" )
+        print( "[Erreur Main] Le fichier ne contient pas la variables URL_VTK !" )
         return False
     try :
         objParams.URL_GRAPHIQUE_3D = bdd[ "URL_GRAPHIQUE_3D" ]
     except KeyError :
-        print( "[Erreur] Le fichier ne contient pas la variables URL_GRAPHIQUE_3D !" )
+        print( "[Erreur Main] Le fichier ne contient pas la variables URL_GRAPHIQUE_3D !" )
         return False
     
     
@@ -95,7 +94,7 @@ def lancerOuOuvrirTraitement( lancer, application ) :
     if lancer : fileDialog.setWindowTitle("Veuillez choisir le fichier à traiter") # Définit le nom de la fenêtre
     else : fileDialog.setWindowTitle("Veuillez choisir le fichier à importer")
     fichierDemande = fileDialog.getOpenFileName()[0] # Permet aussi d'attendre qu'il y ait un fichier demandé
-    print( "[Debug] Fichier demandé : " + fichierDemande )
+    print( "[Debug Main] Fichier demandé : " + fichierDemande )
     fileDialog.close() # Fermer la fenêtre
     
     creationObjParams = Parametres()
