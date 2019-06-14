@@ -218,6 +218,6 @@ for t in range(0, n_tempo):
     file.write("####\n")
 file.close()
 
-os.system("rm -R tmp")
+#os.system("rm -R tmp")
 
 
