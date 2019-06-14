@@ -16,8 +16,8 @@ from class_TabGraphique3D import Graphique3D
 
 ######## Il faut que je modifie le code dans tracking 3D pour faire
 ######## ../extraction pout pouvoir le lancer depuis mon code
-################ sys.path.append("../extraction")
-################ from tracking_3D import *
+sys.path.append("../extraction")
+from tracking_3D import *
 
 
 """
