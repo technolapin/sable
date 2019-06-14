@@ -24,7 +24,7 @@ L'environnement graphique est dans le répertoire `gui_unifiée`.
 On utilisera **C99** si on veut faire de la performance.
 
 ### Note
-**Ne surtout RIEN modifier dans le répertoire `pink/`.**
+**Ne surtout RIEN modifier dans le répertoire `pink`.**
 
 En effet, il y a dans ce répertoire l'extration et la compilation du fichier `pink.tgz`.
 
