@@ -54,7 +54,7 @@ class MilleFeuille3D(FigureCanvasQTAgg) :
                 
                 self.axes.plot_surface(X, Y, Z, facecolors=T)
                 
-                print( "[Debug MilleFeuille3D] Ajout : " + listeImages[I][0] )
+                print( "[Info MilleFeuille3D] Ajout : " + listeImages[I][0] )
             
             else :
                 print( "[Erreur MilleFeuille3D] " + listeImages[I][0] + " n'existe pas !" )

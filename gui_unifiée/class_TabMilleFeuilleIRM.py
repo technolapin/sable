@@ -98,8 +98,8 @@ class TabMilleFeuilleIRM(QGridLayout) :
         self.valeur_Z.setText("Z : " + str(self.barreDeScrollIRMCoucheZ.value()))
         # Fin ajouts Maylis
         
-        print( "[Debug TabMilleFeuilleIRM] X : " + str( self.barreDeScrollIRMCoucheX.value() ) + ", Y : " + str( self.barreDeScrollIRMCoucheY.value() ) + ", Z : " + str( self.barreDeScrollIRMCoucheZ.value() ) + ", Temps : " + str( self.barreDeScrollIRMTemps.value() ) )
-        print( "[Debug TabMilleFeuilleIRM] Affichage : " + imageX + ", " + imageY + ", " + imageZ )
+        print( "[Info TabMilleFeuilleIRM] X : " + str( self.barreDeScrollIRMCoucheX.value() ) + ", Y : " + str( self.barreDeScrollIRMCoucheY.value() ) + ", Z : " + str( self.barreDeScrollIRMCoucheZ.value() ) + ", Temps : " + str( self.barreDeScrollIRMTemps.value() ) )
+        print( "[Info TabMilleFeuilleIRM] Affichage : " + imageX + ", " + imageY + ", " + imageZ )
 
 
 """

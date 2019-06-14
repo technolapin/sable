@@ -48,11 +48,11 @@ class TabGraphique3D(QGridLayout) :
         
         # Graphe à afficher
         if __name__ != '__main__' : # Si on n'est pas le script principal
-            print( "[Debug TabGraphique3D] Fichier NPY utilisé : " + self.objParams.genererURLGraph3D() )
+            print( "[Info TabGraphique3D] Fichier NPY utilisé : " + self.objParams.genererURLGraph3D() )
             try :
                 self.graphe = load( self.objParams.genererURLGraph3D() )
             except FileNotFoundError :
-                print( "[Debug TabGraphique3D] " + self.objParams.genererURLGraph3D() + " n'existe pas !" )
+                print( "[Info TabGraphique3D] " + self.objParams.genererURLGraph3D() + " n'existe pas !" )
                 self.graphe = [[[],[],[]]]
         else :
             self.graphe = grapheDeDemonstration
@@ -100,17 +100,17 @@ class TabGraphique3D(QGridLayout) :
              self.valeur_courbe.setText("Courbe : " + str(self.barreDeScrollCourbes.value() - 1))
          # Fin Ajout Maylis
         
-         print( "[Debug TabGraphique3D] Temps : " + str( self.barreDeScrollTemps.value() ) + ", Courbe : " + str( self.barreDeScrollCourbes.value() ) )
+         print( "[Info TabGraphique3D] Temps : " + str( self.barreDeScrollTemps.value() ) + ", Courbe : " + str( self.barreDeScrollCourbes.value() ) )
          
     """
     Modifier position barres de scrolls
     """
     def setScrollBarsValues( self, courbe = None, temps = None ) :
         if courbe != None :
-            print( "[Debug TabGraphique3D] Valeurs forcées : Courbe = " + str(courbe) )
+            print( "[Info TabGraphique3D] Valeurs forcées : Courbe = " + str(courbe) )
             self.barreDeScrollTemps.setValue(courbe)
         if temps != None :
-            print( "[Debug TabGraphique3D] Valeur forcée : Temps = " + str(temps) )
+            print( "[Info TabGraphique3D] Valeur forcée : Temps = " + str(temps) )
             self.barreDeScrollTemps.setValue(temps)
 
 
