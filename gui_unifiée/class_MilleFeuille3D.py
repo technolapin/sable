@@ -13,7 +13,8 @@ from function_readPGM import readPGM
 """
 Classe MilleFeuille3D, hérite de FigureCanvasQTAgg
 Cette classe permet de gérer un graphique 3D d'images pouvant être tourné et inséré dans un environnement Qt
-Ces images sont affichées sous la forme d'un mille-feuilles*
+Ces images sont affichées sous la forme d'un mille-feuilles
+Basé sur Graphique3D dans class_Graphique3D.py
 @author Amaury
 """
 class MilleFeuille3D(FigureCanvasQTAgg) :

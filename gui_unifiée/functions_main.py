@@ -24,6 +24,7 @@ def traitementImage( fichier ) :
 Importer un fichier exporté par le système de traitement
 @param fichier : Fichier d'exportation du traitement
 @return False si ça a merdé, ou si les données ont des incohérences
+@author Amaury
 """
 def importerTraitement( fichier, objParams ) :
     print( "[Info Main] Importation du traitement : " + fichier )
@@ -88,6 +89,7 @@ def importerTraitement( fichier, objParams ) :
 """
 Demande à l'utilisateur un fichier pour lancer un traitement ou ouvrir un fichier de traitement
 @param lancer : True pour lancer un traitement, False pour ouvrir un traitement
+@author Amaury
 """
 def lancerOuOuvrirTraitement( lancer, application ) :
     fileDialog = QFileDialog() # Crée un objet de type QFileDialog (Fenêtre pour choisir un fichier)

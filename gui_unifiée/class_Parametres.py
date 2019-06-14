@@ -6,6 +6,7 @@ import parametres_par_defaut
 
 """
 Objet de centralisation des paramètres
+@author Amaury
 """
 # Note : Les getters et les setters, en Python, ça sert à rien, tout est public
 class Parametres() :

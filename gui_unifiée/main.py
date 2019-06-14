@@ -12,6 +12,7 @@ from functions_main import lancerOuOuvrirTraitement
 
 """
 Code principal
+@author Amaury
 """
 application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
 

@@ -21,6 +21,7 @@ Classe TabVTK, hérite de la classe QGridLayout, c'est donc une grille
 Cette classe représente le contenu d'une fenêtre PyQt
 Elle peut donc aussi être utilisée comme un onglet dans une fenêtre
 Basé sur ce script : https://stackoverflow.com/questions/48105646/embedding-vtk-object-in-pyqt5-window
+@author Amaury
 """
 class TabVTK(QGridLayout) :
     """

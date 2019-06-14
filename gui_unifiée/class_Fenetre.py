@@ -20,6 +20,7 @@ from parametres_graph3D_pour_demo import grapheDeDemonstration # Ne sert que si 
 """
 Classe Fenetre, hérite de la classe QTabWidget (Et plus QWidget vu qu'on veut faire des onglets)
 Cette classe permet de gérer la fenêtre Qt avec onglets (Appel de la procédure "addTab()")
+@author Maylis et Amaury
 """
 class Fenetre(QTabWidget) :
     """

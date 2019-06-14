@@ -6,6 +6,7 @@ from mpl_toolkits.mplot3d import Axes3D
 """
 Classe Graphique3D, hérite de FigureCanvasQTAgg
 Cette classe permet de gérer un graphique 3D Matplotlib pouvant être tourné et inséré dans un environnement Qt
+Basé sur ce script : https://stackoverflow.com/questions/52379426/pyqta-matplotlib-how-to-redraw-update-a-3d-surface-plot-in-a-window
 @author Amaury
 """
 class Graphique3D(FigureCanvasQTAgg) :

@@ -14,6 +14,7 @@ from function_readPGM import readPGM
 Classe MilleFeuilleIRM, hérite de FigureCanvasQTAgg
 Cette classe permet de gérer un graphique 3D d'images pouvant être tourné et inséré dans un environnement Qt
 Ces images sont affichées sous la forme de 3 plans perpidenculaires, similaire à un IRM
+Basé sur MilleFeuille3D dans class_MilleFeuille3D.py
 @author Amaury
 """
 """
