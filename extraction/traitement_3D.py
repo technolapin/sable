@@ -2,6 +2,8 @@
 
 #importations
 import os
+import numpy as np
+import pickle
 
 
 #donnees
@@ -59,7 +61,8 @@ def export_list(liste, file_name):
         f.write(" ".join(str(el) for el in elements)+"\n")
     f.close()
 
-
+#def traitement_3D_main():
+    
 #palette de couleurs (pour generer la carte des distances coloree)
 lut=" lut "
 lut_bord = " lut_bord "
@@ -405,4 +408,111 @@ for t in range(0, n_tempo):
                 "_org.pgm  coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
                 "_border.pgm coupes_3D/contours_blancs/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_contblanc.pgm")
            
-       
+        
+        
+        
+        
+#listage des grains       
+
+#enleve les formes qui ne sont pas des grains de la liste des barry
+
+formes=[]
+
+for t in range(0, n_tempo):
+    
+    padding_temporel = numerote(t, 2) # pour pas trop recalculer
+
+    #enleve de la liste les grains de vol<100
+    liste= parse_list("../extraction/bary_3D/liste/bary_list_t"+padding_temporel+".list")
+    volume_min=100
+    g=0
+    while g< len(liste):
+        if (liste[g][3]<volume_min):
+            del(liste[g])
+        g += 1
+        
+    formes.append(liste)
+        
+
+grains = []
+
+"""
+[
+grain1 [vol, [[x0, y0, z0], [x1, y1, z1]]]
+]
+
+"""
+
+def dist2(g1, g2):
+    return pow(g1[0]-g2[0], 2) + pow(g1[1]-g2[1], 2) + pow(g1[2]-g2[2], 2)
+
+
+
+seuil_volume = 100
+
+for grain in formes[0]:
+    grains.append(
+            [grain[3],
+             [grain[:3]]
+            ])
+    for t in range(1, n_tempo):
+        gr_prec = grains[len(grains)-1][1][t-1]
+        dist_min = dist2(gr_prec, formes[t][0])
+        plus_proche = formes[t][0]        
+
+        for suivant in formes[t]:
+            d2 = dist2(gr_prec, suivant)
+            if (d2 < dist_min and abs(gr_prec[0]-suivant[0]) < seuil_volume):
+                dist_min = d2
+                plus_proche = suivant
+        grains[len(grains)-1][1].append(plus_proche[:3])
+
+np.save("../extraction/tracking_3D/grains.npy", grains)
+
+resultats = []
+for grain in grains:
+    x = []
+    y = []
+    z = []
+    for coords in grain[1]:
+        x.append(coords[0])
+        y.append(coords[1])
+        z.append(coords[2])
+    resultats.append([x, y, z])
+    
+np.save("../extraction/tracking_3D/resultats.npy", resultats)
+
+
+
+NB_IMGS = 4000
+INTERVALLE_XY = 250
+INTERVALLE_XZ = 80
+INTERVALLE_YZ = 80
+URL_PGM = "../extraction/coupes_3D/"
+URL_VTK = "../extraction/vtks/"
+URL_GRAPHIQUE_3D = "../extraction/tracking_3D/resultats.npy"
+"""
+EXPORTATION
+"""
+#base de donnees
+bdd = {} 
+bdd["NB_IMGS"] = NB_IMGS
+bdd["INTERVALLE_XY"] = INTERVALLE_XY
+bdd["INTERVALLE_XZ"] = INTERVALLE_XZ
+bdd["INTERVALLE_YZ"] = INTERVALLE_YZ
+bdd["URL_PGM"] = URL_PGM
+bdd["URL_VTK"] = URL_VTK
+bdd["URL_GRAPHIQUE_3D" ] = URL_GRAPHIQUE_3D
+
+# Its important to use binary mode
+fichierBdd = open('woopwoop', 'ab')
+
+# source, destination
+pickle.dump(bdd, fichierBdd)                 
+fichierBdd.close()
+
+    
+    #return os.path.abspath('woopwoop')    
+    
+    
+    
