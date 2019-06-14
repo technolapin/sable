@@ -65,7 +65,6 @@ class TabAffichageCoupes(QGridLayout) :
         self.barreScrollTemps.setMaximum( self.objParams.nombreInstantsTemporels() )
         self.barreScrollTemps.valueChanged.connect( self.changeImages )
         
-        
         # Ajout des barres de scroll 
         self.addWidget(self.barreScrollTemps, 2, 1)
         self.addWidget(self.barreScrollAxeX, 1, 2)
@@ -130,7 +129,9 @@ class TabAffichageCoupes(QGridLayout) :
         Positions courantes de X, Y, Z et du temps
         """
         # Création d'un contenant pour les valeurs courantes
+        group_box=QGroupBox("Positions courantes des barres de scroll")
         horizontal_layout = QHBoxLayout()
+        group_box.setLayout(horizontal_layout)
         
         # Création des labels qui affichent les valeurs courantes
         self.valeur_temps = QLabel("Temps : 0")
@@ -146,7 +147,7 @@ class TabAffichageCoupes(QGridLayout) :
 
         # Ajout dans un layout vertical contenant les images et les positions courantes
         vertical_layout=QVBoxLayout()
-        vertical_layout.addLayout(horizontal_layout)
+        vertical_layout.addWidget(group_box)
         vertical_layout.addWidget(contenant_widget,stretch=2)
         
         # Ajout dans l'onglet
@@ -209,7 +210,6 @@ class TabAffichageCoupes(QGridLayout) :
         vl_grain.addWidget(self.label_grain_Z)
         vl_grain.addWidget(self.label_grain_Temps)
 ################ vl_grain.addWidget(self.label_grain_volume)        
-        
         
         # Création d'un contenant pour les Radiobutton, la modification des 
         # images et les informations du grain cliqué ; Ajout dans l'onglet
