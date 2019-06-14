@@ -1,7 +1,7 @@
 from os.path import join
 from os.path import abspath
 
-import parametres
+import parametres_par_defaut
 
 
 """
@@ -13,13 +13,13 @@ class Parametres() :
         """ Valeurs par défaut """
         self.contientVariablesImportees = False
         
-        self.NB_IMGS = parametres.NB_IMGS # Nombre d'images au format PGM
-        self.INTERVALLE_XY = parametres.INTERVALLE_XY # Intervalle temporel dans cette liste d'images, c'est à dire le pas dans le plan XY
-        self.INTERVALLE_XZ = parametres.INTERVALLE_XZ # Pas dans le plan XZ
-        self.INTERVALLE_YZ = parametres.INTERVALLE_YZ # Pas dans le plan YZ
-        self.URL_PGM = parametres.URL_PGM # URL vers les fichiers PGM
-        self.URL_VTK = parametres.URL_VTK # URL vers les fichiers VTK
-        self.URL_GRAPHIQUE_3D = parametres.URL_GRAPHIQUE_3D # URL vers le fichier NPY
+        self.NB_IMGS = parametres_par_defaut.NB_IMGS # Nombre d'images au format PGM
+        self.INTERVALLE_XY = parametres_par_defaut.INTERVALLE_XY # Intervalle temporel dans cette liste d'images, c'est à dire le pas dans le plan XY
+        self.INTERVALLE_XZ = parametres_par_defaut.INTERVALLE_XZ # Pas dans le plan XZ
+        self.INTERVALLE_YZ = parametres_par_defaut.INTERVALLE_YZ # Pas dans le plan YZ
+        self.URL_PGM = parametres_par_defaut.URL_PGM # URL vers les fichiers PGM
+        self.URL_VTK = parametres_par_defaut.URL_VTK # URL vers les fichiers VTK
+        self.URL_GRAPHIQUE_3D = parametres_par_defaut.URL_GRAPHIQUE_3D # URL vers le fichier NPY
         self.CHEMIN_ABSOLU_FICHIER_IMPORTE = None # Chemin absolu du fichier contenant les params importés
         
         self.TabGraphique3D = None # Objet TabGraphique3D

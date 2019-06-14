@@ -1,11 +1,5 @@
 import sys
 
-
-"""
-PARAMETRES
-"""
-ENABLE_ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
-
 """
 PARAMETRES PAR DEFAUT
 Utilisées uniquement par la classe Parametres dans class_Parametres.py

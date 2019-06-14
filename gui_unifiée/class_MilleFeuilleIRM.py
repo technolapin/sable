@@ -58,7 +58,7 @@ class MilleFeuilleIRM(FigureCanvasQTAgg) :
             
             self.axes.plot_surface(X, Y, Z, facecolors=T)
             
-            print( "[Debug MilleFeuilleIRM] Ajout : " + imageX[0] )
+            print( "[Info MilleFeuilleIRM] Ajout : " + imageX[0] )
             
         else :
             print( "[Erreur MilleFeuilleIRM] " + imageX[0] + " n'existe pas !" )
@@ -76,7 +76,7 @@ class MilleFeuilleIRM(FigureCanvasQTAgg) :
             
             self.axes.plot_surface(X, Y, Z, facecolors=T)
             
-            print( "[Debug MilleFeuilleIRM] Ajout : " + imageY[0] )
+            print( "[Info MilleFeuilleIRM] Ajout : " + imageY[0] )
             
         else :
             print( "[Erreur MilleFeuilleIRM] " + imageY[0] + " n'existe pas !" )
@@ -94,7 +94,7 @@ class MilleFeuilleIRM(FigureCanvasQTAgg) :
             
             self.axes.plot_surface(X, Y, Z, facecolors=T)
             
-            print( "[Debug MilleFeuilleIRM] Ajout : " + imageZ[0] )
+            print( "[Info MilleFeuilleIRM] Ajout : " + imageZ[0] )
             
         else :
             print( "[Erreur MilleFeuilleIRM] " + imageZ[0] + " n'existe pas !" )

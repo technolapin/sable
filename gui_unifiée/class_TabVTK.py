@@ -104,7 +104,7 @@ class TabVTK(QGridLayout) :
     """
     def dessinerVTK(self, value) :
         instantTemporel = self.barreDeScrollTemps.value()
-        print ( "[Debug TabVTK] Affichage : " + self.objParams.genererURLdesVTK( instantTemporel ) )
+        print ( "[Info TabVTK] Affichage : " + self.objParams.genererURLdesVTK( instantTemporel ) )
         
         # Ajout Maylis
         self.valeur_temps.setText("Temps : " + str(instantTemporel))

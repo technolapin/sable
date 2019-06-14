@@ -9,7 +9,12 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QLab
 from class_MilleFeuille3D import MilleFeuille3D
 
 from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
-from parametres import ENABLE_ANTI_LAG
+
+
+"""
+PARAMETRES
+"""
+ENABLE_ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
 
 
 """
@@ -93,8 +98,8 @@ class TabMilleFeuille3D(QGridLayout) :
         self.valeur_Z.setText("Z : " + str(self.barreDeScrollMFCoucheMin.value()))
         # Fin Ajout Maylis
         
-        print( "[Debug TabMilleFeuille3D] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
-        if ENABLE_ANTI_LAG : print( "[Debug TabMilleFeuille3D] Affichage : " + urlImage )
+        print( "[Info TabMilleFeuille3D] Min : " + str( self.barreDeScrollMFCoucheMin.value() ) + ", Max : " + str( self.barreDeScrollMFCoucheMax.value() ) + ", Temps : " + str( self.barreDeScrollMFTemps.value() ) )
+        if ENABLE_ANTI_LAG : print( "[Info TabMilleFeuille3D] Affichage : " + urlImage )
 
 
 """

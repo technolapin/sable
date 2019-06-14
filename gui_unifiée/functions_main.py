@@ -94,7 +94,7 @@ def lancerOuOuvrirTraitement( lancer, application ) :
     if lancer : fileDialog.setWindowTitle("Veuillez choisir le fichier à traiter") # Définit le nom de la fenêtre
     else : fileDialog.setWindowTitle("Veuillez choisir le fichier à importer")
     fichierDemande = fileDialog.getOpenFileName()[0] # Permet aussi d'attendre qu'il y ait un fichier demandé
-    print( "[Debug Main] Fichier demandé : " + fichierDemande )
+    print( "[Info Main] Fichier demandé : " + fichierDemande )
     fileDialog.close() # Fermer la fenêtre
     
     creationObjParams = Parametres()
