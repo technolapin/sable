@@ -39,18 +39,20 @@ class Parametres() :
     @param instantTemporel : L'instant temporel du PGM
     @param couche : Le numéro de la couche du PGM
     @param typeDeTraitement : Optionnel, le type de traitement. Peut être :
-                              - "originales",
-                              - "borders,
-                              - "carte_dist",
-                              - "contours_blancs",
-                              - "contours_rouges",
-                              - "water"
+                              - "originales", images originales dans le fichier traité,
+                              - "borders, images avec détection des bords,
+                              - "carte_dist", carte de distances,
+                              - "contours_blancs", images avec contours blancs,
+                              - "contours_rouges", images avec contours rouges,
+                              - "water", watershed
     """
     def genererURLdesPGM3D( self, plan, instantTemporel, couche, typeDeTraitement = "originales" ) :
         coucheFormate = format(couche, '04d') # String sur 4 digits
         tempsFormate = format(instantTemporel, '02d') # String sur 2 digits
         
-        if typeDeTraitement == "borders" :
+        if typeDeTraitement == "originales" :
+            extension = "_org.pgm"
+        elif typeDeTraitement == "borders" :
             extension = "_border.pgm"
         elif typeDeTraitement == "carte_dist" :
             extension = "_distcolor.ppm"
@@ -60,8 +62,6 @@ class Parametres() :
             extension = "_controuge.ppm"
         elif typeDeTraitement == "water" :
             extension = "_wa.pgm"
-        elif typeDeTraitement == "originales" :
-            extension = "_org.pgm"
         else :
             raise Exception("Type de traitement inconnu !")
         

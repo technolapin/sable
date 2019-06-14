@@ -99,7 +99,7 @@ def lancerOuOuvrirTraitement( lancer, application ) :
     print( "[Info Main] Fichier demandé : " + fichierDemande )
     fileDialog.close() # Fermer la fenêtre
     
-    creationObjParams = Parametres()
+    creationObjParams = Parametres() # Permet de passer aux onglets les paramètres chargés
     if lancer :
         fichierExporte = traitementImage( fichierDemande )
         autorisationDeLancer = importerTraitement( fichierExporte, creationObjParams )
@@ -107,8 +107,6 @@ def lancerOuOuvrirTraitement( lancer, application ) :
         autorisationDeLancer = importerTraitement( fichierDemande, creationObjParams )
     
     if autorisationDeLancer :
-        # TODO : Passer en param à la GUI le fichier du traitement
-        # C'est fait avec les variables d'environnement, et récupéré par parametres.py
         fenetre = Fenetre( objParams = creationObjParams ) # Crée un objet de type Fenetre
         fenetre.setWindowTitle("Graphique 3D") # Définit le nom de la fenêtre
         fenetre.show() # Affiche la fenêtre
