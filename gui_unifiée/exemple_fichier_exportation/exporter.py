@@ -15,16 +15,19 @@ NB_IMGS = 4000
 
 """
 Intervalles temporelles dans le plan XY, c'est à dire dans le fichier précédent
+Le terme exacte serait le pas
 """
 INTERVALLE_XY = 250
 
 """
 Intervalles temporelles dans le plan XZ
+Le terme exacte serait le pas
 """
 INTERVALLE_XZ = 80
 
 """
 Intervalles temporelles dans le plan YZ
+Le terme exacte serait le pas
 """
 INTERVALLE_YZ = 80
 
