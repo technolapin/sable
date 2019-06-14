@@ -5,15 +5,15 @@ Projet de fin de E3 de traîtemenent d'image.
 
 Le but de ce projet est d'afficher dans un logiciel le mouvement de grain de sable à partir d'une image 4D.
 
-L'image 4D utilisée est dans `images/`.
+L'image 4D utilisée est dans le répertoire `extraction`.
 
-Le système d'affichage en 3D est dans `environnement/`
+L'environnement graphique est dans le répertoire `gui_unifiée`.
 
 ## Participants
 * Clément Chomicki : Chef de projet
 * Alexandre Leblon
 * Maÿlis Montani
-* Barbara Paré : "Facilitator"
+* Barbara Paré
 * Amaury Baruzy
 
 ## Description détaillée
