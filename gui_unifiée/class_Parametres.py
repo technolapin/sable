@@ -60,7 +60,7 @@ class Parametres() :
             extension = "_controuge.ppm"
         elif typeDeTraitement == "water" :
             extension = "_wa.pgm"
-        elif typeDeTraitement == "original" :
+        elif typeDeTraitement == "originales" :
             extension = "_org.pgm"
         else :
             raise Exception("Type de traitement inconnu !")
