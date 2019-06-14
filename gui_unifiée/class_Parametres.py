@@ -38,17 +38,41 @@ class Parametres() :
     @param plan : Le plan de la caméra, 'YZ', 'XZ' ou 'XY'
     @param instantTemporel : L'instant temporel du PGM
     @param couche : Le numéro de la couche du PGM
+    @param typeDeTraitement : Optionnel, le type de traitement. Peut être :
+                              - "originales",
+                              - "borders,
+                              - "carte_dist",
+                              - "contours_blancs",
+                              - "contours_rouges",
+                              - "water"
     """
-    def genererURLdesPGM3D( self, plan, instantTemporel, couche ) :
+    def genererURLdesPGM3D( self, plan, instantTemporel, couche, typeDeTraitement = "originales" ) :
         coucheFormate = format(couche, '04d') # String sur 4 digits
         tempsFormate = format(instantTemporel, '02d') # String sur 2 digits
         
+        if typeDeTraitement == "borders" :
+            extension = "_border.pgm"
+        elif typeDeTraitement == "carte_dist" :
+            extension = "_distcolor.ppm"
+        elif typeDeTraitement == "contours_blancs" :
+            extension = "_contblanc.pgm"
+        elif typeDeTraitement == "contours_rouges" :
+            extension = "_controuge.ppm"
+        elif typeDeTraitement == "water" :
+            extension = "_wa.pgm"
+        elif typeDeTraitement == "original" :
+            extension = "_org.pgm"
+        else :
+            raise Exception("Type de traitement inconnu !")
+        
         if plan == 'YZ' :
-            fichierPGM = self.URL_PGM + "y_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_yz_" + coucheFormate + ".pgm"
-        if plan == 'XZ' :
-            fichierPGM = self.URL_PGM + "x_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_xz_" + coucheFormate + ".pgm"
-        if plan == 'XY' :
-            fichierPGM = self.URL_PGM + "x_y/" + tempsFormate + "/t_" + tempsFormate + "coupe_xy_" + coucheFormate + ".pgm"
+            fichierPGM = self.URL_PGM + typeDeTraitement + "/" + "y_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_yz_" + coucheFormate + extension
+        elif plan == 'XZ' :
+            fichierPGM = self.URL_PGM + typeDeTraitement + "/" + "x_z/" + tempsFormate + "/t_" + tempsFormate + "coupe_xz_" + coucheFormate + extension
+        elif plan == 'XY' :
+            fichierPGM = self.URL_PGM + typeDeTraitement + "/" + "x_y/" + tempsFormate + "/t_" + tempsFormate + "coupe_xy_" + coucheFormate + extension
+        else :
+            raise Exception("Plan inconnu !")
         
         if self.contientVariablesImportees :
             # Les URL doivent être relatives au fichier d'importation
