@@ -26,6 +26,6 @@ On utilisera **C99** si on veut faire de la performance.
 ### Note
 **Ne surtout RIEN modifier dans le répertoire `pink/`.**
 
-En effet, il y a dans ce répertoire l'extration et la compilation du fichier `pink.tgz'.
+En effet, il y a dans ce répertoire l'extration et la compilation du fichier `pink.tgz`.
 
 Et aussi, ne pas tenter de merge créant une branche pour qu'elle remplace la master, ça efface tous les commits précédant la création de cette branche...
