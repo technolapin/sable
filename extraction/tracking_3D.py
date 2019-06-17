@@ -76,13 +76,14 @@ def retrouve_grain(x,y,z,t):
     command("pgm2list ../extraction/bary_3D/bary_3D_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+
             ".pgm B ../extraction/bary_3D/liste/bary_list_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".list")
     
+    
     bary= parse_list("../extraction/bary_3D/liste/bary_list_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".list")
     print(bary)
     xb=bary[0][0]
     yb=bary[0][1]
     zb=bary[0][2]
     volume=0
-    for grain in range(len(grains)):
+    for grain in grains:
         for s in range(len(grain[1])):
             if ( grain[1][s]==[xb, yb, zb]):
                 volume=grain[0]
@@ -90,10 +91,14 @@ def retrouve_grain(x,y,z,t):
         if (volume!=0):
             break
         
+    print("len(resultats) : ", len(resultats))
+        
     for grain in range(len(resultats)):         
         if(resultats[grain][0][t]==xb and resultats[grain][1][t]==yb and resultats[grain][2][t]==zb):
+            print ("grain :", grain)
+            print ("track :", [volume, resultats[grain]])
             return [volume,resultats[grain]]
    
     
-    
+    return 0
     
