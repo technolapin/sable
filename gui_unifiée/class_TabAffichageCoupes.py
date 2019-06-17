@@ -17,7 +17,7 @@ from class_TabGraphique3D import Graphique3D
 ######## Il faut que je modifie le code dans tracking 3D pour faire
 ######## ../extraction pout pouvoir le lancer depuis mon code
 sys.path.append("../extraction")
-from tracking_3D import *
+from tracking_3D import retrouve_grain
 
 
 """
@@ -168,11 +168,18 @@ class TabAffichageCoupes(QGridLayout) :
         self.bouton1=QRadioButton("Originales sans contours")
         self.bouton2=QRadioButton("Originales contours blancs")
         self.bouton3=QRadioButton("Originales contours colorés")
-        self.bouton4=QRadioButton("Seuillées")
+        self.bouton4=QRadioButton("Seuillées et grains séparés")
         self.bouton5=QRadioButton("Carte de distance")
         
+        # Connecter à la fonction qui change l'image
+        self.bouton1.clicked.connect(self.changeImages)
+        self.bouton2.clicked.connect(self.changeImages)
+        self.bouton3.clicked.connect(self.changeImages)
+        self.bouton4.clicked.connect(self.changeImages)
+        self.bouton5.clicked.connect(self.changeImages)
+        
         # Initialisation du bouton correspondant à l'image initiale
-        self.bouton2.setChecked(True)
+        self.bouton1.setChecked(True)
         
         # Ajout des boutons au layout
         vl_boutons1.addWidget(self.bouton1)
@@ -182,8 +189,8 @@ class TabAffichageCoupes(QGridLayout) :
         vl_boutons1.addWidget(self.bouton5)
         
         # Création d'un bouton pour modifier les images selon les RadioButtons
-        bouton_chargement=QPushButton("Modification des images")
-        bouton_chargement.clicked.connect(self.charger_images)
+        #bouton_chargement=QPushButton("Modification des images")
+        #bouton_chargement.clicked.connect(self.charger_images)
         
         
         
@@ -220,7 +227,7 @@ class TabAffichageCoupes(QGridLayout) :
         
         # Ajout des widgets dans le contenant
         contenant.addWidget(group_box1)
-        contenant.addWidget(bouton_chargement)
+#        contenant.addWidget(bouton_chargement)
         contenant.addSpacing(50)
         contenant.addWidget(group_infos)
         
@@ -337,20 +344,24 @@ class TabAffichageCoupes(QGridLayout) :
 
         self.label_grain_volume.setText("Volume : "+str(volume_grain))
 
-######## A SUPPRIMER (pour le test)
-#        self.fenetre_graph.show() # Affiche la fenêtre
-#        self.graphique3D.dessinerGraphique3D( [[[],[],[]]], 0, 0 )
-
-    
+   
     
     
     """
     Gère l'affichage et son actualisation par les barres de scroll
     """    
     def changeImages(self, value) :
-        
         # Image plan (X, Y)
-        image_xy = self.objParams.genererURLdesPGM3D( 'XY', self.barreScrollTemps.value(), self.barreScrollAxeZ.value() )
+        if (self.bouton1.isChecked()):
+            image_xy = self.objParams.genererURLdesPGM3D( 'XY', self.barreScrollTemps.value(), self.barreScrollAxeZ.value(), typeDeTraitement = "originales")
+        elif (self.bouton2.isChecked()):
+            image_xy = self.objParams.genererURLdesPGM3D( 'XY', self.barreScrollTemps.value(), self.barreScrollAxeZ.value(), typeDeTraitement = "contours_blancs" )
+        elif (self.bouton3.isChecked()):
+            image_xy = self.objParams.genererURLdesPGM3D( 'XY', self.barreScrollTemps.value(), self.barreScrollAxeZ.value(), typeDeTraitement = "contours_rouges" )
+        elif (self.bouton4.isChecked()):
+            image_xy = self.objParams.genererURLdesPGM3D( 'XY', self.barreScrollTemps.value(), self.barreScrollAxeZ.value(), typeDeTraitement = "water" )
+        elif (self.bouton5.isChecked()):
+            image_xy = self.objParams.genererURLdesPGM3D( 'XY', self.barreScrollTemps.value(), self.barreScrollAxeZ.value(), typeDeTraitement = "carte_dist" )
         if os.path.isfile( image_xy ) : # Si le chemin d'accès à l'image existe
             width=self.label_image_xy.width()
             height=self.label_image_xy.height()
@@ -358,8 +369,18 @@ class TabAffichageCoupes(QGridLayout) :
         else :
             print( "[Erreur TabAffichageCoupes] " + image_xy + " n'existe pas !" )
 
+
         # Image plan (Y, Z)
-        image_yz = self.objParams.genererURLdesPGM3D( 'YZ', self.barreScrollTemps.value(), self.barreScrollAxeX.value() )
+        if (self.bouton1.isChecked()):
+            image_yz = self.objParams.genererURLdesPGM3D( 'YZ', self.barreScrollTemps.value(), self.barreScrollAxeX.value(), typeDeTraitement = "originales")
+        elif (self.bouton2.isChecked()):
+            image_yz = self.objParams.genererURLdesPGM3D( 'YZ', self.barreScrollTemps.value(), self.barreScrollAxeX.value(), typeDeTraitement = "contours_blancs" )
+        elif (self.bouton3.isChecked()):
+            image_yz = self.objParams.genererURLdesPGM3D( 'YZ', self.barreScrollTemps.value(), self.barreScrollAxeX.value(), typeDeTraitement = "contours_rouges" )
+        elif (self.bouton4.isChecked()):
+            image_yz = self.objParams.genererURLdesPGM3D( 'YZ', self.barreScrollTemps.value(), self.barreScrollAxeX.value(), typeDeTraitement = "water" )
+        elif (self.bouton5.isChecked()):
+            image_yz = self.objParams.genererURLdesPGM3D( 'YZ', self.barreScrollTemps.value(), self.barreScrollAxeX.value(), typeDeTraitement = "carte_dist" )
         if os.path.isfile( image_yz ) : # Si le chemin d'accès à l'image existe
             width=self.label_image_yz.width()
             height=self.label_image_yz.height()
@@ -367,8 +388,19 @@ class TabAffichageCoupes(QGridLayout) :
         else :
             print( "[Erreur TabAffichageCoupes] " + image_yz + " n'existe pas !" )
         
+
         # Image plan (X, Z)
-        image_zx = self.objParams.genererURLdesPGM3D( 'XZ', self.barreScrollTemps.value(), self.barreScrollAxeY.value() )
+        if (self.bouton1.isChecked()):
+            image_zx = self.objParams.genererURLdesPGM3D( 'XZ', self.barreScrollTemps.value(), self.barreScrollAxeY.value(), typeDeTraitement = "originales")
+        elif (self.bouton2.isChecked()):
+            image_zx = self.objParams.genererURLdesPGM3D( 'XZ', self.barreScrollTemps.value(), self.barreScrollAxeY.value(), typeDeTraitement = "contours_blancs" )
+        elif (self.bouton3.isChecked()):
+            image_zx = self.objParams.genererURLdesPGM3D( 'XZ', self.barreScrollTemps.value(), self.barreScrollAxeY.value(), typeDeTraitement = "contours_rouges" )
+        elif (self.bouton4.isChecked()):
+            image_zx = self.objParams.genererURLdesPGM3D( 'XZ', self.barreScrollTemps.value(), self.barreScrollAxeY.value(), typeDeTraitement = "water" )
+        elif (self.bouton5.isChecked()):
+            image_zx = self.objParams.genererURLdesPGM3D( 'XZ', self.barreScrollTemps.value(), self.barreScrollAxeY.value(), typeDeTraitement = "carte_dist" )
+        
         if os.path.isfile( image_zx ) : # Si le chemin d'accès à l'image existe
             width=self.label_image_zx.width()
             height=self.label_image_zx.height()
