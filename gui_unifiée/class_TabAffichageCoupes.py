@@ -14,6 +14,9 @@ from class_Parametres import Parametres # Ne sert que si est exécuté séparemm
 from class_TabGraphique3D import Graphique3D
 
 
+import numpy as np
+
+
 ######## Il faut que je modifie le code dans tracking 3D pour faire
 ######## ../extraction pout pouvoir le lancer depuis mon code
 sys.path.append("../extraction")
@@ -292,7 +295,7 @@ class TabAffichageCoupes(QGridLayout) :
 ################ 
 
         retour = retrouve_grain(x,y,z,temps)
-        
+        print("tabaff : ", retour)        
 
 
 ######## Prendre le retour de ce Barbara et créer un nouvel objet Graphique3D
@@ -301,15 +304,18 @@ class TabAffichageCoupes(QGridLayout) :
 ################ 
         self.fenetre_graph.show()
 ################ 
-        if (retour[1]==None):
+        if (retour==0):
 ################    
             volume_grain = 0
-            self.graphique3D.dessinerGraphique3D( [[[],[],[]]], 0, 0 ) # Affiche un graphe vide
+            self.graphique3D.dessinerGraphique3D( np.array([[[1,2,3],[1,3,4],[1,4,5]]]), 0, 0 ) # Affiche un graphe vide
 ################ 
         else :
 ################    
+            print("Je me lance bien")
+            print (retour[0])
             volume_grain = retour[0]
-            self.graphique3D.dessinerGraphique3D( resultat[1], 0, 0 ) # Affiche la trajectoire du grain sélectionné
+            print("len tab : ", len(retour[1][0]))
+            self.graphique3D.dessinerGraphique3D( retour[1], 0, 0 ) # Affiche la trajectoire du grain sélectionné
 
 
 
