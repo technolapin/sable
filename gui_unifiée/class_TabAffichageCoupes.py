@@ -188,9 +188,6 @@ class TabAffichageCoupes(QGridLayout) :
         vl_boutons1.addWidget(self.bouton4)
         vl_boutons1.addWidget(self.bouton5)
         
-        # Création d'un bouton pour modifier les images selon les RadioButtons
-        #bouton_chargement=QPushButton("Modification des images")
-        #bouton_chargement.clicked.connect(self.charger_images)
         
         
         
@@ -227,7 +224,6 @@ class TabAffichageCoupes(QGridLayout) :
         
         # Ajout des widgets dans le contenant
         contenant.addWidget(group_box1)
-#        contenant.addWidget(bouton_chargement)
         contenant.addSpacing(50)
         contenant.addWidget(group_infos)
         
@@ -250,34 +246,9 @@ class TabAffichageCoupes(QGridLayout) :
        
         
         """
-        Appel de la fonction qui gère les barres de scroll
+        Appel de la fonction qui gère les barres de scroll et les images
         """
         self.changeImages(0)
-    
-
-
-          
-    
-    """
-    Fonction permettant d'afficher les coupes correspondant aux RadioButtons
-    """
-    def charger_images(self):
-        if (self.bouton1.isChecked()):
-            print("Prendre l'image originale sans contours")
-        elif (self.bouton2.isChecked()):
-            print("Prendre l'image originale avec contours blancs")
-        elif (self.bouton3.isChecked()):
-            print("Prendre l'image originale avec contours colorés")
-        elif (self.bouton4.isChecked()):
-            print("Prendre l'image seuillée")
-        elif (self.bouton5.isChecked()):
-            print("Prendre l'image de carte de distance")
-        
-######## Afficher les images sélectionnées (changer d'URL d'affichage selon le choix)
-######## Demander à Amaury comment modifier ça, parce que j'appelle son truc qui
-######## génère le lien pour moi, mais là j'en veux pas...
-        
-######## Dire à Barbara que les dernières images sur (Y,Z) et (X,Z) sont pas contourées        
     
     
     
@@ -346,9 +317,11 @@ class TabAffichageCoupes(QGridLayout) :
 
    
     
-    
+            
+
     """
-    Gère l'affichage et son actualisation par les barres de scroll
+    Gère l'affichage et son actualisation par les barres de scroll et le choix 
+    de l'image à afficher
     """    
     def changeImages(self, value) :
         # Image plan (X, Y)
