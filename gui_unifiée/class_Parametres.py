@@ -23,7 +23,7 @@ class Parametres() :
         self.URL_GRAPHIQUE_3D = parametres_par_defaut.URL_GRAPHIQUE_3D # URL vers le fichier NPY
         self.CHEMIN_ABSOLU_FICHIER_IMPORTE = None # Chemin absolu du fichier contenant les params importés
         
-        self.TabGraphique3D = None # Objet TabGraphique3D
+        self.tabGraphique3D = None # Objet TabGraphique3D
     
     """
     @return True si il y a une logique, False sinon
