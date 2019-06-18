@@ -33,6 +33,8 @@ class Graphique3D(FigureCanvasQTAgg) :
     """
     def dessinerGraphique3D(self, liste, courbeAfficher, tempsAfficher, conserverLimites = True, limites = None) : # Procédure qui dessine le graphique
         if limites != None :
+            self.axes.clear() # Nettoie les axes et leur contenu
+            
             self.axes.set_xlim(limites[0])
             self.axes.set_ylim(limites[1])
             self.axes.set_zlim(limites[2])
@@ -44,7 +46,7 @@ class Graphique3D(FigureCanvasQTAgg) :
                 saveYLim = self.axes.get_ylim()
                 saveZLim = self.axes.get_zlim()
             
-            self.axes.clear() # Nettoie les axes et leur contenu
+            self.axes.clear()
             
             if self.aEteInit :
                 # Remet la sauvegarde
@@ -53,6 +55,9 @@ class Graphique3D(FigureCanvasQTAgg) :
                 self.axes.set_zlim(saveZLim)
             
             self.aEteInit = True
+        
+        else :
+            self.axes.clear()
         
         self.axes.set_xlabel( 'Axe X' ) # Label sur l'axe X
         self.axes.set_ylabel( 'Axe Y' ) # Label sur l'axe Y
