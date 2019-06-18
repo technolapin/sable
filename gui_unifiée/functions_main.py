@@ -1,4 +1,5 @@
 import os
+import sys
 
 from PyQt5.QtWidgets import QMessageBox, QFileDialog
 
@@ -10,13 +11,16 @@ from class_Parametres import Parametres
 
 from class_Fenetre import Fenetre
 
+sys.path.append("../extraction")
+from traitement_3D import traitement_3D_main
+
 
 """
 Fonction de traitement d'image (Appel tout le travail de traitement d'image)
 @param fichier : Fichier TIFF choisi par l'utilisateur
 """
 def traitementImage( fichier ) :
-    fichierExporte = "./exemple_fichier_exportation/exemple.dat"
+    fichierExporte = traitement_3D_main( fichier )
     return fichierExporte
 
 

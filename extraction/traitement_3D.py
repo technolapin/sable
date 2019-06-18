@@ -61,458 +61,458 @@ def export_list(liste, file_name):
         f.write(" ".join(str(el) for el in elements)+"\n")
     f.close()
 
-#def traitement_3D_main():
+def traitement_3D_main( fichierDemandeParUtilisateur = "" ):
     
-#palette de couleurs (pour generer la carte des distances coloree)
-lut=" lut "
-lut_bord = " lut_bord "
-command("genlut 1000 0 1 0 200 200 200"+lut)
-command("genlut 256 0 0 0 255 255 255"+lut_bord)
-
-
-#gestion des repertoires
-  
-os.system("rm -R tmp")
-os.system("mkdir tmp")
-    
-os.system("rm -R images_3D")
-os.system("mkdir images_3D")
-
-os.system("rm -R vtk_3D")
-os.system("mkdir vtk_3D")
-
-os.system("rm -R images_2D_for_3D")
-os.system("mkdir images_2D_for_3D")
-
-os.system("rm -R coupes_3D")
-os.system("mkdir coupes_3D")
-
-os.system("mkdir coupes_3D/originales")
-os.system("mkdir coupes_3D/originales/x_y")
-os.system("mkdir coupes_3D/originales/x_z")
-os.system("mkdir coupes_3D/originales/y_z")
-
-os.system("mkdir coupes_3D/carte_dist")
-os.system("mkdir coupes_3D/carte_dist/x_y")
-os.system("mkdir coupes_3D/carte_dist/x_z")
-os.system("mkdir coupes_3D/carte_dist/y_z")
-
-os.system("mkdir coupes_3D/contours_blancs")
-os.system("mkdir coupes_3D/contours_blancs/x_y")
-os.system("mkdir coupes_3D/contours_blancs/x_z")
-os.system("mkdir coupes_3D/contours_blancs/y_z")
-
-os.system("mkdir coupes_3D/contours_rouges")
-os.system("mkdir coupes_3D/contours_rouges/x_y")
-os.system("mkdir coupes_3D/contours_rouges/x_z")
-os.system("mkdir coupes_3D/contours_rouges/y_z")
-
-os.system("mkdir coupes_3D/borders")
-os.system("mkdir coupes_3D/borders/x_y")
-os.system("mkdir coupes_3D/borders/x_z")
-os.system("mkdir coupes_3D/borders/y_z")
-
-os.system("mkdir coupes_3D/water")
-os.system("mkdir coupes_3D/water/x_y")
-os.system("mkdir coupes_3D/water/x_z")
-os.system("mkdir coupes_3D/water/y_z")
-
-os.system("rm -R border_3D")
-os.system("mkdir border_3D")
-
-
-os.system("rm -R labels_3D")
-os.system("mkdir labels_3D")
-
-os.system("rm -R bary_3D")
-os.system("mkdir bary_3D")
-os.system("mkdir bary_3D/liste")
-
-os.system("rm -R volumes_3D")
-os.system("mkdir volumes_3D")
-
-
-#extraction des images du tif en bmp
-os.system("convert gros_sable.tif tmp/test.bmp")
-
-#conversion en pgm et renommage aux standard de la fc catpgm
-for i in range(0, n_tempo*n_coupes_xy):
-    os.system("convert tmp/test-"+str(i)+".bmp images_2D_for_3D/image_2D_for_3D_"+numerote(i,4)+".pgm")
-
-
-#traitement pour chaque temps
-    
-for t in range(0, n_tempo):
-    
-    print("image 3D numero "+str(t)+" en traitement")
-
-    debut_colone = t * n_coupes_xy
-    fin_colone   = debut_colone + n_coupes_xy - 1
-
-    padding_temporel = numerote(t, 2)
+    #palette de couleurs (pour generer la carte des distances coloree)
+    lut=" lut "
+    lut_bord = " lut_bord "
+    command("genlut 1000 0 1 0 200 200 200"+lut)
+    command("genlut 256 0 0 0 255 255 255"+lut_bord)
     
     
-    #generation de l image 3D a partir des 250 coupes
-    command("catpgm images_2D_for_3D/image_2D_for_3D_ "+
-            str(debut_colone)+" "+str(fin_colone)+
-            " [80 80 250] images_3D/image_3D_t"+padding_temporel+".pgm")
-
-    
-    #seuillage
-    command("seuil images_3D/image_3D_t"+padding_temporel+".pgm "+
-            str(seuil)+" "+
-            "images_3D/image_3D_s_t"+padding_temporel+".pgm")
-    
-    
-    #nettoyage des impurtes dans les grains
-    file_to_clean = " images_3D/image_3D_s_t"+padding_temporel+".pgm "
-
-    minimum_noir = "300"
-    minimum_blanc = "30"
-
-    command("attribute"+file_to_clean+"6 "+minimum_noir+" 1 0 attributes")
-    command("long2byte attributes attributes")
-    command("attribute attributes 6 "+minimum_blanc+" 1 0 attributes")
-    command("long2byte attributes attributes")
-    command("seuil attributes 1 "+file_to_clean)
-    
-    
-    command("inverse images_3D/image_3D_s_t"+padding_temporel+".pgm "+
-            "images_3D/image_3D_s_inv_t"+padding_temporel+".pgm")
-
-    
-     # carte des distances, avec distance euclidienne
-    command("dist images_3D/image_3D_s_inv_t"+padding_temporel+".pgm "+
-            "0 images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm")
-
-    command("long2byte images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+
-            "0 images_3D/image_3D_dist_t"+padding_temporel+".pgm")
-    
-    command("inverse images_3D/image_3D_dist_t"+padding_temporel+".pgm "+
-            "images_3D/image_3D_dist_inv_t"+padding_temporel+".pgm")
-    
-
-    # minimas
-    command("minima images_3D/image_3D_dist_inv_t"+padding_temporel+".pgm "+
-            "6 images_3D/image_3D_min_t"+padding_temporel+".pgm")
-
-    
-    #ligne de separation des eaux
-    command("watershed images_3D/image_3D_dist_inv_t"+padding_temporel+".pgm "+
-            "images_3D/image_3D_min_t"+padding_temporel+".pgm "+
-            "26 images_3D/image_3D_wat_t"+padding_temporel+".pgm")
-    
-    command("add images_3D/image_3D_s_inv_t"+padding_temporel+".pgm "+
-            "images_3D/image_3D_wat_t"+padding_temporel+".pgm "+
-            "images_3D/image_3D_superpose_t"+padding_temporel+".pgm")
-    
-    command("inverse images_3D/image_3D_superpose_t"+padding_temporel+".pgm "+
-            "images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm ")
-
-    
-    #creation du vtk
-    lissage = 10
-    command("mcube images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 0 "+str(lissage)+" 0 VTK vtk_3D/vtk_t_"+padding_temporel+".vtk")
-    
-    #border
-    command("border images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 border_3D/border_3D_t_"+padding_temporel+".pgm")
-    command("add images_3D/image_3D_t"+padding_temporel+".pgm border_3D/border_3D_t_"+padding_temporel+".pgm border_3D/border_3D_t_"+padding_temporel+"_add_blanc.pgm")
-   
-    
-    #barycentres
-    
-    command("3dlabel images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm labels_3D/label_t_"+padding_temporel+".pgm")
-    command("barycentrelab labels_3D/label_t_"+padding_temporel+".pgm bary_3D/bary_3D_t"+padding_temporel+".pgm")
-    command("pgm2list bary_3D/bary_3D_t"+padding_temporel+".pgm B bary_3D/liste/bary_list_t"+padding_temporel+".list")
-
-
-    #volumes
-    command("attribute images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 0 0 0 volumes_3D/volume_3D_t_"+padding_temporel+".pgm")
-    add_volume("bary_3D/liste/bary_list_t"+padding_temporel+".list","volumes_3D/volume_3D_t_"+padding_temporel+".pgm")
-    
+    #gestion des repertoires
+      
+    os.system("rm -R tmp")
+    os.system("mkdir tmp")
         
-
-    #extraction des coupes 2D sur les 3 plans
+    os.system("rm -R images_3D")
+    os.system("mkdir images_3D")
     
-    # pour moins de repetitions
-    debut_commande= "extractplane border_3D/border_3D_t_"+padding_temporel+"_add_blanc.pgm "
-
-
-    #extraction des coupes sur (x,y)
+    os.system("rm -R vtk_3D")
+    os.system("mkdir vtk_3D")
     
-    os.system("mkdir coupes_3D/originales/x_y/"+padding_temporel)
-    os.system("mkdir coupes_3D/borders/x_y/"+padding_temporel)
-    os.system("mkdir coupes_3D/water/x_y/"+padding_temporel)
-    os.system("mkdir coupes_3D/carte_dist/x_y/"+padding_temporel)
-    os.system("mkdir coupes_3D/contours_rouges/x_y/"+padding_temporel)
-    os.system("mkdir coupes_3D/contours_blancs/x_y/"+padding_temporel)
-  
+    os.system("rm -R images_2D_for_3D")
+    os.system("mkdir images_2D_for_3D")
+    
+    os.system("rm -R coupes_3D")
+    os.system("mkdir coupes_3D")
+    
+    os.system("mkdir coupes_3D/originales")
+    os.system("mkdir coupes_3D/originales/x_y")
+    os.system("mkdir coupes_3D/originales/x_z")
+    os.system("mkdir coupes_3D/originales/y_z")
+    
+    os.system("mkdir coupes_3D/carte_dist")
+    os.system("mkdir coupes_3D/carte_dist/x_y")
+    os.system("mkdir coupes_3D/carte_dist/x_z")
+    os.system("mkdir coupes_3D/carte_dist/y_z")
+    
+    os.system("mkdir coupes_3D/contours_blancs")
+    os.system("mkdir coupes_3D/contours_blancs/x_y")
+    os.system("mkdir coupes_3D/contours_blancs/x_z")
+    os.system("mkdir coupes_3D/contours_blancs/y_z")
+    
+    os.system("mkdir coupes_3D/contours_rouges")
+    os.system("mkdir coupes_3D/contours_rouges/x_y")
+    os.system("mkdir coupes_3D/contours_rouges/x_z")
+    os.system("mkdir coupes_3D/contours_rouges/y_z")
+    
+    os.system("mkdir coupes_3D/borders")
+    os.system("mkdir coupes_3D/borders/x_y")
+    os.system("mkdir coupes_3D/borders/x_z")
+    os.system("mkdir coupes_3D/borders/y_z")
+    
+    os.system("mkdir coupes_3D/water")
+    os.system("mkdir coupes_3D/water/x_y")
+    os.system("mkdir coupes_3D/water/x_z")
+    os.system("mkdir coupes_3D/water/y_z")
+    
+    os.system("rm -R border_3D")
+    os.system("mkdir border_3D")
     
     
-    for u in range(0, n_coupes_xy):
+    os.system("rm -R labels_3D")
+    os.system("mkdir labels_3D")
+    
+    os.system("rm -R bary_3D")
+    os.system("mkdir bary_3D")
+    os.system("mkdir bary_3D/liste")
+    
+    os.system("rm -R volumes_3D")
+    os.system("mkdir volumes_3D")
+    
+    
+    #extraction des images du tif en bmp
+    os.system("convert gros_sable.tif tmp/test.bmp")
+    
+    #conversion en pgm et renommage aux standard de la fc catpgm
+    for i in range(0, n_tempo*n_coupes_xy):
+        os.system("convert tmp/test-"+str(i)+".bmp images_2D_for_3D/image_2D_for_3D_"+numerote(i,4)+".pgm")
+    
+    
+    #traitement pour chaque temps
         
-        #image originale
-        command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(u)+" xy "+
-                    "coupes_3D/originales/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_org.pgm")
+    for t in range(0, n_tempo):
+        
+        print("image 3D numero "+str(t)+" en traitement")
+    
+        debut_colone = t * n_coupes_xy
+        fin_colone   = debut_colone + n_coupes_xy - 1
+    
+        padding_temporel = numerote(t, 2)
         
         
-        #carte des distances coloree
-        command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(u)+" xy "+
-                    "coupes_3D/carte_dist/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_dist.pgm")
-        command("colorize coupes_3D/carte_dist/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_dist.pgm"
-                +lut+"coupes_3D/carte_dist/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_distcolor.ppm")
+        #generation de l image 3D a partir des 250 coupes
+        command("catpgm images_2D_for_3D/image_2D_for_3D_ "+
+                str(debut_colone)+" "+str(fin_colone)+
+                " [80 80 250] images_3D/image_3D_t"+padding_temporel+".pgm")
+    
+        
+        #seuillage
+        command("seuil images_3D/image_3D_t"+padding_temporel+".pgm "+
+                str(seuil)+" "+
+                "images_3D/image_3D_s_t"+padding_temporel+".pgm")
         
         
-        #watershed fini
-        command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(u)+" xy "+
-                    "coupes_3D/water/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_wa.pgm")
+        #nettoyage des impurtes dans les grains
+        file_to_clean = " images_3D/image_3D_s_t"+padding_temporel+".pgm "
+    
+        minimum_noir = "300"
+        minimum_blanc = "30"
+    
+        command("attribute"+file_to_clean+"6 "+minimum_noir+" 1 0 attributes")
+        command("long2byte attributes attributes")
+        command("attribute attributes 6 "+minimum_blanc+" 1 0 attributes")
+        command("long2byte attributes attributes")
+        command("seuil attributes 1 "+file_to_clean)
         
-        #borders
-        command("border coupes_3D/water/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
-                "_wa.pgm 8 coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_border.pgm")
-            
         
+        command("inverse images_3D/image_3D_s_t"+padding_temporel+".pgm "+
+                "images_3D/image_3D_s_inv_t"+padding_temporel+".pgm")
+    
         
-        #image originale contours rouges
-        command("colorize coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_border.pgm"+lut_bord+
-                "coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_border_rg.ppm")
+         # carte des distances, avec distance euclidienne
+        command("dist images_3D/image_3D_s_inv_t"+padding_temporel+".pgm "+
+                "0 images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm")
+    
+        command("long2byte images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+
+                "0 images_3D/image_3D_dist_t"+padding_temporel+".pgm")
         
-        image_a_ppm = "coupes_3D/originales/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_org.pgm"
+        command("inverse images_3D/image_3D_dist_t"+padding_temporel+".pgm "+
+                "images_3D/image_3D_dist_inv_t"+padding_temporel+".pgm")
         
-        command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
-                " coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_orgppm.ppm")
+    
+        # minimas
+        command("minima images_3D/image_3D_dist_inv_t"+padding_temporel+".pgm "+
+                "6 images_3D/image_3D_min_t"+padding_temporel+".pgm")
+    
+        
+        #ligne de separation des eaux
+        command("watershed images_3D/image_3D_dist_inv_t"+padding_temporel+".pgm "+
+                "images_3D/image_3D_min_t"+padding_temporel+".pgm "+
+                "26 images_3D/image_3D_wat_t"+padding_temporel+".pgm")
+        
+        command("add images_3D/image_3D_s_inv_t"+padding_temporel+".pgm "+
+                "images_3D/image_3D_wat_t"+padding_temporel+".pgm "+
+                "images_3D/image_3D_superpose_t"+padding_temporel+".pgm")
+        
+        command("inverse images_3D/image_3D_superpose_t"+padding_temporel+".pgm "+
+                "images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm ")
+    
+        
+        #creation du vtk
+        lissage = 10
+        command("mcube images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 0 "+str(lissage)+" 0 VTK vtk_3D/vtk_t_"+padding_temporel+".vtk")
+        
+        #border
+        command("border images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 border_3D/border_3D_t_"+padding_temporel+".pgm")
+        command("add images_3D/image_3D_t"+padding_temporel+".pgm border_3D/border_3D_t_"+padding_temporel+".pgm border_3D/border_3D_t_"+padding_temporel+"_add_blanc.pgm")
        
-        command("add coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
-                "_orgppm.ppm coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
-                "_border_rg.ppm coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_controuge.ppm")
+        
+        #barycentres
+        
+        command("3dlabel images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm labels_3D/label_t_"+padding_temporel+".pgm")
+        command("barycentrelab labels_3D/label_t_"+padding_temporel+".pgm bary_3D/bary_3D_t"+padding_temporel+".pgm")
+        command("pgm2list bary_3D/bary_3D_t"+padding_temporel+".pgm B bary_3D/liste/bary_list_t"+padding_temporel+".list")
+    
+    
+        #volumes
+        command("attribute images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 0 0 0 volumes_3D/volume_3D_t_"+padding_temporel+".pgm")
+        add_volume("bary_3D/liste/bary_list_t"+padding_temporel+".list","volumes_3D/volume_3D_t_"+padding_temporel+".pgm")
+        
+            
+    
+        #extraction des coupes 2D sur les 3 plans
+        
+        # pour moins de repetitions
+        debut_commande= "extractplane border_3D/border_3D_t_"+padding_temporel+"_add_blanc.pgm "
+    
+    
+        #extraction des coupes sur (x,y)
+        
+        os.system("mkdir coupes_3D/originales/x_y/"+padding_temporel)
+        os.system("mkdir coupes_3D/borders/x_y/"+padding_temporel)
+        os.system("mkdir coupes_3D/water/x_y/"+padding_temporel)
+        os.system("mkdir coupes_3D/carte_dist/x_y/"+padding_temporel)
+        os.system("mkdir coupes_3D/contours_rouges/x_y/"+padding_temporel)
+        os.system("mkdir coupes_3D/contours_blancs/x_y/"+padding_temporel)
+      
         
         
-        
-        #image originale contours blancs 
-        command("add coupes_3D/originales/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
-                "_org.pgm  coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
-                "_border.pgm coupes_3D/contours_blancs/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_contblanc.pgm")
-
+        for u in range(0, n_coupes_xy):
+            
+            #image originale
+            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(u)+" xy "+
+                        "coupes_3D/originales/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_org.pgm")
             
             
-        
-        
-    #extraction des coupes sur (x,z)
-    
-    os.system("mkdir coupes_3D/originales/x_z/"+padding_temporel)
-    os.system("mkdir coupes_3D/borders/x_z/"+padding_temporel)
-    os.system("mkdir coupes_3D/water/x_z/"+padding_temporel)
-    os.system("mkdir coupes_3D/carte_dist/x_z/"+padding_temporel)
-    os.system("mkdir coupes_3D/contours_rouges/x_z/"+padding_temporel)
-    os.system("mkdir coupes_3D/contours_blancs/x_z/"+padding_temporel)
-    
-    for u in range(0, n_coupes_xz):
-        
-        v=n_coupes_xz-u-1  #car extractplane ne les donnait pas dans le bon "sens"
-        
-        #image originale
-        command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(v)+" xz "+
-                    "coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_org.pgm")
-        
-        
-        #carte des distances coloree
-        command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(v)+" xz "+
-                    "coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_dist.pgm")
-        command("colorize coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_dist.pgm"
-                +lut+"coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_distcolor.ppm")
-    
-        
-        #watershed fini
-        command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(v)+" xz "+
-                    "coupes_3D/water/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_wa.pgm")
-        
-        #borders
-        command("border coupes_3D/water/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
-                "_wa.pgm 8 coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_border.pgm")
+            #carte des distances coloree
+            command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(u)+" xy "+
+                        "coupes_3D/carte_dist/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_dist.pgm")
+            command("colorize coupes_3D/carte_dist/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_dist.pgm"
+                    +lut+"coupes_3D/carte_dist/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_distcolor.ppm")
             
-        
-        
-        #image originale contours rouges
-        command("colorize coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_border.pgm"+lut_bord+
-                "coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_border_rg.ppm")
-        
-        image_a_ppm = "coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_org.pgm"
-        
-        command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
-                " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_orgppm.ppm")
-       
-        command("add coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
-                "_orgppm.ppm coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
-                "_border_rg.ppm coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_controuge.ppm")
-        
-        
-        
-        #image originale contours blancs 
-        command("add coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
-                "_org.pgm  coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
-                "_border.pgm coupes_3D/contours_blancs/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_contblanc.pgm")
             
-          
-
-   
-    #extraction des coupes sur (y,z)
-    
-    os.system("mkdir coupes_3D/originales/y_z/"+padding_temporel)
-    os.system("mkdir coupes_3D/borders/y_z/"+padding_temporel)
-    os.system("mkdir coupes_3D/water/y_z/"+padding_temporel)
-    os.system("mkdir coupes_3D/carte_dist/y_z/"+padding_temporel)
-    os.system("mkdir coupes_3D/contours_rouges/y_z/"+padding_temporel)
-    os.system("mkdir coupes_3D/contours_blancs/y_z/"+padding_temporel)
-    
-    for u in range(0, n_coupes_yz):
-        
-        #image originale
-        command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(u)+" yz "+
-                    "coupes_3D/originales/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_org.pgm")
-        
-        
-        #carte des distances coloree
-        command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(u)+" yz "+
-                    "coupes_3D/carte_dist/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_dist.pgm")
-        command("colorize coupes_3D/carte_dist/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_dist.pgm"
-                +lut+"coupes_3D/carte_dist/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_distcolor.ppm")
-        
-        
-        #watershed fini
-        command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(u)+" yz "+
-                    "coupes_3D/water/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_wa.pgm")
-        
-        #borders
-        command("border coupes_3D/water/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
-                "_wa.pgm 8 coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_border.pgm")
+            #watershed fini
+            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(u)+" xy "+
+                        "coupes_3D/water/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_wa.pgm")
             
-        
-        
-        #image originale contours rouges
-        command("colorize coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_border.pgm"+lut_bord+
-                "coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_border_rg.ppm")
-        
-        image_a_ppm = "coupes_3D/originales/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_org.pgm"
-        
-        command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
-                " coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_orgppm.ppm")
-       
-        command("add coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
-                "_orgppm.ppm coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
-                "_border_rg.ppm coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_controuge.ppm")
-        
-        
-        
-        #image originale contours blancs 
-        command("add coupes_3D/originales/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
-                "_org.pgm  coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
-                "_border.pgm coupes_3D/contours_blancs/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_contblanc.pgm")
+            #borders
+            command("border coupes_3D/water/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                    "_wa.pgm 8 coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_border.pgm")
+                
+            
+            
+            #image originale contours rouges
+            command("colorize coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_border.pgm"+lut_bord+
+                    "coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_border_rg.ppm")
+            
+            image_a_ppm = "coupes_3D/originales/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_org.pgm"
+            
+            command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
+                    " coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_orgppm.ppm")
            
-        
-        
-        
-        
-#listage des grains       
-
-#enleve les formes qui ne sont pas des grains de la liste des barry
-
-formes=[]
-
-for t in range(0, n_tempo):
+            command("add coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                    "_orgppm.ppm coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                    "_border_rg.ppm coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_controuge.ppm")
+            
+            
+            
+            #image originale contours blancs 
+            command("add coupes_3D/originales/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                    "_org.pgm  coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+                    "_border.pgm coupes_3D/contours_blancs/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_contblanc.pgm")
     
-    padding_temporel = numerote(t, 2) # pour pas trop recalculer
-
-    #enleve de la liste les grains de vol<100
-    liste= parse_list("../extraction/bary_3D/liste/bary_list_t"+padding_temporel+".list")
-    volume_min=100
-    g=0
-    while g< len(liste):
-        if (liste[g][3]<volume_min):
-            del(liste[g])
-        g += 1
+                
+                
+            
+            
+        #extraction des coupes sur (x,z)
         
-    formes.append(liste)
+        os.system("mkdir coupes_3D/originales/x_z/"+padding_temporel)
+        os.system("mkdir coupes_3D/borders/x_z/"+padding_temporel)
+        os.system("mkdir coupes_3D/water/x_z/"+padding_temporel)
+        os.system("mkdir coupes_3D/carte_dist/x_z/"+padding_temporel)
+        os.system("mkdir coupes_3D/contours_rouges/x_z/"+padding_temporel)
+        os.system("mkdir coupes_3D/contours_blancs/x_z/"+padding_temporel)
         
-
-grains = []
-
-"""
-[
-grain1 [vol, [[x0, y0, z0], [x1, y1, z1]]]
-]
-
-"""
-
-def dist2(g1, g2):
-    return pow(g1[0]-g2[0], 2) + pow(g1[1]-g2[1], 2) + pow(g1[2]-g2[2], 2)
-
-
-
-seuil_volume = 100
-
-for grain in formes[0]:
-    grains.append(
-            [grain[3],
-             [grain[:3]]
-            ])
-    for t in range(1, n_tempo):
-        gr_prec = grains[len(grains)-1][1][t-1]
-        dist_min = dist2(gr_prec, formes[t][0])
-        plus_proche = formes[t][0]        
-
-        for suivant in formes[t]:
-            d2 = dist2(gr_prec, suivant)
-            if (d2 < dist_min and abs(gr_prec[0]-suivant[0]) < seuil_volume):
-                dist_min = d2
-                plus_proche = suivant
-        grains[len(grains)-1][1].append(plus_proche[:3])
-
-np.save("../extraction/tracking_3D/grains.npy", grains)
-
-resultats = []
-for grain in grains:
-    x = []
-    y = []
-    z = []
-    for coords in grain[1]:
-        x.append(coords[0])
-        y.append(coords[1])
-        z.append(coords[2])
-    resultats.append([x, y, z])
+        for u in range(0, n_coupes_xz):
+            
+            v=n_coupes_xz-u-1  #car extractplane ne les donnait pas dans le bon "sens"
+            
+            #image originale
+            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(v)+" xz "+
+                        "coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_org.pgm")
+            
+            
+            #carte des distances coloree
+            command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(v)+" xz "+
+                        "coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_dist.pgm")
+            command("colorize coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_dist.pgm"
+                    +lut+"coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_distcolor.ppm")
+        
+            
+            #watershed fini
+            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(v)+" xz "+
+                        "coupes_3D/water/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_wa.pgm")
+            
+            #borders
+            command("border coupes_3D/water/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
+                    "_wa.pgm 8 coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_border.pgm")
+                
+            
+            
+            #image originale contours rouges
+            command("colorize coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_border.pgm"+lut_bord+
+                    "coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_border_rg.ppm")
+            
+            image_a_ppm = "coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_org.pgm"
+            
+            command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
+                    " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_orgppm.ppm")
+           
+            command("add coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
+                    "_orgppm.ppm coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
+                    "_border_rg.ppm coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_controuge.ppm")
+            
+            
+            
+            #image originale contours blancs 
+            command("add coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
+                    "_org.pgm  coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
+                    "_border.pgm coupes_3D/contours_blancs/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_contblanc.pgm")
+                
+              
     
-np.save("../extraction/tracking_3D/resultats.npy", resultats)
-
-
-
-NB_IMGS = 4000
-INTERVALLE_XY = 250
-INTERVALLE_XZ = 80
-INTERVALLE_YZ = 80
-URL_PGM = "../extraction/coupes_3D/"
-URL_VTK = "../extraction/vtks/"
-URL_GRAPHIQUE_3D = "../extraction/tracking_3D/resultats.npy"
-"""
-EXPORTATION
-"""
-#base de donnees
-bdd = {} 
-bdd["NB_IMGS"] = NB_IMGS
-bdd["INTERVALLE_XY"] = INTERVALLE_XY
-bdd["INTERVALLE_XZ"] = INTERVALLE_XZ
-bdd["INTERVALLE_YZ"] = INTERVALLE_YZ
-bdd["URL_PGM"] = URL_PGM
-bdd["URL_VTK"] = URL_VTK
-bdd["URL_GRAPHIQUE_3D" ] = URL_GRAPHIQUE_3D
-
-# Its important to use binary mode
-fichierBdd = open('woopwoop', 'ab')
-
-# source, destination
-pickle.dump(bdd, fichierBdd)                 
-fichierBdd.close()
+       
+        #extraction des coupes sur (y,z)
+        
+        os.system("mkdir coupes_3D/originales/y_z/"+padding_temporel)
+        os.system("mkdir coupes_3D/borders/y_z/"+padding_temporel)
+        os.system("mkdir coupes_3D/water/y_z/"+padding_temporel)
+        os.system("mkdir coupes_3D/carte_dist/y_z/"+padding_temporel)
+        os.system("mkdir coupes_3D/contours_rouges/y_z/"+padding_temporel)
+        os.system("mkdir coupes_3D/contours_blancs/y_z/"+padding_temporel)
+        
+        for u in range(0, n_coupes_yz):
+            
+            #image originale
+            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(u)+" yz "+
+                        "coupes_3D/originales/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_org.pgm")
+            
+            
+            #carte des distances coloree
+            command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(u)+" yz "+
+                        "coupes_3D/carte_dist/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_dist.pgm")
+            command("colorize coupes_3D/carte_dist/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_dist.pgm"
+                    +lut+"coupes_3D/carte_dist/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_distcolor.ppm")
+            
+            
+            #watershed fini
+            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(u)+" yz "+
+                        "coupes_3D/water/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_wa.pgm")
+            
+            #borders
+            command("border coupes_3D/water/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                    "_wa.pgm 8 coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_border.pgm")
+                
+            
+            
+            #image originale contours rouges
+            command("colorize coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_border.pgm"+lut_bord+
+                    "coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_border_rg.ppm")
+            
+            image_a_ppm = "coupes_3D/originales/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_org.pgm"
+            
+            command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
+                    " coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_orgppm.ppm")
+           
+            command("add coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                    "_orgppm.ppm coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                    "_border_rg.ppm coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_controuge.ppm")
+            
+            
+            
+            #image originale contours blancs 
+            command("add coupes_3D/originales/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                    "_org.pgm  coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+                    "_border.pgm coupes_3D/contours_blancs/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_contblanc.pgm")
+               
+            
+            
+            
+            
+    #listage des grains       
+    
+    #enleve les formes qui ne sont pas des grains de la liste des barry
+    
+    formes=[]
+    
+    for t in range(0, n_tempo):
+        
+        padding_temporel = numerote(t, 2) # pour pas trop recalculer
+    
+        #enleve de la liste les grains de vol<100
+        liste= parse_list("../extraction/bary_3D/liste/bary_list_t"+padding_temporel+".list")
+        volume_min=100
+        g=0
+        while g< len(liste):
+            if (liste[g][3]<volume_min):
+                del(liste[g])
+            g += 1
+            
+        formes.append(liste)
+            
+    
+    grains = []
+    
+    """
+    [
+    grain1 [vol, [[x0, y0, z0], [x1, y1, z1]]]
+    ]
+    
+    """
+    
+    def dist2(g1, g2):
+        return pow(g1[0]-g2[0], 2) + pow(g1[1]-g2[1], 2) + pow(g1[2]-g2[2], 2)
+    
+    
+    
+    seuil_volume = 100
+    
+    for grain in formes[0]:
+        grains.append(
+                [grain[3],
+                 [grain[:3]]
+                ])
+        for t in range(1, n_tempo):
+            gr_prec = grains[len(grains)-1][1][t-1]
+            dist_min = dist2(gr_prec, formes[t][0])
+            plus_proche = formes[t][0]        
+    
+            for suivant in formes[t]:
+                d2 = dist2(gr_prec, suivant)
+                if (d2 < dist_min and abs(gr_prec[0]-suivant[0]) < seuil_volume):
+                    dist_min = d2
+                    plus_proche = suivant
+            grains[len(grains)-1][1].append(plus_proche[:3])
+    
+    np.save("../extraction/tracking_3D/grains.npy", grains)
+    
+    resultats = []
+    for grain in grains:
+        x = []
+        y = []
+        z = []
+        for coords in grain[1]:
+            x.append(coords[0])
+            y.append(coords[1])
+            z.append(coords[2])
+        resultats.append([x, y, z])
+        
+    np.save("../extraction/tracking_3D/resultats.npy", resultats)
+    
+    
+    
+    NB_IMGS = 4000
+    INTERVALLE_XY = 250
+    INTERVALLE_XZ = 80
+    INTERVALLE_YZ = 80
+    URL_PGM = "../extraction/coupes_3D/"
+    URL_VTK = "../extraction/vtks/"
+    URL_GRAPHIQUE_3D = "../extraction/tracking_3D/resultats.npy"
+    """
+    EXPORTATION
+    """
+    #base de donnees
+    bdd = {} 
+    bdd["NB_IMGS"] = NB_IMGS
+    bdd["INTERVALLE_XY"] = INTERVALLE_XY
+    bdd["INTERVALLE_XZ"] = INTERVALLE_XZ
+    bdd["INTERVALLE_YZ"] = INTERVALLE_YZ
+    bdd["URL_PGM"] = URL_PGM
+    bdd["URL_VTK"] = URL_VTK
+    bdd["URL_GRAPHIQUE_3D" ] = URL_GRAPHIQUE_3D
+    
+    # Its important to use binary mode
+    fichierBdd = open('woopwoop', 'ab')
+    
+    # source, destination
+    pickle.dump(bdd, fichierBdd)                 
+    fichierBdd.close()
 
     
-    #return os.path.abspath('woopwoop')    
+    return os.path.abspath('woopwoop')    
     
     
     
