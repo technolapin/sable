@@ -28,23 +28,31 @@ class Graphique3D(FigureCanvasQTAgg) :
     Ces sous-listes doivent comprendre 3 sous-sous-listes étant les coordonnées X, Y et Z à tracer
     @param "courbeAfficher" : La courbe à afficher dans "liste" + 1, 0 si il faut les afficher toutes
     @param "tempsAfficher" : L'instant à afficher dans "liste" + 1, 0 si il faut afficher tous les instants
+    @param "conserverLimites" : Conserver les limites du précédent appel de cette fonction (Ne fait rien si c'est la première fois)
+    @param "limites" : Limites imposées, X, Y, et Z (Outrepasse le paramètre précédent)
     """
-    def dessinerGraphique3D(self, liste, courbeAfficher, tempsAfficher) : # Procédure qui dessine le graphique
-        if self.aEteInit :
-            # Sauvegarde taille des axes
-            saveXLim = self.axes.get_xlim()
-            saveYLim = self.axes.get_ylim()
-            saveZLim = self.axes.get_zlim()
+    def dessinerGraphique3D(self, liste, courbeAfficher, tempsAfficher, conserverLimites = True, limites = None) : # Procédure qui dessine le graphique
+        if limites != None :
+            self.axes.set_xlim(limites[0])
+            self.axes.set_ylim(limites[0])
+            self.axes.set_zlim(limites[0])
         
-        self.axes.clear() # Nettoie les axes et leur contenu
-        
-        if self.aEteInit :
-            # Remet la sauvegarde
-            self.axes.set_xlim(saveXLim)
-            self.axes.set_ylim(saveYLim)
-            self.axes.set_zlim(saveZLim)
-        
-        self.aEteInit = True
+        elif conserverLimites :
+            if self.aEteInit :
+                # Sauvegarde taille des axes
+                saveXLim = self.axes.get_xlim()
+                saveYLim = self.axes.get_ylim()
+                saveZLim = self.axes.get_zlim()
+            
+            self.axes.clear() # Nettoie les axes et leur contenu
+            
+            if self.aEteInit :
+                # Remet la sauvegarde
+                self.axes.set_xlim(saveXLim)
+                self.axes.set_ylim(saveYLim)
+                self.axes.set_zlim(saveZLim)
+            
+            self.aEteInit = True
         
         self.axes.set_xlabel( 'Axe X' ) # Label sur l'axe X
         self.axes.set_ylabel( 'Axe Y' ) # Label sur l'axe Y
@@ -90,3 +98,9 @@ class Graphique3D(FigureCanvasQTAgg) :
                                     liste[numeroCourbe][2],
                                     couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
         self.draw() # Dessine le graphique 3D avec les axes
+    
+    """
+    @return Liste de 3 éléments avec les limites X, Y, et Z du graphe
+    """
+    def getLimitesGraph() :
+        return [self.axes.get_xlim(), self.axes.get_ylim(), self.axes.get_zlim()]
