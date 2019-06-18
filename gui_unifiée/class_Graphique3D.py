@@ -102,5 +102,5 @@ class Graphique3D(FigureCanvasQTAgg) :
     """
     @return Liste de 3 éléments avec les limites X, Y, et Z du graphe
     """
-    def getLimitesGraph() :
+    def getLimitesGraphe() :
         return [self.axes.get_xlim(), self.axes.get_ylim(), self.axes.get_zlim()]
