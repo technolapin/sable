@@ -293,10 +293,8 @@ class TabAffichageCoupes(QGridLayout) :
 ######## retour[0] = volume du grain
 ######## retour[1] = liste dont on a besoin
 ################ 
-
         retour = retrouve_grain(x,y,z,temps)
-        print("tabaff : ", retour)        
-
+        
 
 ######## Prendre le retour de ce Barbara et créer un nouvel objet Graphique3D
 ######## qu'on utilise pour remplacer éventuellement (if il y a déjà un obj)
@@ -307,15 +305,12 @@ class TabAffichageCoupes(QGridLayout) :
         if (retour==0):
 ################    
             volume_grain = 0
-            self.graphique3D.dessinerGraphique3D( np.array([[[1,2,3],[1,3,4],[1,4,5]]]), 0, 0 ) # Affiche un graphe vide
+            self.graphique3D.dessinerGraphique3D( np.array([[[],[],[]]]), 0, 0, limites=self.objParams.tabGraphique3D.graphique3D.getLimitesGraphe() ) # Affiche un graphe vide
 ################ 
         else :
 ################    
-            print("Je me lance bien")
-            print (retour[0])
             volume_grain = retour[0]
-            print("len tab : ", len(retour[1][0]))
-            self.graphique3D.dessinerGraphique3D( retour[1], 0, 0 ) # Affiche la trajectoire du grain sélectionné
+            self.graphique3D.dessinerGraphique3D( [retour[1]], 0, 0, limites=self.objParams.tabGraphique3D.graphique3D.getLimitesGraphe() ) # Affiche la trajectoire du grain sélectionné
 
 
 
