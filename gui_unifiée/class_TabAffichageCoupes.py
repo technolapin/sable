@@ -16,6 +16,8 @@ from class_TabGraphique3D import Graphique3D
 
 import numpy as np
 
+import platform
+
 
 ######## Il faut que je modifie le code dans tracking 3D pour faire
 ######## ../extraction pout pouvoir le lancer depuis mon code
@@ -292,8 +294,11 @@ class TabAffichageCoupes(QGridLayout) :
 ######## dont on a besoin pour afficher la trajectoire
 ######## retour[0] = volume du grain
 ######## retour[1] = liste dont on a besoin
-################ 
-        retour = retrouve_grain(x,y,z,temps)
+################
+        if platform.system() == "Linux" :
+            retour = retrouve_grain(x,y,z,temps)
+        else :
+            retour = 0
         
 
 ######## Prendre le retour de ce Barbara et créer un nouvel objet Graphique3D
@@ -305,12 +310,18 @@ class TabAffichageCoupes(QGridLayout) :
         if (retour==0):
 ################    
             volume_grain = 0
-            self.graphique3D.dessinerGraphique3D( np.array([[[],[],[]]]), 0, 0, limites=self.objParams.tabGraphique3D.graphique3D.getLimitesGraphe() ) # Affiche un graphe vide
+            if self.objParams.tabGraphique3D != None :
+                self.graphique3D.dessinerGraphique3D( np.array([[[],[],[]]]), 0, 0, limites=self.objParams.tabGraphique3D.graphique3D.getLimitesGraphe() ) # Affiche un graphe vide
+            else :
+                self.graphique3D.dessinerGraphique3D( np.array([[[],[],[]]]), 0, 0, conserverLimites = False )
 ################ 
         else :
 ################    
             volume_grain = retour[0]
-            self.graphique3D.dessinerGraphique3D( [retour[1]], 0, 0, limites=self.objParams.tabGraphique3D.graphique3D.getLimitesGraphe() ) # Affiche la trajectoire du grain sélectionné
+            if self.objParams.tabGraphique3D != None :
+                self.graphique3D.dessinerGraphique3D( [retour[1]], 0, 0, limites=self.objParams.tabGraphique3D.graphique3D.getLimitesGraphe() ) # Affiche la trajectoire du grain sélectionné
+            else :
+                self.graphique3D.dessinerGraphique3D( [retour[1]], 0, 0, conserverLimites = False )
 
 
 
