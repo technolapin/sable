@@ -29,13 +29,13 @@ class Graphique3D(FigureCanvasQTAgg) :
     @param "courbeAfficher" : La courbe à afficher dans "liste" + 1, 0 si il faut les afficher toutes
     @param "tempsAfficher" : L'instant à afficher dans "liste" + 1, 0 si il faut afficher tous les instants
     @param "conserverLimites" : Conserver les limites du précédent appel de cette fonction (Ne fait rien si c'est la première fois)
-    @param "limites" : Limites imposées, X, Y, et Z (Outrepasse le paramètre précédent)
+    @param "limites" : Limites de 3 éléments avec les limites X, Y et Z à imposer (Outrepasse le paramètre précédent)
     """
     def dessinerGraphique3D(self, liste, courbeAfficher, tempsAfficher, conserverLimites = True, limites = None) : # Procédure qui dessine le graphique
         if limites != None :
             self.axes.set_xlim(limites[0])
-            self.axes.set_ylim(limites[0])
-            self.axes.set_zlim(limites[0])
+            self.axes.set_ylim(limites[1])
+            self.axes.set_zlim(limites[2])
         
         elif conserverLimites :
             if self.aEteInit :
