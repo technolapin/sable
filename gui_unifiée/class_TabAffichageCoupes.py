@@ -21,8 +21,9 @@ import platform
 
 ######## Il faut que je modifie le code dans tracking 3D pour faire
 ######## ../extraction pout pouvoir le lancer depuis mon code
-sys.path.append("../extraction")
-from tracking_3D import retrouve_grain
+if platform.system() == "Linux" :
+    sys.path.append("../extraction")
+    from tracking_3D import retrouve_grain
 
 
 """
