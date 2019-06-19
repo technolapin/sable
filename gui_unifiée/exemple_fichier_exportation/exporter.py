@@ -41,7 +41,7 @@ URL_PGM = "../../extraction/coupes_3D/"
 URL du répertoire contenant les fichiers VTK
 ELLE DOIT ETRE RELATIVE AU FICHIER EXPORTE !
 """
-URL_VTK = "../../extraction/vtks/"
+URL_VTK = "../../extraction/vtk_3D/"
 
 """
 Données du graphique à afficher

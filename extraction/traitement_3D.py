@@ -5,6 +5,31 @@ import os
 import numpy as np
 import pickle
 
+from vtk import vtkDecimatePro, vtkPolyDataWriter, vtkPolyDataReader, vtkPolyData
+
+
+def decimate(vtk_file, ratio):
+    reader = vtkPolyDataReader()
+    reader.SetFileName(vtk_file)
+    reader.Update()
+    input_poly = reader.GetOutput()
+    decim_poly = vtkPolyData()
+    
+    decimator = vtkDecimatePro()
+    decimator.SetInputData(input_poly)
+    decimator.SetTargetReduction(ratio)
+    decimator.Update()
+    
+    decim_poly.ShallowCopy(decimator.GetOutput())
+    
+    writer = vtkPolyDataWriter()
+    writer.SetInputData(decim_poly)
+    #writer.SetFileName("_decimated.".join(vtk_file.split(".")))
+    writer.SetFileName(vtk_file)
+    #writer.Update()
+    writer.Write()
+    
+
 
 #donnees
 n_tempo = 16 # nb de temps
@@ -80,7 +105,7 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
     
     os.system("rm -R vtk_3D")
     os.system("mkdir vtk_3D")
-    
+
     os.system("rm -R images_2D_for_3D")
     os.system("mkdir images_2D_for_3D")
     
@@ -211,9 +236,12 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
     
         
         #creation du vtk
-        lissage = 10
-        command("mcube images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 0 "+str(lissage)+" 0 VTK vtk_3D/vtk_t_"+padding_temporel+".vtk")
-        
+        lissage = 5
+        nom_vtk = "vtk_3D/vtk_t_"+padding_temporel+".vtk"
+        command("mcube images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 0 "+str(lissage)+" 0 VTK "+nom_vtk)
+        print("decimating", nom_vtk)
+        decimate(nom_vtk, .9)
+        print("done")
         #border
         command("border images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 border_3D/border_3D_t_"+padding_temporel+".pgm")
         command("add images_3D/image_3D_t"+padding_temporel+".pgm border_3D/border_3D_t_"+padding_temporel+".pgm border_3D/border_3D_t_"+padding_temporel+"_add_blanc.pgm")
@@ -489,7 +517,7 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
     INTERVALLE_XZ = 80
     INTERVALLE_YZ = 80
     URL_PGM = "../extraction/coupes_3D/"
-    URL_VTK = "../extraction/vtks/"
+    URL_VTK = "../extraction/vtk_3D/"
     URL_GRAPHIQUE_3D = "../extraction/tracking_3D/resultats.npy"
     """
     EXPORTATION
