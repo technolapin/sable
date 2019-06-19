@@ -87,7 +87,7 @@ class Parametres() :
     """
     def genererURLdesVTK( self, instantTemporel ) :
         tempsFormate = format(instantTemporel, '02d') # String sur 2 digits
-        fichierVTK = self.URL_VTK + tempsFormate + ".vtk"
+        fichierVTK = self.URL_VTK + "vtk_t_" + tempsFormate + ".vtk"
         
         if self.contientVariablesImportees :
             # Les URL doivent être relatives au fichier d'importation
