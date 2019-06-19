@@ -8,13 +8,8 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QLab
 
 from class_MilleFeuille3D import MilleFeuille3D
 
+from parametres import ENABLE_ANTI_LAG
 from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
-
-
-"""
-PARAMETRES
-"""
-ENABLE_ANTI_LAG = True # Désactive l'affichache multi-couches dans le mille-feuilles
 
 
 """

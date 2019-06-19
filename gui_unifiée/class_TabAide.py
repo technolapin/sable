@@ -14,6 +14,7 @@ from class_Parametres import Parametres # Ne sert que si est exécuté séparemm
 PARAMETRES
 """
 FICHIER_CONTENU_AIDE = './contenu_aide/'
+from parametres import DISABLE_IRM
 
 
 """
@@ -39,21 +40,23 @@ class TabAide(QGridLayout) :
         aide_ongl = QWidget()
         aide_onglet1 = QWidget()
         aide_onglet2 = QWidget()
-        aide_onglet3 = QWidget()
+        if not DISABLE_IRM : aide_onglet3 = QWidget()
         aide_onglet4 = QWidget()
         aide_onglet5 = QWidget()
         aide_onglet6 = QWidget()
     
     
         # Dictionnaire des onglets de la page d'aide
-        self.ongl_aide = { 'aide_ongl' :    [aide_ongl,     "Introduction",                     'aide_generale.html'] , 
-                           'aide_onglet1' : [aide_onglet1,  "Aide Trajectoires",                'aide_visu_graph.html'] ,
-                           'aide_onglet2' : [aide_onglet2,  "Aide Vue Mille-feuilles",          'aide_millefeuille.html'] ,
-                           'aide_onglet3' : [aide_onglet3,  "Aide Vue IRM",                     'aide_vision_IRM.html'] ,
-                           'aide_onglet4' : [aide_onglet4,  "Aide vue Coupes",                  'aide_coupes.html'] ,
-                           'aide_onglet5' : [aide_onglet5,  "Aide vue 3D",                      'aide_VTK.html'] ,
-                           'aide_onglet6' : [aide_onglet6,  "Sujet Original",                   'sujet_original.html'] }
+        self.ongl_aide1 = { 'aide_ongl' :    [aide_ongl,     "Introduction",                     'aide_generale.html'] , 
+                            'aide_onglet1' : [aide_onglet1,  "Aide Trajectoires",                'aide_visu_graph.html'] ,
+                            'aide_onglet2' : [aide_onglet2,  "Aide Vue Mille-feuilles",          'aide_millefeuille.html'] }
+        if not DISABLE_IRM : self.ongl_aide2 = { 'aide_onglet3' : [aide_onglet3,  "Aide Vue IRM",                     'aide_vision_IRM.html'] }
+        self.ongl_aide3 = { 'aide_onglet4' : [aide_onglet4,  "Aide vue Coupes",                  'aide_coupes.html'] ,
+                            'aide_onglet5' : [aide_onglet5,  "Aide vue 3D",                      'aide_VTK.html'] ,
+                            'aide_onglet6' : [aide_onglet6,  "Sujet Original",                   'sujet_original.html'] }
         
+        if not DISABLE_IRM : self.ongl_aide = {**self.ongl_aide1, **self.ongl_aide2, **self.ongl_aide3}
+        else : self.ongl_aide = {**self.ongl_aide1, **self.ongl_aide3}
         
         # Ajout dynamique des onglets à la page d'aide
         for ongl in self.ongl_aide :
