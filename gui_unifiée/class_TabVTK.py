@@ -103,17 +103,18 @@ class TabVTK(QGridLayout) :
     Gère le dessin et les changements du VTK
     """
     def dessinerVTK(self, value) :
-        instantTemporel = self.barreDeScrollTemps.value()
-        print ( "[Info TabVTK] Affichage : " + self.objParams.genererURLdesVTK( instantTemporel ) )
-        
-        # Ajout Maylis
-        self.valeur_temps.setText("Temps : " + str(instantTemporel))
-        # Fin Ajout Maylis
-        
-        self.ren.RemoveActor( self.actors[self.actorPrecedent] )
-        self.ren.AddActor( self.actors[instantTemporel] )
-        self.actorPrecedent = instantTemporel
-        self.iren.Initialize()
+        if self.actors != [] :
+            instantTemporel = self.barreDeScrollTemps.value()
+            print ( "[Info TabVTK] Affichage : " + self.objParams.genererURLdesVTK( instantTemporel ) )
+            
+            # Ajout Maylis
+            self.valeur_temps.setText("Temps : " + str(instantTemporel))
+            # Fin Ajout Maylis
+            
+            self.ren.RemoveActor( self.actors[self.actorPrecedent] )
+            self.ren.AddActor( self.actors[instantTemporel] )
+            self.actorPrecedent = instantTemporel
+            self.iren.Initialize()
 
 
 """

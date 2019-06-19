@@ -1,26 +1,20 @@
-<h3><center>Projet en Informatique - E3 - 2018/2019</center></h3>
+﻿<h3><center>Projet en Informatique - E3 - 2018/2019</center></h3>
 <h1><center>Analyse de mouvement de grain de sable dans une séquence d'images 3D</center></h1>
 <h4><center>proposé par</center></h4>
 <h4><center>Jean COUSTY et Yukiko KENMOCHI</center></h4>
 <h3><center>28 mars 2019</center></h3>
 
-<h3><center>Contexte</center></h3>
+<h3>Contexte</h3>
 <p>Un des défis des géomécaniciens avec lesquels nous collaborons est d'étudier le comportement complexe de l'intérieur d'un matériau se déformant, par exemple, le sable, afin de comprendre les effets de séismes. Pour cela, le test de compression triaxiale, qui est une méthode pour mesurer des propriétés mécaniques dans des solides déformables, est souvent réalisé afin d'observer la déformation axiale d'un échantillon cylindrique de sable soumis à une pression de l'extérieur. Cette déformation est localisée, i.e. non-uniforme, et l'on peut observer une bande de cisaillement (voir la figure 1).</p>
-
 <img src="ImgSujet/Figure1Sujet.jpg">
-
 <p>Figure 1 - (a) Un échantillon cylindrique de sable avant le test de compression triaxiale, (b) une expérience du test de compression avec acquisition d'une séquence d'image 3D, et (c) la bande de cisaillement observée après le test de compression.</p>
-
 <p>Au cours du test de compression, des images 3D (taille 1500 x 1500 x 1500, niveau de gris 32-bit) sont reconstruites en utilisant la tomographie à rayon X, et ces scans 3D sont effectués à plusieurs reprises (voir la figure 2), conduisant à des séquences spatio-temporelles d'images 3D (des images 3D+t) permettant d'observer la déformation du matériau au cours du temps.</p>
-
 <img src="ImgSujet/Figure2Sujet.jpg">
-
 <p>Figure 2 - (a, b, c) Scans 3D à plusieurs reprises au cours du test de compression, et (d) la visualisation 3D</p>
 
-<h3><center>Objectifs</center></h3>
-
+<h3>Objectifs</h3>
 <p>Notre but n’est pas seulement d’analyser le mouvement de chaque grain, mais aussi classifierdes grains selon différents types de mouvement. Pour cela, nous utilisons une technique de segmen-tation hiérarchique d’une image, dont la dimension est 4 (3D+t). Il serait intéressant de trouverautomatiquement différents niveaux de la hiérarchie, qui condent par exemple aux grains, etaux régions séparées par la bande de cisaillement.</p>
 
-<h3><center>Contact</center></h3>
+<h3>Contact</h3>
 <p>Jean Cousty, Bureau 5307, jean.cousty@esiee.fr</p>
 <p>Yukiko Kenmochi, Bureau 5351, yukiko.kenmochi@esiee.fr</p>
