@@ -7,13 +7,11 @@ import sys
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QFrame, QVBoxLayout, QScrollBar, QLabel
 
-import vtk
+#import vtk
+from vtk import vtkNamedColors, vtkRenderer, vtkPolyDataReader, vtkPolyDataMapper, vtkActor
 from vtk.qt.QVTKRenderWindowInteractor import QVTKRenderWindowInteractor
 
 from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
-
-
-FICHIER = "../amaury/tests/test.vtk"
 
 
 """
@@ -40,7 +38,7 @@ class TabVTK(QGridLayout) :
         self.addWidget( self.barreDeScrollTemps, 2, 1 )
         
         """ VTK """
-        self.colors = vtk.vtkNamedColors() # Pour pouvoir mettre des couleurs
+        self.colors = vtkNamedColors() # Pour pouvoir mettre des couleurs
         
         self.frame = QFrame()
         self.vl = QVBoxLayout()
@@ -49,15 +47,15 @@ class TabVTK(QGridLayout) :
         
         
         # Ajout Maylis
-        vertical_layout=QVBoxLayout()
-        self.valeur_temps=QLabel("Temps : 0")
+        vertical_layout = QVBoxLayout()
+        self.valeur_temps = QLabel("Temps : 0")
         vertical_layout.addWidget(self.valeur_temps)
         vertical_layout.addWidget(self.frame, stretch=2)
         self.addLayout(vertical_layout,1,1)
         # Fin Ajout Maylis
         
         
-        self.ren = vtk.vtkRenderer()
+        self.ren = vtkRenderer()
         self.vtkWidget.GetRenderWindow().AddRenderer(self.ren)
         self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
         
@@ -71,22 +69,23 @@ class TabVTK(QGridLayout) :
             if not os.path.isfile( fichierVTK ) :
                 print ( "[Erreur TabVTK] " + fichierVTK + " n'existe pas !" )
             
-            print ( "[Info TabVTK] Chargement : " + fichierVTK)
-            
-            # Create source
-            # Source : https://lorensen.github.io/VTKExamples/site/Python/IO/ReadVTP/
-            reader = vtk.vtkPolyDataReader()
-            reader.SetFileName(fichierVTK)
-            reader.Update()
-            
-            # Create a mapper
-            mapper = vtk.vtkPolyDataMapper()
-            mapper.SetInputConnection(reader.GetOutputPort())
-            
-            # Create an actor
-            self.actors.append( vtk.vtkActor() )
-            self.actors[instantTemporel].SetMapper(mapper)
-            self.actors[instantTemporel].GetProperty().SetColor(self.colors.GetColor3d('Tan')) # Couleur de l'objet 3D
+            else :
+                print ( "[Info TabVTK] Chargement : " + fichierVTK)
+                
+                # Create source
+                # Source : https://lorensen.github.io/VTKExamples/site/Python/IO/ReadVTP/
+                reader = vtkPolyDataReader()
+                reader.SetFileName(fichierVTK)
+                reader.Update()
+                
+                # Create a mapper
+                mapper = vtkPolyDataMapper()
+                mapper.SetInputConnection(reader.GetOutputPort())
+                
+                # Create an actor
+                self.actors.append( vtkActor() )
+                self.actors[instantTemporel].SetMapper(mapper)
+                self.actors[instantTemporel].GetProperty().SetColor(self.colors.GetColor3d('Tan')) # Couleur de l'objet 3D
         
         self.actorPrecedent = self.barreDeScrollTemps.value()
         self.dessinerVTK(0)
