@@ -51,7 +51,7 @@ class TabAide(QGridLayout) :
                            'aide_onglet2' : [aide_onglet2,  "Aide Vue Mille-feuilles",          'aide_millefeuille.html'] ,
                            'aide_onglet3' : [aide_onglet3,  "Aide Vue IRM",                     'aide_vision_IRM.html'] ,
                            'aide_onglet4' : [aide_onglet4,  "Aide vue Coupes",                  'aide_coupes.html'] ,
-                           'aide_onglet5' : [aide_onglet5,  "Aide vue 3D",                      'aide_VTK.html'] 
+                           'aide_onglet5' : [aide_onglet5,  "Aide vue 3D",                      'aide_VTK.html'] ,
                            'aide_onglet6' : [aide_onglet6,  "Sujet Original",                   'sujet_original.html'] }
         
         
