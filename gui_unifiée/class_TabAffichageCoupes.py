@@ -290,42 +290,31 @@ class TabAffichageCoupes(QGridLayout) :
         self.label_grain_Z.setText("Z : " + str(z))
         self.label_grain_Temps.setText("Temps : " + str(temps))
     
-        
-######## Appeler ce que Barbara a fait pour obtenir la liste de je sais pas quoi
-######## dont on a besoin pour afficher la trajectoire
-######## retour[0] = volume du grain
-######## retour[1] = liste dont on a besoin
-################
+        # Appeler retrouve_grain pour obtenir la liste des positions au cours du temps
+        # et le volume du grain cliqué (seulement si on est sous Linux)
+        ######## retour[0] = volume du grain
+        ######## retour[1] = liste dont on a besoin
         if platform.system() == "Linux" :
             retour = retrouve_grain(x,y,z,temps)
         else :
             retour = 0
         
-
-######## Prendre le retour de ce Barbara et créer un nouvel objet Graphique3D
-######## qu'on utilise pour remplacer éventuellement (if il y a déjà un obj)
-######## le graphique dans la fenêtre
-################ 
+        # Afficher et actualiser le graphique de la trajectoire
         self.fenetre_graph.show()
-################ 
         if (retour==0):
-################    
             volume_grain = 0
             if self.objParams.tabGraphique3D != None :
                 self.graphique3D.dessinerGraphique3D( np.array([[[],[],[]]]), 0, 0, limites=self.objParams.tabGraphique3D.graphique3D.getLimitesGraphe() ) # Affiche un graphe vide
             else :
                 self.graphique3D.dessinerGraphique3D( np.array([[[],[],[]]]), 0, 0, conserverLimites = False )
-################ 
         else :
-################    
             volume_grain = retour[0]
             if self.objParams.tabGraphique3D != None :
                 self.graphique3D.dessinerGraphique3D( [retour[1]], 0, 0, limites=self.objParams.tabGraphique3D.graphique3D.getLimitesGraphe() ) # Affiche la trajectoire du grain sélectionné
             else :
                 self.graphique3D.dessinerGraphique3D( [retour[1]], 0, 0, conserverLimites = False )
 
-
-
+        # Changement de la valeur du label du volume du grain
         self.label_grain_volume.setText("Volume : "+str(volume_grain))
 
    
@@ -394,6 +383,8 @@ class TabAffichageCoupes(QGridLayout) :
         else :
             print( "[Erreur TabAffichageCoupes] " + image_zx + " n'existe pas !" )
         
+        
+        # Changement de la valeur des labels des axes
         self.valeur_temps.setText("Temps : " + str(self.barreScrollTemps.value()))
         self.valeur_X.setText("X : " + str(self.barreScrollAxeX.value()))
         self.valeur_Y.setText("Y : " + str(self.barreScrollAxeY.value()))
