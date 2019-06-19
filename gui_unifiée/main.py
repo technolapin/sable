@@ -5,7 +5,7 @@ import sys
 #from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QApplication, QMessageBox
 
-import platform
+from platform import system as systemPlatform
 
 from functions_main import lancerOuOuvrirTraitement
 
@@ -24,7 +24,7 @@ returnValue = msgBox.exec()
 
 if returnValue == QMessageBox.Yes :
     print( "[Info Main] L'utilisateur veut lancer un nouveau traitement." )
-    if platform.system() != "Linux" :
+    if systemPlatform() != "Linux" :
         print( "[Info Main] Un système Unix est nécéssaire pour lancer un traitement." )
         QMessageBox.about(None, "Information", "Vous devez exécuter ce logiciel sur un système Linux pour pouvoir réaliser un traitement !\nEn effet, notre système de traitement est compilé uniquement pour cette plateforme.")
     else :
