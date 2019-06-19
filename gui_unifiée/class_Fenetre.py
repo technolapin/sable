@@ -18,6 +18,12 @@ from parametres_graph3D_pour_demo import grapheDeDemonstration # Ne sert que si 
 
 
 """
+PARAMETRES
+"""
+DISABLE_IRM = True # Désactive la vue IRM, qui est buggée
+
+
+"""
 Classe Fenetre, hérite de la classe QTabWidget (Et plus QWidget vu qu'on veut faire des onglets)
 Cette classe permet de gérer la fenêtre Qt avec onglets (Appel de la procédure "addTab()")
 @author Maylis et Amaury
@@ -43,17 +49,17 @@ class Fenetre(QTabWidget) :
         # Création des onglets de la fenêtre
         self.onglet1 = QWidget()
         self.onglet2 = QWidget()
-        self.onglet3 = QWidget()
+        if not DISABLE_IRM : self.onglet3 = QWidget()
         self.onglet4 = QWidget()
         if returnValue == QMessageBox.Yes : self.onglet5 = QWidget()
         self.onglet6 = QWidget() 
         
         # Ajout des onglets à la fenêtre
-        self.addTab( self.onglet1, "Visualisation du Graphique" ) 
-        self.addTab( self.onglet2, "Mille-feuilles" )
-        self.addTab( self.onglet3, "Vision IRM" )
-        self.addTab( self.onglet4, "Coupes" )
-        if returnValue == QMessageBox.Yes : self.addTab( self.onglet5, "VTK" )
+        self.addTab( self.onglet1, "Trajectoires" ) 
+        self.addTab( self.onglet2, "Vue Mille-feuilles" )
+        if not DISABLE_IRM : self.addTab( self.onglet3, "Vue IRM" )
+        self.addTab( self.onglet4, "Vues Coupes" )
+        if returnValue == QMessageBox.Yes : self.addTab( self.onglet5, "Vue 3D" )
         self.addTab( self.onglet6, "Aide" )
         
         # Création et enregistrement de l'objet de l'onglet du graphique 3D
@@ -63,7 +69,7 @@ class Fenetre(QTabWidget) :
         # Remplissage des onglets en créant les grilles
         self.onglet1.setLayout( self.objParams.TabGraphique3D )
         self.onglet2.setLayout( TabMilleFeuille3D( objParams = self.objParams ) )
-        self.onglet3.setLayout( TabMilleFeuilleIRM( objParams = self.objParams ) )
+        if not DISABLE_IRM : self.onglet3.setLayout( TabMilleFeuilleIRM( objParams = self.objParams ) )
         self.onglet4.setLayout( TabAffichageCoupes( objParams = self.objParams ) )
         if returnValue == QMessageBox.Yes : self.onglet5.setLayout( TabVTK( objParams = self.objParams ) )
         self.onglet6.setLayout( TabAide( objParams = self.objParams ) )
