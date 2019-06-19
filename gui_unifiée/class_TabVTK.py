@@ -69,22 +69,23 @@ class TabVTK(QGridLayout) :
             if not os.path.isfile( fichierVTK ) :
                 print ( "[Erreur TabVTK] " + fichierVTK + " n'existe pas !" )
             
-            print ( "[Info TabVTK] Chargement : " + fichierVTK)
-            
-            # Create source
-            # Source : https://lorensen.github.io/VTKExamples/site/Python/IO/ReadVTP/
-            reader = vtkPolyDataReader()
-            reader.SetFileName(fichierVTK)
-            reader.Update()
-            
-            # Create a mapper
-            mapper = vtkPolyDataMapper()
-            mapper.SetInputConnection(reader.GetOutputPort())
-            
-            # Create an actor
-            self.actors.append( vtkActor() )
-            self.actors[instantTemporel].SetMapper(mapper)
-            self.actors[instantTemporel].GetProperty().SetColor(self.colors.GetColor3d('Tan')) # Couleur de l'objet 3D
+            else :
+                print ( "[Info TabVTK] Chargement : " + fichierVTK)
+                
+                # Create source
+                # Source : https://lorensen.github.io/VTKExamples/site/Python/IO/ReadVTP/
+                reader = vtkPolyDataReader()
+                reader.SetFileName(fichierVTK)
+                reader.Update()
+                
+                # Create a mapper
+                mapper = vtkPolyDataMapper()
+                mapper.SetInputConnection(reader.GetOutputPort())
+                
+                # Create an actor
+                self.actors.append( vtkActor() )
+                self.actors[instantTemporel].SetMapper(mapper)
+                self.actors[instantTemporel].GetProperty().SetColor(self.colors.GetColor3d('Tan')) # Couleur de l'objet 3D
         
         self.actorPrecedent = self.barreDeScrollTemps.value()
         self.dessinerVTK(0)
