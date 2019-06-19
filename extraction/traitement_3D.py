@@ -517,7 +517,7 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
     INTERVALLE_XZ = 80
     INTERVALLE_YZ = 80
     URL_PGM = "../extraction/coupes_3D/"
-    URL_VTK = "../extraction/vtks/"
+    URL_VTK = "../extraction/vtk_3D/"
     URL_GRAPHIQUE_3D = "../extraction/tracking_3D/resultats.npy"
     """
     EXPORTATION
