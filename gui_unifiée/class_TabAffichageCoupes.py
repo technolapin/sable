@@ -13,15 +13,14 @@ from math import floor
 from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 from class_TabGraphique3D import Graphique3D
 
-
 import numpy as np
 
-import platform
+from platform import system as systemPlatform
 
 
 ######## Il faut que je modifie le code dans tracking 3D pour faire
 ######## ../extraction pout pouvoir le lancer depuis mon code
-if platform.system() == "Linux" :
+if systemPlatform() == "Linux" :
     sys.path.append("../extraction")
     from tracking_3D import retrouve_grain
 
