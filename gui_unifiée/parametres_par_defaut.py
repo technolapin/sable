@@ -10,7 +10,7 @@ INTERVALLE_XY = 250 # Intervalle temporel dans cette liste d'images
 URL_PGM = "../extraction/coupes_3D/"
 INTERVALLE_XZ = 80
 INTERVALLE_YZ = 80
-URL_VTK = "../extraction/vtks/"
+URL_VTK = "../extraction/vtk_3D/"
 URL_GRAPHIQUE_3D = "../extraction/tracking_3D/resultats.npy"
 
 """
