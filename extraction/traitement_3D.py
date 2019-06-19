@@ -61,7 +61,7 @@ def export_list(liste, file_name):
         f.write(" ".join(str(el) for el in elements)+"\n")
     f.close()
 
-def traitement_3D_main( fichierDemandeParUtilisateur = "" ):
+def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
     
     #palette de couleurs (pour generer la carte des distances coloree)
     lut=" lut "
@@ -133,7 +133,7 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "" ):
     
     
     #extraction des images du tif en bmp
-    os.system("convert gros_sable.tif tmp/test.bmp")
+    os.system("convert " + fichierDemandeParUtilisateur + " tmp/test.bmp")
     
     #conversion en pgm et renommage aux standard de la fc catpgm
     for i in range(0, n_tempo*n_coupes_xy):
