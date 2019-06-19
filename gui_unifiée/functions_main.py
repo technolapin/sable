@@ -7,12 +7,15 @@ from PyQt5.QtWidgets import QMessageBox, QFileDialog
 import pickle # Permet de sauvegarder et charger des variables
 # On n'utilise plus shelve, car il n'est pas cross-platform
 
+from platform import system as systemPlatform
+
 from class_Parametres import Parametres
 
 from class_Fenetre import Fenetre
 
-sys.path.append("../extraction")
-from traitement_3D import traitement_3D_main
+if systemPlatform() == "Linux" :
+    sys.path.append("../extraction")
+    from traitement_3D import traitement_3D_main
 
 
 """
@@ -40,7 +43,11 @@ def importerTraitement( fichier, objParams ) :
         print( "[Erreur Main] Fichier invalide !" )
         return False
     
-    bdd = pickle.load(fichierExporté)
+    try :
+        bdd = pickle.load(fichierExporté)
+    except Exception :
+        print( "[Erreur Main] Fichier corrompu !" )
+        return False
     
     try :
         objParams.NB_IMGS = bdd[ "NB_IMGS" ]

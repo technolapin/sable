@@ -13,14 +13,9 @@ from class_TabAffichageCoupes import TabAffichageCoupes
 from class_TabVTK import TabVTK
 from class_TabAide import TabAide
 
+from parametres import DISABLE_IRM
 from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 from parametres_graph3D_pour_demo import grapheDeDemonstration # Ne sert que si est exécuté séparemment
-
-
-"""
-PARAMETRES
-"""
-DISABLE_IRM = True # Désactive la vue IRM, qui est buggée
 
 
 """
