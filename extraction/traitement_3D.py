@@ -335,50 +335,47 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
         os.system("mkdir coupes_3D/contours_blancs/x_z/"+padding_temporel)
         
         for u in range(0, n_coupes_xz):
-            
-            v=n_coupes_xz-u-1  #car extractplane ne les donnait pas dans le bon "sens"
-            
             #image originale
-            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(v)+" xz "+
-                        "coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_org.pgm")
+            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(u)+" xz "+
+                        "coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_org.pgm")
             
             
             #carte des distances coloree
-            command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(v)+" xz "+
-                        "coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_dist.pgm")
-            command("colorize coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_dist.pgm"
-                    +lut+"coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_distcolor.ppm")
+            command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(u)+" xz "+
+                        "coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_dist.pgm")
+            command("colorize coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_dist.pgm"
+                    +lut+"coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_distcolor.ppm")
         
             
             #watershed fini
-            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(v)+" xz "+
-                        "coupes_3D/water/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_wa.pgm")
+            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(u)+" xz "+
+                        "coupes_3D/water/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_wa.pgm")
             
             #borders
-            command("border coupes_3D/water/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
-                    "_wa.pgm 8 coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_border.pgm")
+            command("border coupes_3D/water/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                    "_wa.pgm 8 coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_border.pgm")
                 
             
             
             #image originale contours rouges
-            command("colorize coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_border.pgm"+lut_bord+
-                    "coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_border_rg.ppm")
+            command("colorize coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_border.pgm"+lut_bord+
+                    "coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_border_rg.ppm")
             
-            image_a_ppm = "coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_org.pgm"
+            image_a_ppm = "coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_org.pgm"
             
             command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
-                    " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_orgppm.ppm")
+                    " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_orgppm.ppm")
            
-            command("add coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
-                    "_orgppm.ppm coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
-                    "_border_rg.ppm coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_controuge.ppm")
+            command("add coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                    "_orgppm.ppm coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                    "_border_rg.ppm coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_controuge.ppm")
             
             
             
             #image originale contours blancs 
-            command("add coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
-                    "_org.pgm  coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+
-                    "_border.pgm coupes_3D/contours_blancs/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(v,4)+"_contblanc.pgm")
+            command("add coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                    "_org.pgm  coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
+                    "_border.pgm coupes_3D/contours_blancs/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_contblanc.pgm")
                 
               
     
@@ -473,16 +470,31 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
     
     def dist2(g1, g2):
         return pow(g1[0]-g2[0], 2) + pow(g1[1]-g2[1], 2) + pow(g1[2]-g2[2], 2)
-    
-    
+
+
+
+
+
     
     seuil_volume = 100
+
+    #resultats = []
+    #grains = []
+
+    vitesses=[]
+
+    num_grain=0
+    vitesse_moy_grains=0
+    acc_moy_grains=0
     
+
     for grain in formes[0]:
+        vitesse=0
+        acc=0
         grains.append(
-                [grain[3],
-                 [grain[:3]]
-                ])
+            [grain[3],
+             [grain[:3]]
+            ])
         for t in range(1, n_tempo):
             gr_prec = grains[len(grains)-1][1][t-1]
             dist_min = dist2(gr_prec, formes[t][0])
@@ -494,8 +506,45 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
                     dist_min = d2
                     plus_proche = suivant
             grains[len(grains)-1][1].append(plus_proche[:3])
+            
+                    
+            #vitesse 
+            vitesse=0
+            vx = abs(grains[num_grain][1][t][0]-grains[num_grain][1][t-1][0]) 
+            vy = abs(grains[num_grain][1][t][1]-grains[num_grain][1][t-1][1])
+            vz = abs(grains[num_grain][1][t][2]-grains[num_grain][1][t-1][2])
+            v= (vx**2+vy**2+vz**2)**(0.5)
+            vitesse=vitesse+v
+            
+            if (t>1):
+                 vx_1 = abs(grains[num_grain][1][t][0]-grains[num_grain][1][t-1][0]) 
+                 vy_1 = abs(grains[num_grain][1][t][1]-grains[num_grain][1][t-1][1])
+                 vz_1 = abs(grains[num_grain][1][t][2]-grains[num_grain][1][t-1][2])
+                 v_1= (vx_1**2+vy_1**2+vz_1**2)**(0.5)
+                 a=abs(v-v_1)
+                 acc=acc+a
+                 
+        acc=acc/13  
+        vitesse = vitesse/14
+        vitesses.append([grains[num_grain][1][0],vitesse,acc])
+        vitesse_moy_grains = vitesse_moy_grains + vitesse
+        acc_moy_grains = acc_moy_grains+ acc
+      
     
+        num_grain=num_grain+1
+    
+    nb_grains=len(grains)
+    
+    #vitesse moyenne des grains
+    vitesse_moy_grains=vitesse_moy_grains/nb_grains
+    
+    #acceleration moyenne des grains
+    acc_moy_grains=acc_moy_grains/nb_grains
+    
+    np.save("../extraction/tracking_3D/vitesse_moy_grains.npy", [vitesse_moy_grains,acc_moy_grains])
     np.save("../extraction/tracking_3D/grains.npy", grains)
+    np.save("../extraction/tracking_3D/vitesses.npy",vitesses)
+    
     
     resultats = []
     for grain in grains:
