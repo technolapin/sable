@@ -293,7 +293,7 @@ class TabAffichageCoupes(QGridLayout) :
         # et le volume du grain cliqué (seulement si on est sous Linux)
         ######## retour[0] = volume du grain
         ######## retour[1] = liste dont on a besoin
-        if platform.system() == "Linux" :
+        if systemPlatform() == "Linux" :
             retour = retrouve_grain(x,y,z,temps)
         else :
             retour = 0
