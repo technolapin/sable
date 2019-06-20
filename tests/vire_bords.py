@@ -9,8 +9,6 @@ def numerote(n, l):
         s = '0' + s
     return s
 
-empty3D = " empty "
-command("genimage 3D/00 0 "+empty3D)
 
 
  
@@ -84,9 +82,10 @@ def vire_bord(image_in, image_out):
     return sub(image_in, dil, image_out)
 
 
-image = "../extraction/images_3D/image_3D_superpose_t00.pgm"
+image = "../extraction/images_3D/image_3D_superpose_inv_t00.pgm"
 #inv = inverse(image, "inv")
 vire_bord(image, "borderless.pgm")
 
-extrait_coupes(vire_bord(image, "borderless.pgm"), "xy", 0, 250, "tmp/")
+extrait_coupes(vire_bord(image, "borderless.pgm"), "xy", 0, 250, "tmp/bor")
+extrait_coupes(image, "xy", 0, 250, "tmp/ori")
     
