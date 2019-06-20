@@ -485,8 +485,12 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
 
     num_grain=0
     vitesse_moy_grains=0
+    acc_moy_grains=0
+    
 
     for grain in formes[0]:
+        vitesse=0
+        acc=0
         grains.append(
             [grain[3],
              [grain[:3]]
@@ -511,18 +515,36 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
             vz = abs(grains[num_grain][1][t][2]-grains[num_grain][1][t-1][2])
             v= (vx**2+vy**2+vz**2)**(0.5)
             vitesse=vitesse+v
-
+            
+            if (t>1):
+                 vx_1 = abs(grains[num_grain][1][t][0]-grains[num_grain][1][t-1][0]) 
+                 vy_1 = abs(grains[num_grain][1][t][1]-grains[num_grain][1][t-1][1])
+                 vz_1 = abs(grains[num_grain][1][t][2]-grains[num_grain][1][t-1][2])
+                 v_1= (vx_1**2+vy_1**2+vz_1**2)**(0.5)
+                 a=abs(v-v_1)
+                 acc=acc+a
+                 
+        acc=acc/13  
         vitesse = vitesse/14
-        print("num:", num_grain)
-        print("v:",v)
-        vitesses.append([grains[num_grain][1][0],vitesse])
+        vitesses.append([grains[num_grain][1][0],vitesse,acc])
         vitesse_moy_grains = vitesse_moy_grains + vitesse
+        acc_moy_grains = acc_moy_grains+ acc
+      
     
         num_grain=num_grain+1
     
-    print(vitesses)
+    nb_grains=len(grains)
+    
+    #vitesse moyenne des grains
+    vitesse_moy_grains=vitesse_moy_grains/nb_grains
+    
+    #acceleration moyenne des grains
+    acc_moy_grains=acc_moy_grains/nb_grains
+    
+    np.save("../extraction/tracking_3D/vitesse_moy_grains.npy", [vitesse_moy_grains,acc_moy_grains])
     np.save("../extraction/tracking_3D/grains.npy", grains)
     np.save("../extraction/tracking_3D/vitesses.npy",vitesses)
+    
     
     resultats = []
     for grain in grains:
