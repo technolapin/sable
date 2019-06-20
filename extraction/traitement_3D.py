@@ -512,10 +512,10 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
     
     
     
-    NB_IMGS = 4000
-    INTERVALLE_XY = 250
-    INTERVALLE_XZ = 80
-    INTERVALLE_YZ = 80
+    NB_IMGS = n_tempo * n_coupes_xy
+    INTERVALLE_XY = n_coupes_xy
+    INTERVALLE_XZ = n_coupes_xz
+    INTERVALLE_YZ = n_coupes_yz
     URL_PGM = "../extraction/coupes_3D/"
     URL_VTK = "../extraction/vtk_3D/"
     URL_GRAPHIQUE_3D = "../extraction/tracking_3D/resultats.npy"
@@ -533,14 +533,11 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
     bdd["URL_GRAPHIQUE_3D" ] = URL_GRAPHIQUE_3D
     
     # Its important to use binary mode
-    fichierBdd = open('woopwoop', 'ab')
+    fichierBdd = open('woopwoop', 'wb')
     
     # source, destination
     pickle.dump(bdd, fichierBdd)                 
     fichierBdd.close()
 
     
-    return os.path.abspath('woopwoop')    
-    
-    
-    
+    return os.path.abspath('woopwoop')

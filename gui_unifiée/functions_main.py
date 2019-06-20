@@ -36,13 +36,12 @@ Importer un fichier exporté par le système de traitement
 def importerTraitement( fichier, objParams ) :
     print( "[Info Main] Importation du traitement : " + fichier )
     try :
-        cheminSansExtension = os.path.splitext(fichier)[0]
-        # For reading also binary mode is important 
-        fichierExporté = open(cheminSansExtension, 'rb')
+        fichierExporté = open(fichier, 'rb')
     except Exception :
         print( "[Erreur Main] Fichier invalide !" )
         return False
     
+    sys.path.append(fichierExporté)
     try :
         bdd = pickle.load(fichierExporté)
     except Exception :

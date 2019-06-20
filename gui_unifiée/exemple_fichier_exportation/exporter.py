@@ -68,7 +68,7 @@ bdd["URL_VTK"] = URL_VTK
 bdd["URL_GRAPHIQUE_3D" ] = URL_GRAPHIQUE_3D
 
 # Its important to use binary mode
-fichierBdd = open('exemple', 'ab')
+fichierBdd = open('exemple', 'wb')
 
 # source, destination
 pickle.dump(bdd, fichierBdd)                 
