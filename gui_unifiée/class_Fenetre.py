@@ -12,6 +12,7 @@ from class_TabMilleFeuilleIRM import TabMilleFeuilleIRM
 from class_TabAffichageCoupes import TabAffichageCoupes
 from class_TabVTK import TabVTK
 from class_TabAide import TabAide
+from class_TabBienvenue import TabBienvenue
 
 from parametres import DISABLE_IRM
 from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
@@ -48,8 +49,10 @@ class Fenetre(QTabWidget) :
         self.onglet4 = QWidget()
         if returnValue == QMessageBox.Yes : self.onglet5 = QWidget()
         self.onglet6 = QWidget() 
+        self.onglet7 = QWidget()
         
         # Ajout des onglets à la fenêtre
+        self.addTab( self.onglet7, "Bienvenue" )
         self.addTab( self.onglet1, "Trajectoires" ) 
         self.addTab( self.onglet2, "Vue Mille-feuilles" )
         if not DISABLE_IRM : self.addTab( self.onglet3, "Vue IRM" )
@@ -62,6 +65,7 @@ class Fenetre(QTabWidget) :
         self.objParams.TabGraphique3D = TabGraphique3D( objParams = self.objParams )
         
         # Remplissage des onglets en créant les grilles
+        self.onglet7.setLayout( TabBienvenue(objParams=self.objParams))
         self.onglet1.setLayout( self.objParams.TabGraphique3D )
         self.onglet2.setLayout( TabMilleFeuille3D( objParams = self.objParams ) )
         if not DISABLE_IRM : self.onglet3.setLayout( TabMilleFeuilleIRM( objParams = self.objParams ) )
