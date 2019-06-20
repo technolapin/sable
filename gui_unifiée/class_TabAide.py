@@ -43,7 +43,7 @@ class TabAide(QGridLayout) :
         if not DISABLE_IRM : aide_onglet3 = QWidget()
         aide_onglet4 = QWidget()
         aide_onglet5 = QWidget()
-        aide_onglet6 = QWidget()
+        
     
     
         # Dictionnaire des onglets de la page d'aide
@@ -52,8 +52,7 @@ class TabAide(QGridLayout) :
                             'aide_onglet2' : [aide_onglet2,  "Aide Vue Mille-feuilles",          'aide_millefeuille.html'] }
         if not DISABLE_IRM : self.ongl_aide2 = { 'aide_onglet3' : [aide_onglet3,  "Aide Vue IRM",                     'aide_vision_IRM.html'] }
         self.ongl_aide3 = { 'aide_onglet4' : [aide_onglet4,  "Aide vue Coupes",                  'aide_coupes.html'] ,
-                            'aide_onglet5' : [aide_onglet5,  "Aide vue 3D",                      'aide_VTK.html'] ,
-                            'aide_onglet6' : [aide_onglet6,  "Sujet Original",                   'sujet_original.html'] }
+                            'aide_onglet5' : [aide_onglet5,  "Aide vue 3D",                      'aide_VTK.html'] }
         
         if not DISABLE_IRM : self.ongl_aide = {**self.ongl_aide1, **self.ongl_aide2, **self.ongl_aide3}
         else : self.ongl_aide = {**self.ongl_aide1, **self.ongl_aide3}
