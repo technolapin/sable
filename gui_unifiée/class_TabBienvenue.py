@@ -5,7 +5,7 @@ import sys
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QTabWidget, QHBoxLayout, QScrollArea, QLabel, QSizePolicy
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QTabWidget, QHBoxLayout, QScrollArea, QLabel, QSizePolicy, QGroupBox
 
 from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 
@@ -43,13 +43,13 @@ class TabBienvenue(QGridLayout) :
         # Ajout dynamique des onglets à la page d'aide
         onglets.addTab(self.bienvenue_ongl,"Bienvenue")
         onglets.addTab(self.sujet_original,"Sujet Original")
-        self.contenuOngletBienvenue("bienvenue_ongl.html", self.bienvenue_ongl)
+        self.contenuOngletBienvenue("bienvenue_ongl.html", self.bienvenue_ongl, margeHaut = False )
         self.contenuOngletBienvenue("sujet_original.html", self.sujet_original)
         
         # Récupérations des informations générales
-        label_nombre = QLabel("Nombre de grains : ", A INSERER) ## Compléter
-        label_vitesse = QLabel("Vitesse moyenne des grains : ", A INSERER) ## Compléter
-        label_acceleration = QLabel("Accélération moyenne des grains : ", A INSERER) ## Compléter
+        label_nombre = QLabel("Nombre de grains : " + str(0) ) ## Compléter
+        label_vitesse = QLabel("Vitesse moyenne des grains : " + str(0) ) ## Compléter
+        label_acceleration = QLabel("Accélération moyenne des grains : " + str(0) ) ## Compléter
         
         # Groupe d'informations générales
         group_box = QGroupBox("Informations générales des grains")
@@ -62,18 +62,15 @@ class TabBienvenue(QGridLayout) :
         # Insersion dans la fenêtre des éléments
         gridLayout.addWidget(onglets, 1,1)
         gridLayout.addWidget(group_box, 2,1)
-        self.addLayout(gridLayout)
+        self.addLayout(gridLayout, 1, 1)
         
         # Rendre le layout avec les images plus gros que les autres
         gridLayout.setColumnStretch(1,1)
-        
-
-
     
     """
     Affiche dans l'onglet indiqué le contenu du fichier .html associé
     """    
-    def contenuOngletBienvenue(self, nom_fichier, objet) :  
+    def contenuOngletBienvenue(self, nom_fichier, objet, margeHaut = True) :  
         # Contenant avec barre de scroll
         zone_de_texte = QHBoxLayout()
         scroll_area = QScrollArea()
@@ -85,7 +82,8 @@ class TabBienvenue(QGridLayout) :
         if os.path.isfile( lien_fichier ) : # Si le chemin d'accès existe
             fichier = open(lien_fichier, 'r', encoding='utf-8')
             texte = QLabel(fichier.read())
-            texte.setStyleSheet("QLabel { padding: 20px; margin-top: -40px; }"); # CSS
+            if margeHaut : texte.setStyleSheet("QLabel { padding: 20px; margin-top: -40px; }"); # CSS
+            else : texte.setStyleSheet("QLabel { padding: 20px; margin-top: -20px; }"); # CSS
         else :
             texte = QLabel("Le fichier suivant est manquant : " + lien_fichier)
             texte.setStyleSheet("QLabel { padding: 20px; }"); # CSS
@@ -113,6 +111,6 @@ if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
     fenetre = QWidget() # Crée un objet de type QWidget
     fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
-    fenetre.setLayout( TabAide( Parametres() ) )
+    fenetre.setLayout( TabBienvenue( Parametres() ) )
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté
