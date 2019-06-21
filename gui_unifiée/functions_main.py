@@ -22,12 +22,15 @@ if systemPlatform() == "Linux" :
 Fonction de traitement d'image (Appel tout le travail de traitement d'image)
 @param fichier : Fichier TIFF choisi par l'utilisateur
 """
-def traitementImage( fichier, supprimerBords =  False ) :
-    dossierActuel = os.path.dirname(__file__).replace("\\", "/")
-    dossierDuTraitement = os.path.abspath( os.path.join(dossierActuel, "../extraction") )
+def traitementImage( fichier, supprimerLesBords =  False ) :
+    dossierActuel = os.path.dirname(__file__)
+    dossierDuTraitement = os.path.abspath( os.path.join(dossierActuel.replace("\\", "/"), "../extraction") )
     os.chdir( dossierDuTraitement )
-    fichierExporte = traitement_3D_main( fichier, supprimerBords )
-    os.chdir( dossierActuel )
+    print( "[Info Main] Nouveau WD : " + dossierDuTraitement )
+    print( "[Info Main] LANCEMENT DU TRAITEMENT !" )
+    fichierExporte = traitement_3D_main( fichier, supprimerBords = supprimerLesBords )
+    print( "[Info Main] FIN DU TRAITEMENT !" )
+    print( "[Info Main] Retour au WD : " + dossierActuel )
     return fichierExporte
 
 
@@ -38,6 +41,8 @@ Importer un fichier exporté par le système de traitement
 @author Amaury
 """
 def importerTraitement( fichier, objParams ) :
+    print( "[Info Main] Actuel WD : " + os.path.dirname(__file__) )
+    
     print( "[Info Main] Importation du traitement : " + fichier )
     try :
         fichierExporté = open(fichier, 'rb')
@@ -88,7 +93,6 @@ def importerTraitement( fichier, objParams ) :
         print( "[Erreur Main] Le fichier ne contient pas la variables URL_GRAPHIQUE_3D !" )
         return False
     
-    
     objParams.contientVariablesImportees = True
     
     # Sauvegarde du répertoire absolu du répertorie du fichier d'exportation
@@ -123,9 +127,9 @@ def lancerOuOuvrirTraitement( lancer, application ) :
         returnValue = msgBox.exec()
         
         if returnValue == QMessageBox.Yes :
-            fichierExporte = traitementImage( fichierDemande, supprimerBords = True )
+            fichierExporte = traitementImage( fichierDemande, supprimerLesBords = True )
         else : 
-            fichierExporte = traitementImage( fichierDemande, supprimerBords = False )
+            fichierExporte = traitementImage( fichierDemande, supprimerLesBords = False )
         
         autorisationDeLancer = importerTraitement( fichierExporte, creationObjParams )
     else :
