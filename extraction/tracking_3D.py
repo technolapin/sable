@@ -68,10 +68,14 @@ def retrouve_grain(x,y,z,t):
     #retrouve le grain et sa coupe
     command ("selectcomp ../extraction/images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 "+str(x)+" "+str(y)+" "+str(z)+
              " ../extraction/tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+".pgm")    
-        
+    #vtk
+    command("mcube  ../extraction/tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+
+            ".pgm 0 5 0 VTK  ../extraction/tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+".vtk")
+    
+    lien_vtk= "../extraction/tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+".vtk"
     #barycentre
     command("3dlabel ../extraction/tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+
-            ".pgm ../extraction/labels_3D/label_t_"+padding_temporel+"_"+str(x)+str(y)+str(z)+".pgm")
+            ".pgm ../extraction/_3D/label_t_"+padding_temporel+"_"+str(x)+str(y)+str(z)+".pgm")
     
     command("barycentrelab ../extraction/labels_3D/label_t_"+padding_temporel+"_"+str(x)+str(y)+str(z)+
             ".pgm ../extraction/bary_3D/bary_3D_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".pgm")
@@ -104,7 +108,7 @@ def retrouve_grain(x,y,z,t):
         for grain in range(len(resultats)):         
             if(resultats[grain][0][t]==xb and resultats[grain][1][t]==yb and resultats[grain][2][t]==zb):
              
-                return [volume,resultats[grain],v,a,vitesse_moyenne,acc_moyenne]
+                return [volume,resultats[grain],v,a,vitesse_moyenne,acc_moyenne,lien_vtk]
    
     
 
