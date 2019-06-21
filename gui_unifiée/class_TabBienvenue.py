@@ -51,13 +51,16 @@ class TabBienvenue(QGridLayout) :
         
         # Récupérations des informations générales
         label_nombre = QLabel("Nombre de grains : " + str(int(moyenne[2])) )
+        label_volume = QLabel("Volume moyen des grains : " + str(round(moyenne[3],2)))
         label_vitesse = QLabel("Vitesse moyenne des grains : " + str(round(moyenne[0],2)) + " px/t") 
         label_acceleration = QLabel("Accélération moyenne des grains : " + str(round(moyenne[1],2)) + " px/t²") 
+        
         
         # Groupe d'informations générales
         group_box = QGroupBox("Informations générales des grains")
         group_layout = QHBoxLayout()
         group_layout.addWidget(label_nombre)
+        group_layout.addWidget(label_volume)
         group_layout.addWidget(label_vitesse)
         group_layout.addWidget(label_acceleration)
         group_box.setLayout(group_layout)
