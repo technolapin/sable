@@ -8,7 +8,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QTabWidget, QHBoxLayout, QScrollArea, QLabel, QSizePolicy, QGroupBox
 
 from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
-
+from numpy import load
 
 """
 PARAMETRES
@@ -46,10 +46,13 @@ class TabBienvenue(QGridLayout) :
         self.contenuOngletBienvenue("bienvenue_ongl.html", self.bienvenue_ongl, margeHaut = False )
         self.contenuOngletBienvenue("sujet_original.html", self.sujet_original)
         
+        # Récupération des valeurs d'accélération et vitesse moyenne
+        moyenne = load("../extraction/tracking_3D/vitesse_moy_grains.npy")
+        
         # Récupérations des informations générales
-        label_nombre = QLabel("Nombre de grains : " + str(0) ) ## Compléter
-        label_vitesse = QLabel("Vitesse moyenne des grains : " + str(0) ) ## Compléter
-        label_acceleration = QLabel("Accélération moyenne des grains : " + str(0) ) ## Compléter
+        label_nombre = QLabel("Nombre de grains : " + str(int(moyenne[2])) )
+        label_vitesse = QLabel("Vitesse moyenne des grains : " + str(round(moyenne[0],2)) + " px/t") 
+        label_acceleration = QLabel("Accélération moyenne des grains : " + str(round(moyenne[1],2)) + " px/t²") 
         
         # Groupe d'informations générales
         group_box = QGroupBox("Informations générales des grains")

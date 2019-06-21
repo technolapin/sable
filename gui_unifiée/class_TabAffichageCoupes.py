@@ -54,16 +54,19 @@ class TabAffichageCoupes(QGridLayout) :
         self.barreScrollAxeX = QScrollBar()
         self.barreScrollAxeX.setMaximum( self.objParams.nombreImagesPlanYZ() )
         self.barreScrollAxeX.valueChanged.connect( self.changeImages )
+        self.barreScrollAxeX.setValue(round(self.objParams.nombreImagesPlanYZ()/2))
         
         # Défilement de la couche Y
         self.barreScrollAxeY = QScrollBar()
         self.barreScrollAxeY.setMaximum( self.objParams.nombreImagesPlanXZ() )
         self.barreScrollAxeY.valueChanged.connect( self.changeImages )
+        self.barreScrollAxeY.setValue(round(self.objParams.nombreImagesPlanXZ()/2))
         
         # Défilement de la couche Z
         self.barreScrollAxeZ = QScrollBar()
         self.barreScrollAxeZ.setMaximum( self.objParams.nombreImagesPlanXY() )
         self.barreScrollAxeZ.valueChanged.connect( self.changeImages )
+        self.barreScrollAxeZ.setValue(round(self.objParams.nombreImagesPlanXY()/2))
         
         # Défilement temporel
         self.barreScrollTemps = QScrollBar(Qt.Horizontal)
@@ -206,6 +209,9 @@ class TabAffichageCoupes(QGridLayout) :
         vl_grain=QVBoxLayout()
         group_infos.setLayout(vl_grain)
                 
+        # Récupération des valeurs d'accélération et vitesse moyenne
+        moyenne = np.load("../extraction/tracking_3D/vitesse_moy_grains.npy")
+        
         # Création de labels qui affichent les valeurs du grain cliqué      
         self.label_grain_X=QLabel("X : ")
         self.label_grain_Y=QLabel("Y : ")
@@ -213,6 +219,11 @@ class TabAffichageCoupes(QGridLayout) :
         self.label_grain_Temps=QLabel("Temps : ")
 ################ 
         self.label_grain_volume = QLabel("Volume : ")
+        self.label_grain_vitesse = QLabel("Vitesse grain : ")
+        self.label_grain_vitessemoy = QLabel("Vitesse moyenne : " + str(round(moyenne[0],2)) + " px/t")#moyenne[0]))
+        self.label_grain_accel = QLabel("Accélération grain : ")
+        self.label_grain_accelmoy = QLabel("Accélération moyenne : " + str(round(moyenne[1],2)) + " px/t²")#moyenne[1]))
+        
         
         # Ajout des labels dans le layout
         vl_grain.addWidget(self.label_grain_X)
@@ -221,6 +232,10 @@ class TabAffichageCoupes(QGridLayout) :
         vl_grain.addWidget(self.label_grain_Temps)
 ################ 
         vl_grain.addWidget(self.label_grain_volume)        
+        vl_grain.addWidget(self.label_grain_vitesse) 
+        vl_grain.addWidget(self.label_grain_vitessemoy) 
+        vl_grain.addWidget(self.label_grain_accel) 
+        vl_grain.addWidget(self.label_grain_accelmoy) 
         
         # Création d'un contenant pour les Radiobutton, la modification des 
         # images et les informations du grain cliqué ; Ajout dans l'onglet
@@ -274,7 +289,7 @@ class TabAffichageCoupes(QGridLayout) :
             y=floor(event.pos().y()/3)
             z=self.barreScrollAxeZ.value()   
         elif (source_object==self.label_image_yz):
-            y=floor(event.pos().x()/3)
+            y=80-floor(event.pos().x()/3)
             z=floor(event.pos().y()/2)
             x=self.barreScrollAxeX.value()
         elif (source_object==self.label_image_zx):
@@ -293,31 +308,41 @@ class TabAffichageCoupes(QGridLayout) :
         # et le volume du grain cliqué (seulement si on est sous Linux)
         ######## retour[0] = volume du grain
         ######## retour[1] = liste dont on a besoin
+        ######## retour[2] = vitesse
+        ######## retour[3] = accélération
+        ######## retour[4] = vitesse moyenne
+        ######## retour[5] = acceleration moyenne
         if systemPlatform() == "Linux" :
             retour = retrouve_grain(x,y,z,temps)
         else :
             retour = 0
         
+        print("retour : ", retour)
+        
         # Afficher et actualiser le graphique de la trajectoire
         self.fenetre_graph.show()
         if (retour==0):
             volume_grain = 0
+            vitesse_grain = 0
+            acceleration_grain = 0
             if self.objParams.tabGraphique3D != None :
-                self.graphique3D.dessinerGraphique3D( np.array([[[],[],[]]]), 0, 0, limites=self.objParams.tabGraphique3D.graphique3D.getLimitesGraphe() ) # Affiche un graphe vide
+                self.graphique3D.dessinerGraphique3D( np.array([[[],[],[]]]), 1, 0, limites=self.objParams.tabGraphique3D.graphique3D.getLimitesGraphe() ) # Affiche un graphe vide
             else :
-                self.graphique3D.dessinerGraphique3D( np.array([[[],[],[]]]), 0, 0, conserverLimites = False )
+                self.graphique3D.dessinerGraphique3D( np.array([[[],[],[]]]), 1, 0, conserverLimites = False )
         else :
             volume_grain = retour[0]
+            vitesse_grain = retour[2]
+            acceleration_grain = retour[3]
             if self.objParams.tabGraphique3D != None :
-                self.graphique3D.dessinerGraphique3D( [retour[1]], 0, 0, limites=self.objParams.tabGraphique3D.graphique3D.getLimitesGraphe() ) # Affiche la trajectoire du grain sélectionné
+                self.graphique3D.dessinerGraphique3D( [retour[1]], 1, 0, limites=self.objParams.tabGraphique3D.graphique3D.getLimitesGraphe() ) # Affiche la trajectoire du grain sélectionné
             else :
-                self.graphique3D.dessinerGraphique3D( [retour[1]], 0, 0, conserverLimites = False )
+                self.graphique3D.dessinerGraphique3D( [retour[1]], 1, 0, conserverLimites = False )
 
-        # Changement de la valeur du label du volume du grain
-        self.label_grain_volume.setText("Volume : "+str(volume_grain))
+        # Changement de la valeur des labels relatives au grain
+        self.label_grain_volume.setText("Volume : "+str(round(volume_grain,2))+ " px³")
+        self.label_grain_vitesse.setText("Vitesse grain : "+str(round(vitesse_grain,2)) +" px/t")
+        self.label_grain_accel.setText("Accélération grain : "+str(round(acceleration_grain,2))+ " px/t²")
 
-   
-    
             
 
     """
