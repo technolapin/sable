@@ -83,6 +83,6 @@ Code principal pour démonstration
 if __name__ == '__main__' :
     application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
     fenetre = Fenetre( Parametres() ) # Crée un objet de type Fenetre
-    fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
+    fenetre.setWindowTitle("WoopWoop 3D (MODE DÉMONSTRATION)") # Définit le nom de la fenêtre
     fenetre.show() # Affiche la fenêtre
     application.exec_() # Attendre que tout ce qui est en cours soit exécuté

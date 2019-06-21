@@ -118,7 +118,7 @@ def lancerOuOuvrirTraitement( lancer, application ) :
     
     if autorisationDeLancer :
         fenetre = Fenetre( objParams = creationObjParams ) # Crée un objet de type Fenetre
-        fenetre.setWindowTitle("Graphique 3D") # Définit le nom de la fenêtre
+        fenetre.setWindowTitle("WoopWoop 3D") # Définit le nom de la fenêtre
         fenetre.show() # Affiche la fenêtre
         application.exec_() # Attendre que tout ce qui est en cours soit exécuté
     else :
