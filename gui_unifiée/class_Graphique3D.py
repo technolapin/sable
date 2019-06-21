@@ -64,7 +64,7 @@ class Graphique3D(FigureCanvasQTAgg) :
         self.axes.set_zlabel( 'Axe Z' ) # Label sur l'axe Z
 #        self.axes.set_aspect( 'equal' ) # Permet d'avoir un repère orthonormal
         
-        couleurs = ["b", "g", "r", "c", "m", "y"] # Liste des couleurs de base de Matplotlib
+        couleurs = ["r", "b", "g", "c", "m", "y"] # Liste des couleurs de base de Matplotlib
         
         if courbeAfficher != 0 :
             couleur = couleurs[(courbeAfficher - 1) % len(couleurs)] # Couleurs périodiques
