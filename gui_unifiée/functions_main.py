@@ -22,8 +22,8 @@ if systemPlatform() == "Linux" :
 Fonction de traitement d'image (Appel tout le travail de traitement d'image)
 @param fichier : Fichier TIFF choisi par l'utilisateur
 """
-def traitementImage( fichier ) :
-    fichierExporte = traitement_3D_main( fichier )
+def traitementImage( fichier, supprimerBords =  False ) :
+    fichierExporte = traitement_3D_main( fichier, supprimerBords )
     return fichierExporte
 
 
@@ -110,8 +110,19 @@ def lancerOuOuvrirTraitement( lancer, application ) :
     fileDialog.close() # Fermer la fenêtre
     
     creationObjParams = Parametres() # Permet de passer aux onglets les paramètres chargés
+    
     if lancer :
-        fichierExporte = traitementImage( fichierDemande )
+        msgBox = QMessageBox()
+        msgBox.setText("Voulez-vous couper aux bords ?\nAttention, les premiéres coupes seront vides.")
+        msgBox.setWindowTitle("Information")
+        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        returnValue = msgBox.exec()
+        
+        if returnValue == QMessageBox.Yes :
+            fichierExporte = traitementImage( fichierDemande, supprimerBords = True )
+        else : 
+            fichierExporte = traitementImage( fichierDemande, supprimerBords = False )
+        
         autorisationDeLancer = importerTraitement( fichierExporte, creationObjParams )
     else :
         autorisationDeLancer = importerTraitement( fichierDemande, creationObjParams )
