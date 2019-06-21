@@ -30,6 +30,7 @@ def traitementImage( fichier, supprimerLesBords =  False ) :
     print( "[Info Main] LANCEMENT DU TRAITEMENT !" )
     fichierExporte = traitement_3D_main( fichier, supprimerBords = supprimerLesBords )
     print( "[Info Main] FIN DU TRAITEMENT !" )
+    os.chdir( dossierActuel )
     print( "[Info Main] Retour au WD : " + dossierActuel )
     return fichierExporte
 
@@ -41,8 +42,6 @@ Importer un fichier exporté par le système de traitement
 @author Amaury
 """
 def importerTraitement( fichier, objParams ) :
-    print( "[Info Main] Actuel WD : " + os.path.dirname(__file__) )
-    
     print( "[Info Main] Importation du traitement : " + fichier )
     try :
         fichierExporté = open(fichier, 'rb')
@@ -110,6 +109,8 @@ Demande à l'utilisateur un fichier pour lancer un traitement ou ouvrir un fichi
 @author Amaury
 """
 def lancerOuOuvrirTraitement( lancer, application ) :
+    print( "[Info Main] Actuel WD : " + os.path.dirname(__file__) )
+    
     fileDialog = QFileDialog() # Crée un objet de type QFileDialog (Fenêtre pour choisir un fichier)
     if lancer : fileDialog.setWindowTitle("Veuillez choisir le fichier à traiter") # Définit le nom de la fenêtre
     else : fileDialog.setWindowTitle("Veuillez choisir le fichier à importer")
