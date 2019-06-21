@@ -616,7 +616,7 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
     #acceleration moyenne des grains
     acc_moy_grains=acc_moy_grains/nb_grains
     
-    np.save("../extraction/tracking_3D/vitesse_moy_grains.npy", [vitesse_moy_grains,acc_moy_grains])
+    np.save("../extraction/tracking_3D/vitesse_moy_grains.npy", [vitesse_moy_grains,acc_moy_grains,nb_grains])
     np.save("../extraction/tracking_3D/grains.npy", grains)
     np.save("../extraction/tracking_3D/vitesses.npy",vitesses)
     
