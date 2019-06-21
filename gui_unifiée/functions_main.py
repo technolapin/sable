@@ -23,7 +23,11 @@ Fonction de traitement d'image (Appel tout le travail de traitement d'image)
 @param fichier : Fichier TIFF choisi par l'utilisateur
 """
 def traitementImage( fichier, supprimerBords =  False ) :
+    dossierActuel = os.path.dirname(__file__).replace("\\", "/")
+    dossierDuTraitement = os.path.abspath( os.path.join(dossierActuel, "../extraction") )
+    os.chdir( dossierDuTraitement )
     fichierExporte = traitement_3D_main( fichier, supprimerBords )
+    os.chdir( dossierActuel )
     return fichierExporte
 
 
