@@ -591,9 +591,9 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
             vitesse=vitesse+v
             
             if (t>1):
-                 vx_1 = abs(grains[num_grain][1][t][0]-grains[num_grain][1][t-1][0]) 
-                 vy_1 = abs(grains[num_grain][1][t][1]-grains[num_grain][1][t-1][1])
-                 vz_1 = abs(grains[num_grain][1][t][2]-grains[num_grain][1][t-1][2])
+                 vx_1 = abs(grains[num_grain][1][t-1][0]-grains[num_grain][1][t-2][0]) 
+                 vy_1 = abs(grains[num_grain][1][t-1][1]-grains[num_grain][1][t-2][1])
+                 vz_1 = abs(grains[num_grain][1][t-1][2]-grains[num_grain][1][t-2][2])
                  v_1= (vx_1**2+vy_1**2+vz_1**2)**(0.5)
                  a=abs(v-v_1)
                  acc=acc+a
