@@ -226,7 +226,6 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
     os.system("rm -R volumes_3D")
     os.system("mkdir volumes_3D")
     
-    
     #extraction des images du tif en bmp
     os.system("convert " + fichierDemandeParUtilisateur + " tmp/test.bmp")
     
@@ -441,20 +440,13 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
             command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
                     " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_orgppm.ppm")
            
-            cmd = ("sub coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_orgppm.ppm "+ 
-                    " coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4) + "_border_rg.ppm "+
-                    " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_controuge.ppm")
-
-            print(cmd)
-            command( cmd )
+            command(
+                "sub coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_orgppm.ppm "+ 
+                " coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4) + "_border_rg.ppm "+
+                " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_controuge.ppm"
+            )
             
-            """
-            sub
-            coupes_3D/contours_rouges/x_z/00/t_00coupe_xz_0079_orgppm.ppm
-            coupes_3D/borders/x_z/00/t_00coupe_xz_0079_border_rg.ppm
-            coupes_3D/contours_rouges/x_z/00/t_00coupe_xz_0079_controuge.ppm
-            """
-            
+                        
             #image originale contours blancs 
             command("add coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
                     "_org.pgm  coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
@@ -505,7 +497,7 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
             command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
                     " coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_orgppm.ppm")
            
-            command("add coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
+            command("sub coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
                     "_orgppm.ppm coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
                     "_border_rg.ppm coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_controuge.ppm")
             
