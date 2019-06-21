@@ -156,7 +156,7 @@ def export_list(liste, file_name):
         f.write(" ".join(str(el) for el in elements)+"\n")
     f.close()
 
-def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
+def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprimerBords=False ):
     
     #palette de couleurs (pour generer la carte des distances coloree)
     lut=" lut "
@@ -306,7 +306,8 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
         
         command("inverse images_3D/image_3D_superpose_t"+padding_temporel+".pgm " + image_supinv)
 
-        vire_bord(image_supinv, image_supinv)
+        if supprimerBords:
+            vire_bord(image_supinv, image_supinv)
 
         
         #creation du vtk
@@ -384,7 +385,7 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
             command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
                     " coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_orgppm.ppm")
            
-            command("add coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
+            command("sub coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
                     "_orgppm.ppm coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
                     "_border_rg.ppm coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_controuge.ppm")
             
@@ -440,11 +441,19 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif" ):
             command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
                     " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_orgppm.ppm")
            
-            command("add coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
-                    "_orgppm.ppm coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
-                    "_border_rg.ppm coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_controuge.ppm")
+            cmd = ("sub coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_orgppm.ppm "+ 
+                    " coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4) + "_border_rg.ppm "+
+                    " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_controuge.ppm")
+
+            print(cmd)
+            command( cmd )
             
-            
+            """
+            sub
+            coupes_3D/contours_rouges/x_z/00/t_00coupe_xz_0079_orgppm.ppm
+            coupes_3D/borders/x_z/00/t_00coupe_xz_0079_border_rg.ppm
+            coupes_3D/contours_rouges/x_z/00/t_00coupe_xz_0079_controuge.ppm
+            """
             
             #image originale contours blancs 
             command("add coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
