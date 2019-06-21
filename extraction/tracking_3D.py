@@ -57,7 +57,10 @@ def retrouve_grain(x,y,z,t):
     
     resultats=np.load("../extraction/tracking_3D/resultats.npy")
     grains=np.load("../extraction/tracking_3D/grains.npy")
-    
+    vitesses=np.load("../extraction/tracking_3D/vitesses.npy")
+    moyenne=np.load("../extraction/tracking_3D/vitesse_moy_grains.npy")
+    vitesse_moyenne=moyenne[0]
+    acc_moyenne=moyenne[1]
     padding_temporel = numerote(t, 2)
     
     
@@ -78,7 +81,7 @@ def retrouve_grain(x,y,z,t):
     
     
     bary= parse_list("../extraction/bary_3D/liste/bary_list_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".list")
-    print(bary)
+    
     if (bary==[]):
         return 0
     else:
@@ -86,21 +89,22 @@ def retrouve_grain(x,y,z,t):
         yb=bary[0][1]
         zb=bary[0][2]
         volume=0
-        for grain in grains:
-            for s in range(len(grain[1])):
-                if ( grain[1][s]==[xb, yb, zb]):
-                    volume=grain[0]
-                    break
-            if (volume!=0):
+        for grain in grains:           
+            if(grain[1][t]==[xb, yb, zb]):
+                coord0=grain[1][0]
+                volume=grain[0]
                 break
-            
-        print("len(resultats) : ", len(resultats))
+        for grain in vitesses:
+            if( grain[0]==coord0):
+                v=grain[1]
+                a=grain[2]
+                break
+       
             
         for grain in range(len(resultats)):         
             if(resultats[grain][0][t]==xb and resultats[grain][1][t]==yb and resultats[grain][2][t]==zb):
-                print ("grain :", grain)
-                print ("track :", [volume, resultats[grain]])
-                return [volume,resultats[grain]]
+             
+                return [volume,resultats[grain],v,a,vitesse_moyenne,acc_moyenne]
    
     
 
