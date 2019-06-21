@@ -547,9 +547,16 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
         return pow(g1[0]-g2[0], 2) + pow(g1[1]-g2[1], 2) + pow(g1[2]-g2[2], 2)
 
 
-
-
-
+    vol_moy=0
+    n_grains=0
+    for  time in formes:
+        for grain in time:
+            vol=grain[3]
+            if (vol>1000):
+                vol_moy=vol_moy+grain[3]
+                n_grains=n_grains+1
+                
+    vol_moy=vol_moy/n_grains
     
     seuil_volume = 100
 
@@ -557,7 +564,8 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
     #grains = []
 
     vitesses=[]
-
+    
+    
     num_grain=0
     vitesse_moy_grains=0
     acc_moy_grains=0
@@ -616,7 +624,7 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
     #acceleration moyenne des grains
     acc_moy_grains=acc_moy_grains/nb_grains
     
-    np.save("../extraction/tracking_3D/vitesse_moy_grains.npy", [vitesse_moy_grains,acc_moy_grains,nb_grains])
+    np.save("../extraction/tracking_3D/vitesse_moy_grains.npy", [vitesse_moy_grains,acc_moy_grains,nb_grains,vol_moy])
     np.save("../extraction/tracking_3D/grains.npy", grains)
     np.save("../extraction/tracking_3D/vitesses.npy",vitesses)
     
