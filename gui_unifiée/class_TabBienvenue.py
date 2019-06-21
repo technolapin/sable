@@ -51,7 +51,7 @@ class TabBienvenue(QGridLayout) :
         
         # Récupérations des informations générales
         label_nombre = QLabel("Nombre de grains : " + str(int(moyenne[2])) )
-        label_volume = QLabel("Volume moyen des grains : " + str(round(moyenne[3],2)))
+        label_volume = QLabel("Volume moyen des grains : " + str(round(moyenne[3],2)) + " px³")
         label_vitesse = QLabel("Vitesse moyenne des grains : " + str(round(moyenne[0],2)) + " px/t") 
         label_acceleration = QLabel("Accélération moyenne des grains : " + str(round(moyenne[1],2)) + " px/t²") 
         
