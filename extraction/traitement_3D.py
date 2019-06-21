@@ -552,7 +552,7 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
     for  time in formes:
         for grain in time:
             vol=grain[3]
-            if (vol>1000):
+            if (vol>7000):
                 vol_moy=vol_moy+grain[3]
                 n_grains=n_grains+1
                 
