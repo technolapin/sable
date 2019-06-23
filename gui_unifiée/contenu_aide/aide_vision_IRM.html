@@ -1,5 +1,10 @@
 ﻿<h1>Vision IRM</h1>
+<br/>
 <p>Cet onglet vous permet de visualiser simultanément les coupes des plans (x,y), (y,z) et (z,x).</p>
 <p>La barre de défilement en bas de la fenêtre permet de faire défiler le temps, tandis que les trois barres à droite de la fenêtre permettent de modifier respectivement la valeur de la position sur l'axe X, Y et Z.</p>
-<p>Afin de générer cet outil, nous avons utilisé Matplotlib qui ne permet pas de recouper les différentes coupes sur les axes. En effet, les différentes coupes se superposent lors de l'affichage, et puisque ce fonctionnement est intrinsèque au fonctionnement de Matplotlib, le problème est insoluble.</p>
-<p>Cependant, comme pour l'onglet de visualisation graphique, la visualisation 3D des coupes permet aussi la rotation. Pour cela, il vous suffit d'attraper la figure avec le clic gauche de votre souris puis de la bouger. Il vous est également possible de zoomer à l'aide d'un clic droit et d'un mouvement de la souris.</p>
+<p>Comme pour l'onglet de visualisation graphique, la visualisation 3D des coupes permet aussi la rotation. Pour cela, il vous suffit d'attraper la figure avec le clic gauche de votre souris et de la bouger. Il vous est également possible de zoomer à l'aide d'un clic droit et d'un mouvement de la souris.</p>
+<p>Les valeurs actuelles de l'axe X, Y, Z et du temps sont affichées en haut de la fenêtre et permettent de suivre en temps réel les grains étudiés.</p>
+<br/>
+
+<h3>Informations sur le développement</h3>
+<p>Afin de générer cet outil, nous avons utilisé les coupes obtenues à partir des images 3D, mais l'affichage de celles-ci simultanément par Matplotlib ne se recoupent pas sur axes. En effet, les différentes coupes se superposent lors de l'affichage, et puisque ce fonctionnement est intrinsèque au fonctionnement de Matplotlib, le problème est insoluble. Nous avons donc décidé de désactiver cet outil dans la version de présentation de notre logiciel.</p>

@@ -1,7 +1,14 @@
-﻿<h1>Visualisation du graphique</h1>
-<p>Cet onglet vous permet de visualiser la trajectoire d'un grain de sable.</p>
-<p>A droite de la fenêtre, vous pouvez voir deux barres de défilement. La barre la plus à gauche permet de visualiser la trajectoire de chaque grain de sable. 
-La seconde permet de visualiser chacune des positions du grain de sable correspondant à la trajectoire sélectionnée.</p>
-<p>Les trajectoires ici affichées sont les trajectoires de chaque grain de sable.</p>
+﻿<h1>Trajectoires</h1>
+<br/>
+
+<h3>Fonctionnement de l'onglet</h3>
+<p>Cet onglet vous permet de visualiser la trajectoire des ou d'un grain(s) de sable.</p>
+<p>A droite de la fenêtre, vous pouvez voir une barre de défilement. Cette barre vous permet de faire défiler les différentes trajectoires pour chaque grain de sable. La première position permet de visualiser toutes les courbes sur le même dessin.</p>
+<p>La seconde barre de défilement en bas vous permet de faire défiler le temps et ainsi de voir les positions à chaque instant donné.</p>
+<p>Les valeurs actuelles de courbes et du temps sont affichées en haut de la fenêtre et permettent de suivre en temps réel les grains étudiés.</p>
 <p>D'autre part, la visualisation 3D des trajectoires permet aussi la rotation. Pour cela, il vous suffit de maintenir le clic gauche de votre souris et de la bouger. Il vous est également possible de zoomer en maintenant clic droit tout en bougeant votre souris.</p>
-<p>Les trajectoires ont été obtenues grâce à l'utilisation d'un programme qui repère les grains grâce à leur barycentre. Ce programme parcourt les images sur l'axe temporel et admet que le grain dont le barycentre est le plus proche (en terme de distance absolue) de celui du grain dont on veut connaître la prochaine position est donc ce dernier (le grain dont on veut connaître la prochaine position). Il est donc possible qu'il y ait quelques erreurs.</p>
+<br/>
+
+<h3>Informations sur le développement</h3>
+<p>Les trajectoires ont été obtenues grâce à l'utilisation d'un programme qui repère les grains grâce à leur barycentre. 
+Ce programme parcourt les images sur l'axe temporel et admet que pour un grain à un temps et une position donnée, le grain à l'instant suivant dont le barycentre est le plus proche (en terme de distance absolue) sont les mêmes. Cette approche engendre quelques erreurs, notamment sur les bords puisque les grains peuvent sortir et rentrer dans l'image sans distinction dans notre méthode, mais ce traitement reste dans l'ensemble assez juste pour les grains au centre.</p>
