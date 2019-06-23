@@ -12,6 +12,7 @@ from math import floor
 
 from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 from class_TabGraphique3D import Graphique3D
+from class_AfficheLienVTK import AfficheLienVTK
 
 import numpy as np
 
@@ -54,19 +55,19 @@ class TabAffichageCoupes(QGridLayout) :
         self.barreScrollAxeX = QScrollBar()
         self.barreScrollAxeX.setMaximum( self.objParams.nombreImagesPlanYZ() )
         self.barreScrollAxeX.valueChanged.connect( self.changeImages )
-        self.barreScrollAxeX.setValue(round(self.objParams.nombreImagesPlanYZ()/2))
+        #self.barreScrollAxeX.setValue(round(self.objParams.nombreImagesPlanYZ()/2))
         
         # Défilement de la couche Y
         self.barreScrollAxeY = QScrollBar()
         self.barreScrollAxeY.setMaximum( self.objParams.nombreImagesPlanXZ() )
         self.barreScrollAxeY.valueChanged.connect( self.changeImages )
-        self.barreScrollAxeY.setValue(round(self.objParams.nombreImagesPlanXZ()/2))
+        #self.barreScrollAxeY.setValue(round(self.objParams.nombreImagesPlanXZ()/2))
         
         # Défilement de la couche Z
         self.barreScrollAxeZ = QScrollBar()
         self.barreScrollAxeZ.setMaximum( self.objParams.nombreImagesPlanXY() )
         self.barreScrollAxeZ.valueChanged.connect( self.changeImages )
-        self.barreScrollAxeZ.setValue(round(self.objParams.nombreImagesPlanXY()/2))
+        #self.barreScrollAxeZ.setValue(round(self.objParams.nombreImagesPlanXY()/2))
         
         # Défilement temporel
         self.barreScrollTemps = QScrollBar(Qt.Horizontal)
@@ -251,7 +252,7 @@ class TabAffichageCoupes(QGridLayout) :
 
         
         """
-        Création d'une fenêtre qu'on affiche en cliquant sur un grain
+        Création de deux fenêtres qu'on affiche en cliquant sur un grain
         """
         # Création de la fenêtre et d'un layout
         self.fenetre_graph = QWidget() 
@@ -263,6 +264,12 @@ class TabAffichageCoupes(QGridLayout) :
         self.graphique3D = Graphique3D()
         self.layout_traj_sepa.addWidget(self.graphique3D)
         
+        self.fenetre_vtk = QWidget() 
+        self.fenetre_vtk.setWindowTitle("Grain cliqué en 3D")
+        self.afficheLienVTK=AfficheLienVTK()
+        self.fenetre_vtk.setLayout(self.afficheLienVTK)
+        
+
        
         
         """
@@ -312,15 +319,17 @@ class TabAffichageCoupes(QGridLayout) :
         ######## retour[3] = accélération
         ######## retour[4] = vitesse moyenne
         ######## retour[5] = acceleration moyenne
+        ######## retour[6] = lien VTK grain
         if systemPlatform() == "Linux" :
             retour = retrouve_grain(x,y,z,temps)
         else :
             retour = 0
         
-        print("retour : ", retour)
         
         # Afficher et actualiser le graphique de la trajectoire
         self.fenetre_graph.show()
+        
+        
         if (retour==0):
             volume_grain = 0
             vitesse_grain = 0
@@ -330,6 +339,8 @@ class TabAffichageCoupes(QGridLayout) :
             else :
                 self.graphique3D.dessinerGraphique3D( np.array([[[],[],[]]]), 1, 0, conserverLimites = False )
         else :
+            self.fenetre_vtk.show()
+            self.afficheLienVTK.AfficherNouveauVTK(lienVTK=retour[6])
             volume_grain = retour[0]
             vitesse_grain = retour[2]
             acceleration_grain = retour[3]
