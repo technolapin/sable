@@ -5,7 +5,7 @@ import sys
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QFrame, QVBoxLayout, QScrollBar, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QFrame, QVBoxLayout, QScrollBar, QLabel, QGroupBox, QHBoxLayout
 
 #import vtk
 from vtk import vtkNamedColors, vtkRenderer, vtkPolyDataReader, vtkPolyDataMapper, vtkActor
@@ -48,8 +48,12 @@ class TabVTK(QGridLayout) :
         
         # Ajout Maylis
         vertical_layout = QVBoxLayout()
+        group_box=QGroupBox("Positions courantes des barres de scroll")
+        horizontal_layout = QHBoxLayout()
+        group_box.setLayout(horizontal_layout)
         self.valeur_temps = QLabel("Temps : 0")
-        vertical_layout.addWidget(self.valeur_temps)
+        horizontal_layout.addWidget(self.valeur_temps)
+        vertical_layout.addWidget(group_box)
         vertical_layout.addWidget(self.frame, stretch=2)
         self.addLayout(vertical_layout,1,1)
         # Fin Ajout Maylis
