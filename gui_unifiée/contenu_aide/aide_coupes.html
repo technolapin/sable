@@ -1,10 +1,20 @@
 ﻿<h1>Coupes</h1>
+<br/>
+
+<h3>Fonctionnement de l'onglet</h3>
 <p>Cet onglet permet de visualiser les coupes 2D sur les trois plans (x,y), (y,z) et (x,z) simultanément et d'étudier le mouvement des grains de sable suivant leur mouvement sur les axes X, Y, Z et dans le temps.</p>
 <p>La barre de défilement en bas de la fenêtre permet de faire défiler le temps, tandis que les trois barres à droite de la fenêtre permettent de modifier respectivement la valeur de la position sur l'axe X, Y et Z.</p>
 <p>Les valeurs actuelles de X, Y, Z et du temps sont affichées en haut de la fenêtre et permettent de suivre en temps réel les positions étudiées.</p>
-<p>Il est possible de cliquer sur un grain pour obtenir ses coordonnées et sa trajectoire qui s'affiche dans une autre fenêtre.</p>
-<p>Les coupes originales sans contour sur le plan (x,y) sont les images desquelles nous sommes partis pour obtenir toutes les autres.</p>
-<p>Les coupes originales sans contour sur les plans (y,z) et (x,z) ont été obtenues à partir des images 3D qui nous ont permis de re-générer les coupes dans tous les plans (suivant tous les axes).</p>
-<p>Les coupes avec contour ont été obtenues en superposant les images sans contour à des images comportant seulement les contours des grains. Il nous a suffit de colorer les contours sur les images avec seulement les contours pour ensuite obtenir les images avec contour coloré.</p>
+<p>Il vous est possible de choisir dans le cadre en haut à droite le type de coupes que vous souhaitez afficher. Nous vous proposons différentes options telles que les images originales, les images originales avec contours sur chaque grain, l'image seuillée et l'image colorée de la carte des distances.</p>
+<p>Il est également possible de cliquer sur un grain dans l'une des coupes pour obtenir des informations telles que ses coordonnées dans l'espace et le temps (relatives au pixel cliqué), son volume, sa vitesse et son accélération dans le cadre en bas à droite. Nous avons ajouté à titre de comparaison les valeurs de la vitesse et de l'accélération moyenne de l'intégralité des grains. 
+<p>En cliquant sur un grain, deux nouvelles fenêtres s'ouvriront : la trajectoire du grain cliqué dans le temps, dont le premier point (temps 0) est affiché en noir, et sa vue en 3D.</p>
+<br/>
+
+<h3>Informations sur le développement</h3>
+<p>Les coupes originales sans contour sur le plan (x,y) sont les images desquelles nous sommes partis pour obtenir toutes les autres. En effet, ces images nous ont permis de générer une image en 3D desquelles nous avons pu re-générer les coupes dans tous les axes (ou plans).</p>
+<p>Nous avons ainsi pu générer (ou re-générer) les coupes originales dans les plans (x,y), (y,z) et (x,z).</p>
 <p>Les images seuillées avec grains séparés sont le fruit de l'application d'une fonction de la library Pink et d'un watershed aux images originales sans contours.</p>
 <p>Les cartes de distance représentent la distance de chaque pixel au plus proche pixel n'appartenant pas à un grain de sable. Les maximas sont donc le centre des grains de sable.</p>
+<p>Afin d'obtenir les coupes des images seuillées et des cartes de distance, nous avons commencé par effectuer le traitement sur les images 3D directement puis nous avons généré les coupes dans tous les axes.</p>
+<p>Les coupes avec contour ont été obtenues en superposant les images sans contour (2D) à des images comportant seulement les contours des grains. Il nous a suffit de colorer les contours sur les images avec seulement les contours pour ensuite obtenir les images avec contour coloré. Contraitement aux coupes précédentes, le traitement pour obtenir le contour sur l'image originale se fait en 2D.</p>
+
