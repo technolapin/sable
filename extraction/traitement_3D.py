@@ -651,6 +651,7 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
     URL_PGM = "../extraction/coupes_3D/"
     URL_VTK = "../extraction/vtk_3D/"
     URL_GRAPHIQUE_3D = "../extraction/tracking_3D/resultats.npy"
+    URL_VITESSE_MOY_GRAINS = "../extraction/tracking_3D/vitesse_moy_grains.npy"
     """
     EXPORTATION
     """
@@ -663,6 +664,7 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
     bdd["URL_PGM"] = URL_PGM
     bdd["URL_VTK"] = URL_VTK
     bdd["URL_GRAPHIQUE_3D" ] = URL_GRAPHIQUE_3D
+    bdd["URL_VITESSE_MOY_GRAINS" ] = URL_VITESSE_MOY_GRAINS
     
     # Its important to use binary mode
     fichierBdd = open('woopwoop', 'wb')

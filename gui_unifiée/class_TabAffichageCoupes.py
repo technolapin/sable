@@ -211,7 +211,11 @@ class TabAffichageCoupes(QGridLayout) :
         group_infos.setLayout(vl_grain)
                 
         # Récupération des valeurs d'accélération et vitesse moyenne
-        moyenne = np.load("../extraction/tracking_3D/vitesse_moy_grains.npy")
+        try :
+            moyenne = np.load( self.objParams.genererURLInfos() )
+        except FileNotFoundError :
+            print( "[Erreur Bienvenue] Fichier introuvable : " + self.objParams.genererURLInfos() )
+            moyenne = [0, 0, 0, 0]
         
         # Création de labels qui affichent les valeurs du grain cliqué      
         self.label_grain_X=QLabel("X : ")

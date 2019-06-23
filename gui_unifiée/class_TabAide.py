@@ -27,7 +27,7 @@ class TabAide(QGridLayout) :
     """
     Constructeur, crée le contenu de l'onglet
     """
-    def __init__(self, objParams, parent=None) :
+    def __init__(self, objParams, parent=None, noVTK = False) :
         super(TabAide, self).__init__(parent) # Appel du constructeur de QGridLayout
         
         self.objParams = objParams # Ne sert à rien pour le moment
@@ -52,10 +52,12 @@ class TabAide(QGridLayout) :
                             'aide_onglet1' : [aide_onglet1,  "Aide Trajectoires",                'aide_visu_graph.html'] ,
                             'aide_onglet2' : [aide_onglet2,  "Aide Vue Mille-feuilles",          'aide_millefeuille.html'] }
         if not DISABLE_IRM : self.ongl_aide2 = { 'aide_onglet3' : [aide_onglet3,  "Aide Vue IRM",                     'aide_vision_IRM.html'] }
-        self.ongl_aide3 = { 'aide_onglet5' : [aide_onglet5,  "Aide vue 3D",                      'aide_VTK.html'] }
+        if not noVTK : self.ongl_aide3 = { 'aide_onglet5' : [aide_onglet5,  "Aide vue 3D",                      'aide_VTK.html'] }
         
-        if not DISABLE_IRM : self.ongl_aide = {**self.ongl_aide1, **self.ongl_aide2, **self.ongl_aide3}
-        else : self.ongl_aide = {**self.ongl_aide1, **self.ongl_aide3}
+        if not DISABLE_IRM and not noVTK : self.ongl_aide = {**self.ongl_aide1, **self.ongl_aide2, **self.ongl_aide3}
+        elif not DISABLE_IRM and noVTK : self.ongl_aide = {**self.ongl_aide1, **self.ongl_aide2}
+        elif DISABLE_IRM and not noVTK : self.ongl_aide = {**self.ongl_aide1, **self.ongl_aide3}
+        else : self.ongl_aide = {**self.ongl_aide1}
         
         # Ajout dynamique des onglets à la page d'aide
         for ongl in self.ongl_aide :

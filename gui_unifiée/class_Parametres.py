@@ -21,6 +21,7 @@ class Parametres() :
         self.URL_PGM = parametres_par_defaut.URL_PGM # URL vers les fichiers PGM
         self.URL_VTK = parametres_par_defaut.URL_VTK # URL vers les fichiers VTK
         self.URL_GRAPHIQUE_3D = parametres_par_defaut.URL_GRAPHIQUE_3D # URL vers le fichier NPY
+        self.URL_VITESSE_MOY_GRAINS = parametres_par_defaut.URL_VITESSE_MOY_GRAINS # URL vers le fichier NPY
         self.CHEMIN_ABSOLU_FICHIER_IMPORTE = None # Chemin absolu du fichier contenant les params importés
         
         self.tabGraphique3D = None # Objet TabGraphique3D
@@ -108,6 +109,18 @@ class Parametres() :
                                  ).replace("\\","/") )
         else :
             return self.URL_GRAPHIQUE_3D
+    
+    """
+    @return URL du fichier NPY à utiliser
+    """
+    def genererURLInfos(self) :
+        if self.contientVariablesImportees :
+            # Les URL doivent être relatives au fichier d'importation
+            return abspath( join( self.CHEMIN_ABSOLU_FICHIER_IMPORTE.replace("\\", "/"),
+                                  self.URL_VITESSE_MOY_GRAINS.replace("\\", "/")
+                                 ).replace("\\","/") )
+        else :
+            return self.URL_VITESSE_MOY_GRAINS
     
     
     """

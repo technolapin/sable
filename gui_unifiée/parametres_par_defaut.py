@@ -12,6 +12,7 @@ INTERVALLE_XZ = 80
 INTERVALLE_YZ = 80
 URL_VTK = "../extraction/vtk_3D/"
 URL_GRAPHIQUE_3D = "../extraction/tracking_3D/resultats.npy"
+URL_VITESSE_MOY_GRAINS = "../extraction/tracking_3D/vitesse_moy_grains.npy"
 
 """
 VERIFICATION

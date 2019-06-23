@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QTabWidget, QHBo
 from class_Parametres import Parametres # Ne sert que si est exécuté séparemment
 from numpy import load
 
+
 """
 PARAMETRES
 """
@@ -29,7 +30,7 @@ class TabBienvenue(QGridLayout) :
     def __init__(self, objParams, parent=None) :
         super(TabBienvenue, self).__init__(parent) # Appel du constructeur de QGridLayout
         
-        self.objParams = objParams # Ne sert à rien pour le moment
+        self.objParams = objParams
         
         # Layout de la fenêtre 
         gridLayout = QGridLayout()
@@ -47,7 +48,11 @@ class TabBienvenue(QGridLayout) :
         self.contenuOngletBienvenue("sujet_original.html", self.sujet_original)
         
         # Récupération des valeurs d'accélération et vitesse moyenne
-        moyenne = load("../extraction/tracking_3D/vitesse_moy_grains.npy")
+        try :
+            moyenne = load( self.objParams.genererURLInfos() )
+        except FileNotFoundError :
+            print( "[Erreur Bienvenue] Fichier introuvable : " + self.objParams.genererURLInfos() )
+            moyenne = [0, 0, 0, 0]
         
         # Récupérations des informations générales
         label_nombre = QLabel("Nombre de grains : " + str(int(moyenne[2])) )

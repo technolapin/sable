@@ -3,6 +3,7 @@ import sys
 #from PyQt5.QtCore import *
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
 from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox
 
 from class_Graphique3D import Graphique3D
@@ -72,7 +73,7 @@ class TabGraphique3D(QGridLayout) :
         self.barreDeScrollCourbes.valueChanged.connect( self.dessinerGraphique3D ) # La procédure à appeler lorsque l'utilisateur y touche
         
         # Défilement temporel
-        self.barreDeScrollTemps = QScrollBar()
+        self.barreDeScrollTemps = QScrollBar(Qt.Horizontal)
         self.barreDeScrollTemps.setMaximum( len(self.graphe[0][0]) ) # Temps à 0 signifie tous les temps
         # len(self.graphe[0][0]) est le nombre d'échantillons temporels dont on dispose
         self.barreDeScrollTemps.valueChanged.connect( self.dessinerGraphique3D )
@@ -80,7 +81,7 @@ class TabGraphique3D(QGridLayout) :
         vertical_layout.addWidget( self.graphique3D , stretch=2) # Ajoute le graphique 3D en position ligne 2 colonne 1
         self.addLayout(vertical_layout,1,1)
         self.addWidget( self.barreDeScrollCourbes,1,2 ) # Ajoute la barre de défilement 1 en position ligne 2 colonne 2
-        self.addWidget( self.barreDeScrollTemps,1,3 ) # Ajoute la barre de défilement 2 en position ligne 2 colonne 2
+        self.addWidget( self.barreDeScrollTemps,2,1 ) # Ajoute la barre de défilement 2 en position ligne 2 colonne 2
             
         self.dessinerGraphique3D(0) # Afficher graphique de base
     

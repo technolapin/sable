@@ -53,6 +53,11 @@ ELLE DOIT ETRE RELATIVE AU FICHIER EXPORTE !
 """
 URL_GRAPHIQUE_3D = "../../extraction/tracking_3D/resultats.npy"
 
+"""
+Fichier NPY contenant des informations sur les grains
+"""
+URL_VITESSE_MOY_GRAINS = "../../extraction/tracking_3D/vitesse_moy_grains.npy"
+
 
 """
 EXPORTATION
@@ -66,6 +71,7 @@ bdd["INTERVALLE_YZ"] = INTERVALLE_YZ
 bdd["URL_PGM"] = URL_PGM
 bdd["URL_VTK"] = URL_VTK
 bdd["URL_GRAPHIQUE_3D" ] = URL_GRAPHIQUE_3D
+bdd["URL_VITESSE_MOY_GRAINS" ] = URL_VITESSE_MOY_GRAINS
 
 # Its important to use binary mode
 fichierBdd = open('exemple', 'wb')

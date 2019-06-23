@@ -71,7 +71,7 @@ class Fenetre(QTabWidget) :
         self.onglet2.setLayout( TabMilleFeuille3D( objParams = self.objParams ) )
         if not DISABLE_IRM : self.onglet3.setLayout( TabMilleFeuilleIRM( objParams = self.objParams ) )
         if returnValue == QMessageBox.Yes : self.onglet5.setLayout( TabVTK( objParams = self.objParams ) )
-        self.onglet6.setLayout( TabAide( objParams = self.objParams ) )
+        self.onglet6.setLayout( TabAide( objParams = self.objParams, noVTK = (returnValue == QMessageBox.No) ) )
 
 
 """

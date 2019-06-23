@@ -91,6 +91,11 @@ def importerTraitement( fichier, objParams ) :
     except KeyError :
         print( "[Erreur Main] Le fichier ne contient pas la variables URL_GRAPHIQUE_3D !" )
         return False
+    try :
+        objParams.URL_VITESSE_MOY_GRAINS = bdd[ "URL_VITESSE_MOY_GRAINS" ]
+    except KeyError :
+        print( "[Erreur Main] Le fichier ne contient pas la variables URL_VITESSE_MOY_GRAINS !" )
+        return False
     
     objParams.contientVariablesImportees = True
     
