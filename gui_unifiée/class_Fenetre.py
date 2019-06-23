@@ -53,10 +53,10 @@ class Fenetre(QTabWidget) :
         
         # Ajout des onglets à la fenêtre
         self.addTab( self.onglet7, "Bienvenue" )
+        self.addTab( self.onglet4, "Vues Coupes" )
         self.addTab( self.onglet1, "Trajectoires" ) 
         self.addTab( self.onglet2, "Vue Mille-feuilles" )
         if not DISABLE_IRM : self.addTab( self.onglet3, "Vue IRM" )
-        self.addTab( self.onglet4, "Vues Coupes" )
         if returnValue == QMessageBox.Yes : self.addTab( self.onglet5, "Vue 3D" )
         self.addTab( self.onglet6, "Aide" )
         
@@ -66,10 +66,10 @@ class Fenetre(QTabWidget) :
         
         # Remplissage des onglets en créant les grilles
         self.onglet7.setLayout( TabBienvenue(objParams=self.objParams))
+        self.onglet4.setLayout( TabAffichageCoupes( objParams = self.objParams ) )
         self.onglet1.setLayout( self.objParams.TabGraphique3D )
         self.onglet2.setLayout( TabMilleFeuille3D( objParams = self.objParams ) )
         if not DISABLE_IRM : self.onglet3.setLayout( TabMilleFeuilleIRM( objParams = self.objParams ) )
-        self.onglet4.setLayout( TabAffichageCoupes( objParams = self.objParams ) )
         if returnValue == QMessageBox.Yes : self.onglet5.setLayout( TabVTK( objParams = self.objParams ) )
         self.onglet6.setLayout( TabAide( objParams = self.objParams ) )
 

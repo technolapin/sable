@@ -48,11 +48,11 @@ class TabAide(QGridLayout) :
     
         # Dictionnaire des onglets de la page d'aide
         self.ongl_aide1 = { 'aide_ongl' :    [aide_ongl,     "Introduction",                     'aide_generale.html'] , 
+                            'aide_onglet4' : [aide_onglet4,  "Aide vue Coupes",                  'aide_coupes.html'] ,
                             'aide_onglet1' : [aide_onglet1,  "Aide Trajectoires",                'aide_visu_graph.html'] ,
                             'aide_onglet2' : [aide_onglet2,  "Aide Vue Mille-feuilles",          'aide_millefeuille.html'] }
         if not DISABLE_IRM : self.ongl_aide2 = { 'aide_onglet3' : [aide_onglet3,  "Aide Vue IRM",                     'aide_vision_IRM.html'] }
-        self.ongl_aide3 = { 'aide_onglet4' : [aide_onglet4,  "Aide vue Coupes",                  'aide_coupes.html'] ,
-                            'aide_onglet5' : [aide_onglet5,  "Aide vue 3D",                      'aide_VTK.html'] }
+        self.ongl_aide3 = { 'aide_onglet5' : [aide_onglet5,  "Aide vue 3D",                      'aide_VTK.html'] }
         
         if not DISABLE_IRM : self.ongl_aide = {**self.ongl_aide1, **self.ongl_aide2, **self.ongl_aide3}
         else : self.ongl_aide = {**self.ongl_aide1, **self.ongl_aide3}
