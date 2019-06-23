@@ -81,10 +81,13 @@ class Graphique3D(FigureCanvasQTAgg) :
                                 liste[courbeAfficher - 1][1],
                                 liste[courbeAfficher - 1][2],
                                 couleur + 'o-' ) # Dessine le graphique 3D à partir de 3 listes dans les axes
-                self.axes.plot( [liste[courbeAfficher - 1][0][0]],
-                                [liste[courbeAfficher - 1][1][0]],
-                                [liste[courbeAfficher - 1][2][0]],
-                                'ko-' ) # Affiche le début de la courbe en noir
+                try :
+                    self.axes.plot( [liste[courbeAfficher - 1][0][0]],
+                                    [liste[courbeAfficher - 1][1][0]],
+                                    [liste[courbeAfficher - 1][2][0]],
+                                    'ko-' ) # Affiche le début de la courbe en noir
+                except IndexError :
+                    pass
 
         else :
             for numeroCourbe in range(len(liste)) :
