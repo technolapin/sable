@@ -64,34 +64,26 @@ def retrouve_grain(x,y,z,t):
     padding_temporel = numerote(t, 2)
     
     
-    print("aAAAAAAA")
     #retrouve le grain et sa coupe
     command ("selectcomp ../extraction/images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm 26 "+str(x)+" "+str(y)+" "+str(z)+
              " ../extraction/tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+".pgm")    
-    print("BBBBBBB")
     #vtk
     command("mcube  ../extraction/tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+
             ".pgm 0 5 0 VTK  ../extraction/tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+".vtk")
-    print("CCCCCCC")
     
     lien_vtk= "../extraction/tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+".vtk"
-    print("DDDDDDD")
     #barycentre
     command("3dlabel ../extraction/tracking_3D/track_t_"+padding_temporel+"_"+str(x)+"_"+str(y)+"_"+str(z)+
             ".pgm ../extraction/labels_3D/label_t_"+padding_temporel+"_"+str(x)+str(y)+str(z)+".pgm")
-    print("EEEEEEE")
     
     command("barycentrelab ../extraction/labels_3D/label_t_"+padding_temporel+"_"+str(x)+str(y)+str(z)+
             ".pgm ../extraction/bary_3D/bary_3D_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".pgm")
-    print("FFFFFFFF")
     
     command("pgm2list ../extraction/bary_3D/bary_3D_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+
             ".pgm B ../extraction/bary_3D/liste/bary_list_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".list")
-    print("GGGGGGG")
     
     
     bary= parse_list("../extraction/bary_3D/liste/bary_list_t"+padding_temporel+"_"+str(x)+str(y)+str(z)+".list")
-    print("HHHHHHHH")
     
     if (bary==[]):
         return 0
