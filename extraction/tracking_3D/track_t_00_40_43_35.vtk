@@ -1,0 +1,8 @@
+# vtk DataFile Version 3.0
+mcube output
+ASCII
+DATASET POLYDATA
+POINTS 0 float
+
+POLYGONS 0 0
+
