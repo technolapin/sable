@@ -4,7 +4,7 @@ import sys
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QHBoxLayout, QVBoxLayout, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox
 
 from class_MilleFeuilleIRM import MilleFeuilleIRM
 
@@ -63,14 +63,16 @@ class TabMilleFeuilleIRM(QGridLayout) :
         self.valeur_Y = QLabel("Y : 0")
         self.valeur_Z = QLabel("Z : 0")
         
+        group_box=QGroupBox("Positions courantes des barres de scroll")
         horizontal_layout = QHBoxLayout()
+        group_box.setLayout(horizontal_layout)
         vertical_layout = QVBoxLayout()
         
         horizontal_layout.addWidget(self.valeur_temps)
         horizontal_layout.addWidget(self.valeur_X)
         horizontal_layout.addWidget(self.valeur_Y)
         horizontal_layout.addWidget(self.valeur_Z)
-        vertical_layout.addLayout(horizontal_layout)
+        vertical_layout.addWidget(group_box)
         vertical_layout.addWidget(self.milleFeuilleIRM,stretch=2)
         
         self.addLayout(vertical_layout,1,1)
