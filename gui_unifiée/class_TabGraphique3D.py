@@ -3,7 +3,7 @@ import sys
 #from PyQt5.QtCore import *
 #from PyQt5.QtGui import *
 #from PyQt5.QtWidgets import *
-from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QHBoxLayout, QVBoxLayout, QLabel
+from PyQt5.QtWidgets import QApplication, QWidget, QGridLayout, QScrollBar, QHBoxLayout, QVBoxLayout, QLabel, QGroupBox
 
 from class_Graphique3D import Graphique3D
 
@@ -33,7 +33,9 @@ class TabGraphique3D(QGridLayout) :
         vertical_layout=QVBoxLayout()
         
         # Valeurs actuelles des barres de scroll
+        group_box=QGroupBox("Positions courantes des barres de scroll")
         horizontal_layout = QHBoxLayout()
+        group_box.setLayout(horizontal_layout)
         
         self.valeur_temps = QLabel("Temps : 0")
         self.valeur_courbe = QLabel("X : 0")
@@ -42,7 +44,7 @@ class TabGraphique3D(QGridLayout) :
         horizontal_layout.addWidget(self.valeur_temps)
         
         
-        vertical_layout.addLayout(horizontal_layout)
+        vertical_layout.addWidget(group_box)
         # Fin Ajout Maylis
         
         
