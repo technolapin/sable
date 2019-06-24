@@ -29,7 +29,7 @@ class AfficheLienVTK(QGridLayout):
         self.vtkWidget.GetRenderWindow().AddRenderer(self.ren)
         self.iren = self.vtkWidget.GetRenderWindow().GetInteractor()
 
-#        # Create source
+        # Create source
 #        fichierVTK = lienVTK
 #        reader = vtkPolyDataReader()
 #        reader.SetFileName(fichierVTK)
@@ -39,7 +39,7 @@ class AfficheLienVTK(QGridLayout):
         self.mapper = vtk.vtkPolyDataMapper()
 #        mapper.SetInputConnection(reader.GetOutputPort())
 #        
-#        # Create an actor
+        # Create an actor
         self.actor = vtk.vtkActor()
         self.actor.SetMapper(self.mapper)
         self.actor.GetProperty().SetColor(self.colors.GetColor3d('Tan'))
@@ -53,7 +53,7 @@ class AfficheLienVTK(QGridLayout):
         self.iren.Initialize()
         self.iren.Start()
 
-    def AfficherNouveauVTK(self,lienVTK=None):
+    def AfficherNouveauVTK(self, lienVTK=None):
         reader = vtkPolyDataReader()
         reader.SetFileName(lienVTK)
         reader.Update()
@@ -61,11 +61,3 @@ class AfficheLienVTK(QGridLayout):
         self.actor.SetMapper(self.mapper)
         self.ren.ResetCamera()
         self.iren.Initialize()
-
-if __name__ == '__main__' :
-    application = QApplication(sys.argv) # Crée un objet de type QApplication (Doit être fait avant la fenêtre)
-    fenetre = QWidget() # Crée un objet de type QWidget
-    fenetre.setWindowTitle("MODE DÉMONSTRATION") # Définit le nom de la fenêtre
-    fenetre.setLayout( AfficheLienVTK(lienVTK="../extraction/vtk_3D/vtk_t_01.vtk" ))
-    fenetre.show() # Affiche la fenêtre
-    application.exec_() # Attendre que tout ce qui est en cours soit exécuté
