@@ -339,6 +339,7 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
         # pour moins de repetitions
         debut_commande= "extractplane border_3D/border_3D_t_"+padding_temporel+"_add_blanc.pgm "
     
+
     
         #extraction des coupes sur (x,y)
         
@@ -351,49 +352,49 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
       
         
         
-        for u in range(0, n_coupes_xy):
+        for i_coupe in range(0, n_coupes_xy):
             
             #image originale
-            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(u)+" xy "+
-                        "coupes_3D/originales/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_org.pgm")
+            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(i_coupe)+" xy "+
+                        "coupes_3D/originales/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+"_org.pgm")
             
             
             #carte des distances coloree
-            command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(u)+" xy "+
-                        "coupes_3D/carte_dist/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_dist.pgm")
-            command("colorize coupes_3D/carte_dist/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_dist.pgm"
-                    +lut+"coupes_3D/carte_dist/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_distcolor.ppm")
+            command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(i_coupe)+" xy "+
+                        "coupes_3D/carte_dist/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+"_dist.pgm")
+            command("colorize coupes_3D/carte_dist/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+"_dist.pgm"
+                    +lut+"coupes_3D/carte_dist/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+"_distcolor.ppm")
             
             
             #watershed fini
-            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(u)+" xy "+
-                        "coupes_3D/water/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_wa.pgm")
+            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(i_coupe)+" xy "+
+                        "coupes_3D/water/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+"_wa.pgm")
             
             #borders
-            command("border coupes_3D/water/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
-                    "_wa.pgm 8 coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_border.pgm")
+            command("border coupes_3D/water/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+
+                    "_wa.pgm 8 coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+"_border.pgm")
                 
             
             
             #image originale contours rouges
-            command("colorize coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_border.pgm"+lut_bord+
-                    "coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_border_rg.ppm")
+            command("colorize coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+"_border.pgm"+lut_bord+
+                    "coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+"_border_rg.ppm")
             
-            image_a_ppm = "coupes_3D/originales/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_org.pgm"
+            image_a_ppm = "coupes_3D/originales/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+"_org.pgm"
             
             command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
-                    " coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_orgppm.ppm")
+                    " coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+"_orgppm.ppm")
            
-            command("sub coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
-                    "_orgppm.ppm coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
-                    "_border_rg.ppm coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_controuge.ppm")
+            command("sub coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+
+                    "_orgppm.ppm coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+
+                    "_border_rg.ppm coupes_3D/contours_rouges/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+"_controuge.ppm")
             
             
             
             #image originale contours blancs 
-            command("add coupes_3D/originales/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
-                    "_org.pgm  coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+
-                    "_border.pgm coupes_3D/contours_blancs/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(u,4)+"_contblanc.pgm")
+            command("add coupes_3D/originales/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+
+                    "_org.pgm  coupes_3D/borders/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+
+                    "_border.pgm coupes_3D/contours_blancs/x_y/"+padding_temporel+"/t_"+padding_temporel+"coupe_xy_"+numerote(i_coupe,4)+"_contblanc.pgm")
     
                 
                 
@@ -408,49 +409,49 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
         os.system("mkdir coupes_3D/contours_rouges/x_z/"+padding_temporel)
         os.system("mkdir coupes_3D/contours_blancs/x_z/"+padding_temporel)
         
-        for u in range(0, n_coupes_xz):
+        for i_coupe in range(0, n_coupes_xz):
             #image originale
-            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(u)+" xz "+
-                        "coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_org.pgm")
+            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(i_coupe)+" xz "+
+                        "coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_org.pgm")
             
             
             #carte des distances coloree
-            command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(u)+" xz "+
-                        "coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_dist.pgm")
-            command("colorize coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_dist.pgm"
-                    +lut+"coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_distcolor.ppm")
+            command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(i_coupe)+" xz "+
+                        "coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_dist.pgm")
+            command("colorize coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_dist.pgm"
+                    +lut+"coupes_3D/carte_dist/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_distcolor.ppm")
         
             
             #watershed fini
-            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(u)+" xz "+
-                        "coupes_3D/water/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_wa.pgm")
+            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(i_coupe)+" xz "+
+                        "coupes_3D/water/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_wa.pgm")
             
             #borders
-            command("border coupes_3D/water/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
-                    "_wa.pgm 8 coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_border.pgm")
+            command("border coupes_3D/water/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+
+                    "_wa.pgm 8 coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_border.pgm")
                 
             
             
             #image originale contours rouges
-            command("colorize coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_border.pgm"+lut_bord+
-                    "coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_border_rg.ppm")
+            command("colorize coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_border.pgm"+lut_bord+
+                    "coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_border_rg.ppm")
             
-            image_a_ppm = "coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_org.pgm"
+            image_a_ppm = "coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_org.pgm"
             
             command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
-                    " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_orgppm.ppm")
+                    " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_orgppm.ppm")
            
             command(
-                "sub coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_orgppm.ppm "+ 
-                " coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4) + "_border_rg.ppm "+
-                " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_controuge.ppm"
+                "sub coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_orgppm.ppm "+ 
+                " coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4) + "_border_rg.ppm "+
+                " coupes_3D/contours_rouges/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_controuge.ppm"
             )
             
                         
             #image originale contours blancs 
-            command("add coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
-                    "_org.pgm  coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+
-                    "_border.pgm coupes_3D/contours_blancs/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(u,4)+"_contblanc.pgm")
+            command("add coupes_3D/originales/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+
+                    "_org.pgm  coupes_3D/borders/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+
+                    "_border.pgm coupes_3D/contours_blancs/x_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_xz_"+numerote(i_coupe,4)+"_contblanc.pgm")
                 
               
     
@@ -464,49 +465,49 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
         os.system("mkdir coupes_3D/contours_rouges/y_z/"+padding_temporel)
         os.system("mkdir coupes_3D/contours_blancs/y_z/"+padding_temporel)
         
-        for u in range(0, n_coupes_yz):
+        for i_coupe in range(0, n_coupes_yz):
             
             #image originale
-            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(u)+" yz "+
-                        "coupes_3D/originales/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_org.pgm")
+            command("extractplane images_3D/image_3D_t"+padding_temporel+".pgm "+str(i_coupe)+" yz "+
+                        "coupes_3D/originales/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe,4)+"_org.pgm")
             
             
             #carte des distances coloree
-            command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(u)+" yz "+
-                        "coupes_3D/carte_dist/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_dist.pgm")
-            command("colorize coupes_3D/carte_dist/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_dist.pgm"
-                    +lut+"coupes_3D/carte_dist/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_distcolor.ppm")
+            command("extractplane images_3D/image_3D_dist_proc_t"+padding_temporel+".pgm "+str(i_coupe)+" yz "+
+                        "coupes_3D/carte_dist/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe,4)+"_dist.pgm")
+            command("colorize coupes_3D/carte_dist/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe,4)+"_dist.pgm"
+                    +lut+"coupes_3D/carte_dist/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe,4)+"_distcolor.ppm")
             
             
             #watershed fini
-            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(u)+" yz "+
-                        "coupes_3D/water/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_wa.pgm")
+            command("extractplane images_3D/image_3D_superpose_inv_t"+padding_temporel+".pgm "+str(i_coupe)+" yz "+
+                        "coupes_3D/water/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe,4)+"_wa.pgm")
             
             #borders
-            command("border coupes_3D/water/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
-                    "_wa.pgm 8 coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_border.pgm")
+            command("border coupes_3D/water/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe,4)+
+                    "_wa.pgm 8 coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe,4)+"_border.pgm")
                 
             
             
             #image originale contours rouges
-            command("colorize coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_border.pgm"+lut_bord+
-                    "coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_border_rg.ppm")
+            command("colorize coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe,4)+"_border.pgm"+lut_bord+
+                    "coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe,4)+"_border_rg.ppm")
             
-            image_a_ppm = "coupes_3D/originales/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_org.pgm"
+            image_a_ppm = "coupes_3D/originales/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe,4)+"_org.pgm"
             
             command("pgm2ppm "+image_a_ppm+" "+image_a_ppm+" "+image_a_ppm+
-                    " coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_orgppm.ppm")
+                    " coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe,4)+"_orgppm.ppm")
            
-            command("sub coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
-                    "_orgppm.ppm coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
-                    "_border_rg.ppm coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_controuge.ppm")
+            command("sub coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe, 4)+
+                    "_orgppm.ppm coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe, 4)+
+                    "_border_rg.ppm coupes_3D/contours_rouges/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe, 4)+"_controuge.ppm")
             
             
             
             #image originale contours blancs 
-            command("add coupes_3D/originales/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
-                    "_org.pgm  coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+
-                    "_border.pgm coupes_3D/contours_blancs/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(u,4)+"_contblanc.pgm")
+            command("add coupes_3D/originales/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe, 4)+
+                    "_org.pgm  coupes_3D/borders/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe, 4)+
+                    "_border.pgm coupes_3D/contours_blancs/y_z/"+padding_temporel+"/t_"+padding_temporel+"coupe_yz_"+numerote(i_coupe, 4)+"_contblanc.pgm")
                
             
             
@@ -525,24 +526,19 @@ def traitement_3D_main( fichierDemandeParUtilisateur = "gros_sable.tif", supprim
         #enleve de la liste les grains de vol<100
         liste= parse_list("../extraction/bary_3D/liste/bary_list_t"+padding_temporel+".list")
         volume_min=100
-        g=0
-        while g< len(liste):
-            if (liste[g][3]<volume_min):
-                del(liste[g])
-            g += 1
+        i_grain=0
+        while i_grain< len(liste):
+            if (liste[i_grain][3]<volume_min):
+                del(liste[i_grain])
+            else:
+                i_grain += 1
             
         formes.append(liste)
             
     
     grains = []
     
-    """
-    [
-    grain1 [vol, [[x0, y0, z0], [x1, y1, z1]]]
-    ]
-    
-    """
-    
+    # distance entre 2 grains
     def dist2(g1, g2):
         return pow(g1[0]-g2[0], 2) + pow(g1[1]-g2[1], 2) + pow(g1[2]-g2[2], 2)
 
